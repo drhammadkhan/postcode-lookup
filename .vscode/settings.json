@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd \"/Users/hammadkhan/Code/Postcode lookup/postcode-lookup\" && /usr/bin/python3 postcode_lookup\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
