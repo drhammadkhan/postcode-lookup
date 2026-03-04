@@ -70,7 +70,7 @@ def find_nearest(pc_group, hosp_subset):
 
 # 5. EXECUTION
 postcodes['Side'] = postcodes['Postcode'].apply(get_side)
-results = postcodes[['Postcode', 'Side']].copy()
+results = postcodes[['Postcode', 'Latitude', 'Longitude', 'Side']].copy()
 
 for side in ['North', 'South']:
     pc_group = postcodes[postcodes['Side'] == side]
@@ -79,9 +79,16 @@ for side in ['North', 'South']:
     for label, level in [('Any', None), ('L1', 1), ('L2', 2), ('L3', 3)]:
         hosp_subset = hosp_side if level is None else hosp_side[hosp_side['Level'] == level]
         names, dists = find_nearest(pc_group, hosp_subset.reset_index(drop=True))
-        results.loc[pc_group.index, f'Closest_{label}'] = (
-            names + ' (' + dists.astype(str) + 'km)'
-        )
+        results.loc[pc_group.index, f'Closest_{label}'] = names
+        results.loc[pc_group.index, f'Distance_{label}_km'] = dists
 
-results.to_csv('Neonatal_Lookup_Final.csv', index=False)
-print(f"Done! {len(results)} postcodes processed.")
+# 6. SAVE SEPARATE FILE PER HOSPITAL (based on Closest_Any)
+import os, re
+os.makedirs('output', exist_ok=True)
+
+for hospital, group in results.groupby('Closest_Any'):
+    safe_name = re.sub(r'[^\w\s-]', '', hospital).strip().replace(' ', '_')
+    group.to_csv(f'output/{safe_name}.csv', index=False)
+    print(f"  → output/{safe_name}.csv ({len(group)} rows)")
+
+print(f"\nDone! {len(results)} postcodes across {results['Closest_Any'].nunique()} hospital files.")
