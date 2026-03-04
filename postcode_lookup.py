@@ -18,7 +18,16 @@ def haversine(lat1, lon1, lat2, lon2):
 
 # 3. FUNCTION TO DETERMINE SIDE OF RIVER
 def get_side(pc):
-    outcode = pc.split(' ')[0].upper()
+    pc = pc.strip().upper()
+    # Specific postcodes that are exceptions — treated as South despite SW1 prefix
+    south_exceptions = {'SW1W9FJ', 'SW1P9UP', 'SW1Y6YQ', 'SW1Y5WT',
+                        'SW1Y4ZB', 'SW1Y6WZ', 'SW1Y5ZP', 'SW1X9UQ',
+                        'SW39DU', 'SW39EG', 'SW39GG'}
+    if pc.replace(' ', '') in south_exceptions:
+        return 'South'
+
+    # UK incode is always the last 3 characters; outcode is everything before that
+    outcode = pc[:-3].strip() if len(pc) > 3 else pc.split(' ')[0]
     north_prefixes = {'N', 'NW', 'E', 'EN', 'HA', 'IG', 'RM', 'UB', 'WD', 'WC', 'EC', 'W'}
     # SW districts that sit north of the Thames
     north_sw_districts = {'1', '3', '5', '6', '7', '10'}
@@ -32,7 +41,7 @@ def get_side(pc):
             break
 
     if prefix == 'SW':
-        # Extract just the numeric district (e.g. SW1A → '1', SW10 → '10')
+        # Extract the district number from the outcode (SW1V → '1', SW10 → '10')
         district_num = ''.join(c for c in outcode[len(prefix):] if c.isdigit())
         return 'North' if district_num in north_sw_districts else 'South'
 
@@ -91,4 +100,7 @@ for hospital, group in results.groupby('Closest_Any'):
     group.to_csv(f'output/{safe_name}.csv', index=False)
     print(f"  → output/{safe_name}.csv ({len(group)} rows)")
 
-print(f"\nDone! {len(results)} postcodes across {results['Closest_Any'].nunique()} hospital files.")
+# 7. SAVE COMBINED FILE
+results.to_csv('output/All_Postcodes.csv', index=False)
+print(f"\n  → output/All_Postcodes.csv ({len(results)} rows)")
+print(f"\nDone! {len(results)} postcodes across {results['Closest_Any'].nunique()} hospital files + 1 combined file.")

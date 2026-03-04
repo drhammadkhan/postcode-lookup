@@ -59,6 +59,26 @@ If the area code is in this set → **North**. Otherwise → **South**.
 
 **Special case — SW postcodes:** The SW area straddles the river. Some districts (SW1, SW3, SW5, SW6, SW7, SW10) are north of the Thames (Chelsea, Knightsbridge, Earl's Court), while others (SW2, SW4, SW8, SW9, SW11–SW20) are south (Brixton, Clapham, Battersea). The script extracts the district number from the outcode and checks it against a known set of north-side districts.
 
+### Postcode exceptions
+
+Even within north-side SW districts, a small number of individual postcodes are geographically south of the Thames or are better served by South London hospitals. These are hardcoded as exceptions and always classified as **South**, regardless of their district:
+
+| Postcode | District | Reason for exception |
+|----------|----------|---------------------|
+| SW1W 9FJ | SW1 | South of the Thames |
+| SW1P 9UP | SW1 | South of the Thames |
+| SW1Y 6YQ | SW1 | South of the Thames |
+| SW1Y 5WT | SW1 | South of the Thames |
+| SW1Y 4ZB | SW1 | South of the Thames |
+| SW1Y 6WZ | SW1 | South of the Thames |
+| SW1Y 5ZP | SW1 | South of the Thames |
+| SW1X 9UQ | SW1 | South of the Thames |
+| SW3 9DU  | SW3 | South of the Thames |
+| SW3 9EG  | SW3 | South of the Thames |
+| SW3 9GG  | SW3 | South of the Thames |
+
+These exceptions are checked **before** the district-level classification, so they take priority.
+
 ---
 
 ## Stage 2: Nearest Neighbour Search (KD-Tree)
