@@ -33,7 +33,8 @@ colour_map = dict(zip(hospital_names, colour_list))
 SAMPLE_RATE = 5  # plot every 5th postcode (≈65K dots)
 sampled = results.iloc[::SAMPLE_RATE].copy()
 
-m = folium.Map(location=[51.5, -0.1], zoom_start=10, tiles='cartodbpositron')
+m = folium.Map(location=[51.5, -0.1], zoom_start=10, tiles=None)
+folium.TileLayer('cartodbpositron', name='Base Map').add_to(m)
 
 for name in hospital_names:
     subset = sampled[sampled['Closest_Any'] == name]
@@ -81,7 +82,36 @@ hosp_layer.add_to(m)
 # 5. LAYER CONTROL (toggle hospitals on/off)
 folium.LayerControl(collapsed=False).add_to(m)
 
-# 6. ADD LEGEND
+# 6. ADD DESELECT/SELECT ALL BUTTON
+toggle_js = """
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        var ctrl = document.querySelector('.leaflet-control-layers-overlays');
+        if (!ctrl) return;
+        var btn = document.createElement('div');
+        btn.style.cssText = 'padding:6px 0 2px 0;text-align:center;border-top:1px solid #ccc;margin-top:4px;';
+        var a = document.createElement('a');
+        a.href = '#';
+        a.style.cssText = 'cursor:pointer;font-size:12px;color:#2d6a9f;text-decoration:none;font-weight:600;';
+        a.textContent = 'Deselect All';
+        var allOn = true;
+        a.onclick = function(e) {
+            e.preventDefault();
+            var checks = ctrl.querySelectorAll('input[type=checkbox]');
+            allOn = !allOn;
+            checks.forEach(function(cb) { if (cb.checked !== allOn) cb.click(); });
+            a.textContent = allOn ? 'Deselect All' : 'Select All';
+        };
+        btn.appendChild(a);
+        ctrl.appendChild(btn);
+    }, 500);
+});
+</script>
+"""
+m.get_root().html.add_child(folium.Element(toggle_js))
+
+# 7. ADD LEGEND
 legend_html = """
 <div style="
     position: fixed; bottom: 20px; left: 20px; z-index: 9999;
@@ -102,7 +132,7 @@ for name in hospital_names:
 legend_html += "</div>"
 m.get_root().html.add_child(folium.Element(legend_html))
 
-# 7. SAVE
+# 8. SAVE
 m.save('neonatal_catchment_map.html')
 print(f"Map saved → neonatal_catchment_map.html")
 print(f"  {n} hospitals, {len(sampled):,} sampled dots (1/{SAMPLE_RATE} of {len(results):,})")

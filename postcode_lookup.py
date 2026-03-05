@@ -20,9 +20,9 @@ def haversine(lat1, lon1, lat2, lon2):
 def get_side(pc):
     pc = pc.strip().upper()
     # Specific postcodes that are exceptions — treated as South despite SW1 prefix
-    south_exceptions = {'SW1W9FJ', 'SW1P9UP', 'SW1Y6YQ', 'SW1Y5WT',
-                        'SW1Y4ZB', 'SW1Y6WZ', 'SW1Y5ZP', 'SW1X9UQ',
-                        'SW39DU', 'SW39EG', 'SW39GG'}
+    south_exceptions = {'SW1W 9FJ', 'SW1P 9UP', 'SW1Y 6YQ', 'SW1Y 5WT',
+                        'SW1Y 4ZB', 'SW1Y 6WZ', 'SW1Y 5ZP', 'SW1X 9UQ',
+                        'SW3 9DU', 'SW3 9EG', 'SW3 9GG'}
     if pc.replace(' ', '') in south_exceptions:
         return 'South'
 
