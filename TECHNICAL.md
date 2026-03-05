@@ -77,6 +77,8 @@ Even within north-side SW districts, a small number of individual postcodes are 
 | SW3 9EG  | SW3 | South of the Thames |
 | SW3 9GG  | SW3 | South of the Thames |
 
+In the code, these postcodes are stored **without spaces** (e.g. `SW1W9FJ`) because the comparison strips spaces from the input postcode before checking the set. The table above shows them in standard format for readability.
+
 These exceptions are checked **before** the district-level classification, so they take priority.
 
 ---

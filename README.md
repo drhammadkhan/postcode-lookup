@@ -18,7 +18,7 @@ Not every hospital has every level of unit, so knowing which is closest — and 
 
 The script takes two input files:
 
-- **`hospitals_refined.csv`** — A list of ~34 neonatal hospitals across London, including their location (latitude/longitude), care level (1–3), and which side of the Thames they serve (North, South, or Both).
+- **`hospitals_refined.csv`** — A list of ~31 neonatal hospitals across London, including their location (latitude/longitude), care level (1–3), and which side of the Thames they serve (North, South, or Both).
 - **`postcodes_master.csv`** — A list of ~326,000 London-area postcodes with their geographic coordinates.
 
 It then runs through three steps:
@@ -67,14 +67,28 @@ Results are saved to the `output/` folder in two formats:
 
 ### 4. Visualise on a map
 
-A separate script (`generate_map.py`) generates an interactive HTML map showing each hospital's catchment area as colour-coded dots. Hover over any dot to see its postcode. Hospital markers can be clicked for name, level and side. Use the layer control (top-right) to toggle individual hospitals on/off.
+A separate script (`generate_map.py`) generates an interactive HTML map showing each hospital's catchment area as colour-coded dots. Hover over any dot to see its postcode. Hospital markers can be clicked for name, level and side. Use the layer control (top-right) to toggle individual hospitals on/off. A **Deselect All / Select All** button at the bottom of the control panel lets you quickly clear or restore all layers.
+
+### 5. Local web app (Flask)
+
+A Flask-based frontend (`app.py`) provides a local web interface at `http://127.0.0.1:5001` with:
+
+- **Postcode search** — enter any London postcode to see the nearest neonatal unit at each level, with distances and an interactive map.
+- **Embedded catchment map** — the generated map is viewable directly within the app.
+- **Hospital API** — a `/hospitals` endpoint returning all hospitals as JSON.
+
+### 6. Static site (GitHub Pages)
+
+A fully client-side version lives in the `docs/` folder and is published via GitHub Pages at **https://drhammadkhan.github.io/postcode-lookup/**.
+
+The script `build_static.py` compresses the output into two compact JSON files (`docs/postcodes.json` and `docs/hospitals.json`) which `docs/index.html` loads and searches entirely in the browser — no server required.
 
 ## How to run it
 
 1. Make sure you have Python 3 installed
 2. Install the required packages:
    ```
-   pip install pandas numpy scipy folium
+   pip install pandas numpy scipy folium flask
    ```
 3. Place `hospitals_refined.csv` and `postcodes_master.csv` in the same folder as the script
 4. Run the lookup:
@@ -86,4 +100,13 @@ A separate script (`generate_map.py`) generates an interactive HTML map showing 
    ```
    python generate_map.py
    ```
-7. Open `neonatal_catchment_map.html` in a browser
+7. To rebuild the static JSON for the GitHub Pages site:
+   ```
+   python build_static.py
+   ```
+8. To run the local web app:
+   ```
+   python app.py
+   ```
+   Then visit `http://127.0.0.1:5001` in your browser
+9. Or open `neonatal_catchment_map.html` directly for just the map
