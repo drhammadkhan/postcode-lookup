@@ -1,0 +1,35 @@
+Hospital Name,Level,Sector,Specialty Tags,Postcode,Latitude,Longitude,Side
+St Peters Hospital,3,Border,Regional NICU,KT16 0PZ,51.3773,-0.526,Both
+Medway Maritime,3,Border,Regional NICU,ME7 5NY,51.378,0.5431,Both
+Luton and Dunstable,3,Border,Regional NICU,LU4 0DZ,51.8954,-0.4742,Both
+Princess Alexandra,3,Border,Regional NICU,CM20 1QX,51.7709,0.0852,Both
+UCH (University College),3,NC,Neuro,NW1 2BU,51.5248,-0.1352,North
+The Royal London,3,NE,Surg,E1 1BB,51.5185,-0.0594,North
+Homerton University,3,NE,Regional NICU,E9 6SR,51.5508,-0.0462,North
+Chelsea & Westminster,3,NW,"Surg, ENT",SW10 9NH,51.4849,-0.1824,North
+Queen Charlottes',3,NW,Neuro,W12 0HS,51.517,-0.23632,North
+Evelina (St Thomas'),3,South East,"Surg, Cardiac, ENT, Neuro",SE1 7EH,51.5003,-0.1189,South
+St. Georges Hospital,3,South West,"Surg, Neuro Surg, ENT",SW17 0QT,51.4273,-0.1748,South
+Kings College Hospital,3,South East,"Surg, Neuro Surg",SE5 9RS,51.4683,-0.0919,South
+Watford General,2,Border,LNU,WD18 0HB,51.6485,-0.4046,Both
+East Surrey,2,Border,LNU,RH1 5RH,51.2185,-0.162,Both
+Wexham Park,2,Border,LNU,SL2 4HL,51.532,-0.5878,Both
+Barnet Hospital,2,NC,LNU,EN5 3DJ,51.6507,-0.2152,North
+Whittington Hospital,2,NC,LNU,N19 5NF,51.5665,-0.1403,North
+Newham General,2,NE,LNU,E13 8SL,51.5223,0.035,North
+Whipps Cross,2,NE,LNU,E11 1NR,51.5785,0.002,North
+Queens Hospital,2,NE,LNU,RM7 0AG,51.5694,0.1779,North
+St Marys Hospital,2,NW,LNU,W2 1NY,51.5173,-0.1738,North
+Northwick Park,2,NW,LNU,HA1 3UJ,51.5767,-0.3222,North
+Hillingdon Hospital,2,NW,LNU,UB8 3NN,51.5259,-0.4597,North
+St Heliers Hospital,2,South West,LNU,SM5 1AA,51.3806,-0.1831,South
+Kingston Hospital,2,South West,LNU,KT2 7QB,51.415,-0.2813,South
+Croydon University,2,South West,LNU,CR7 7YE,51.3908,-0.1104,South
+University Lewisham,2,South East,LNU,SE13 6LH,51.4528,-0.0186,South
+Queen Elizabeth Woolwich,2,South East,LNU,SE18 4QH,51.4788,0.0514,South
+Princess Royal (PRUH),2,South East,LNU,BR6 8ND,51.3656,0.06,South
+Darent Valley,1,Border,SCBU,DA2 8DA,51.4353,0.2586,Both
+Royal Free Hospital,1,NC,SCBU,NW3 2QG,51.5532,-0.1654,North
+North Middlesex,1,NC,SCBU,N18 1QX,51.6133,-0.073,North
+West Middlesex,1,NW,SCBU,TW7 6AF,51.4733,-0.3249,Both
+Epsom Hospital,1,South West,SCBU,KT18 7EG,51.3259,-0.2726,South

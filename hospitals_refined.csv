@@ -1,8 +1,5 @@
 Hospital Name,Level,Sector,Specialty Tags,Postcode,Latitude,Longitude,Side
 St Peters Hospital,3,Border,Regional NICU,KT16 0PZ,51.3773,-0.526,Both
-Medway Maritime,3,Border,Regional NICU,ME7 5NY,51.378,0.5431,Both
-Luton and Dunstable,3,Border,Regional NICU,LU4 0DZ,51.8954,-0.4742,Both
-Princess Alexandra,3,Border,Regional NICU,CM20 1QX,51.7709,0.0852,Both
 UCH (University College),3,NC,Neuro,NW1 2BU,51.5248,-0.1352,North
 The Royal London,3,NE,Surg,E1 1BB,51.5185,-0.0594,North
 Homerton University,3,NE,Regional NICU,E9 6SR,51.5508,-0.0462,North
