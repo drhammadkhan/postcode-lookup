@@ -210,13 +210,18 @@
 
         #map { height: 400px; width: 100%; }
 
-        /* Catchment map */
+        /* Catchment map — full-screen breakout */
+        #tab-catchment {
+            margin: 0 calc(-50vw + 50%);
+            width: 100vw;
+            padding: 0;
+        }
+
         #catchment-map {
-            height: calc(100vh - 180px);
+            height: calc(100vh - 140px);
             width: 100%;
             border: none;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            border-radius: 0;
         }
 
         /* Spinner */
