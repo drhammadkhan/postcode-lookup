@@ -364,7 +364,7 @@
         mapDiv.style.display = 'block';
 
         catchmentMap = L.map(mapDiv).setView([51.5, -0.1], 10);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        const baseLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
             maxZoom: 19,
         }).addTo(catchmentMap);
@@ -376,6 +376,12 @@
             const hue = i / names.length;
             const h = Math.round(hue * 360);
             colours[name] = `hsl(${h}, 60%, 45%)`;
+        });
+
+        // Create a layer group per hospital for the layer control
+        const hospLayers = {};
+        names.forEach(name => {
+            hospLayers[name] = L.layerGroup().addTo(catchmentMap);
         });
 
         // Sample every 10th postcode for performance
@@ -395,13 +401,14 @@
                     fillColor: colours[hospName],
                     fillOpacity: 0.6,
                     weight: 0,
-                }).bindTooltip(r[0]).addTo(catchmentMap);
+                }).bindTooltip(r[0]).addTo(hospLayers[hospName]);
             });
             // Yield to browser
             await new Promise(r => setTimeout(r, 0));
         }
 
-        // Add hospital markers
+        // Add hospital markers to a separate overlay
+        const hospMarkerLayer = L.layerGroup().addTo(catchmentMap);
         hospitalData.forEach(h => {
             L.circleMarker([h.lat, h.lon], {
                 radius: 8,
@@ -411,8 +418,33 @@
                 fillOpacity: 1,
             }).bindPopup(`<b>${h.name}</b><br>Level ${h.level} | ${h.side}`)
               .bindTooltip(h.name)
-              .addTo(catchmentMap);
+              .addTo(hospMarkerLayer);
         });
+
+        // Layer control
+        const overlays = { 'Hospitals': hospMarkerLayer, ...hospLayers };
+        L.control.layers({ 'Base Map': baseLayer }, overlays, { collapsed: false }).addTo(catchmentMap);
+
+        // Add Deselect All / Select All toggle
+        setTimeout(() => {
+            const ctrl = document.querySelector('#catchment-map .leaflet-control-layers-overlays');
+            if (!ctrl) return;
+            const btn = document.createElement('div');
+            btn.style.cssText = 'padding:6px 0 2px 0;text-align:center;border-top:1px solid #ccc;margin-top:4px;';
+            const a = document.createElement('a');
+            a.href = '#';
+            a.style.cssText = 'cursor:pointer;font-size:12px;color:#2d6a9f;text-decoration:none;font-weight:600;';
+            a.textContent = 'Deselect All';
+            let allOn = true;
+            a.onclick = function (e) {
+                e.preventDefault();
+                allOn = !allOn;
+                ctrl.querySelectorAll('input[type=checkbox]').forEach(cb => { if (cb.checked !== allOn) cb.click(); });
+                a.textContent = allOn ? 'Deselect All' : 'Select All';
+            };
+            btn.appendChild(a);
+            ctrl.appendChild(btn);
+        }, 500);
 
         // Add legend
         const legend = L.control({ position: 'bottomleft' });
