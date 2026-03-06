@@ -52,12 +52,16 @@ print(f"docs/postcodes.json → {size_mb:.1f} MB ({len(records):,} postcodes)")
 # 4. Hospitals JSON
 hosp_list = []
 for _, row in hospitals.iterrows():
+    tags = ''
+    if pd.notna(row.get('Specialty Tags', '')):
+        tags = str(row['Specialty Tags']).strip()
     hosp_list.append({
         'name': row['Hospital Name'],
         'level': int(row['Level']),
         'side': row['Side'],
         'lat': round(row['Latitude'], 4),
         'lon': round(row['Longitude'], 4),
+        'tags': tags,
     })
 
 with open('docs/hospitals.json', 'w') as f:

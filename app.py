@@ -43,12 +43,19 @@ def search():
         hosp_row = hospitals[hospitals['Hospital Name'] == hosp_name]
         hosp_lat = float(hosp_row['Latitude'].values[0]) if not hosp_row.empty else None
         hosp_lon = float(hosp_row['Longitude'].values[0]) if not hosp_row.empty else None
+        # Include specialty tags for Level 3 units
+        tags = ''
+        if not hosp_row.empty and int(hosp_row['Level'].values[0]) == 3:
+            raw_tags = hosp_row['Specialty Tags'].values[0]
+            if pd.notna(raw_tags):
+                tags = str(raw_tags).strip()
         levels.append({
             'label': name,
             'hospital': hosp_name,
             'distance_km': float(dist),
             'lat': hosp_lat,
             'lon': hosp_lon,
+            'specialty_tags': tags,
         })
 
     return jsonify({

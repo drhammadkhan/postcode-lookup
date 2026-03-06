@@ -230,6 +230,24 @@
             color: #4a5568;
         }
 
+        .card-tags {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #fee2e2;
+            color: #991b1b;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 999px;
+            letter-spacing: 0.02em;
+        }
+
         /* Map */
         #map-container {
             margin-top: 1rem;
@@ -372,10 +390,18 @@
             data.levels.forEach((lvl, i) => {
                 const card = document.createElement('div');
                 card.className = `card ${levelClasses[i]}`;
+                let tagsHtml = '';
+                if (lvl.specialty_tags) {
+                    tagsHtml = '<div class="card-tags">' +
+                        lvl.specialty_tags.split(',').map(t =>
+                            `<span class="tag">${t.trim()}</span>`
+                        ).join(' ') + '</div>';
+                }
                 card.innerHTML = `
                     <div class="card-label">${lvl.label}</div>
                     <div class="card-hospital">${lvl.hospital}</div>
                     <div class="card-distance">${lvl.distance_km} km away</div>
+                    ${tagsHtml}
                 `;
                 cardsEl.appendChild(card);
             });
