@@ -85,28 +85,61 @@ The script `build_static.py` compresses the output into two compact JSON files (
 
 ## How to run it
 
-1. Make sure you have Python 3 installed
+### Prerequisites
+
+1. Make sure you have Python 3 installed (use `python3` on macOS)
 2. Install the required packages:
    ```
    pip install pandas numpy scipy folium flask
    ```
-3. Place `hospitals_refined.csv` and `postcodes_master.csv` in the same folder as the script
-4. Run the lookup:
+3. Confirm the input files are present in the project root:
+   - `hospitals_refined.csv`
+   - `postcodes_master.csv`
+
+### Run each script (explicit commands)
+
+1. **Generate postcode lookups (main pipeline)**
    ```
-   python postcode_lookup.py
+   python3 postcode_lookup.py
    ```
-5. Results will be saved to the `output/` folder
-6. To generate the catchment map:
+   - Outputs:
+     - `output/All_Postcodes.csv`
+     - One CSV per hospital in `output/`
+
+2. **Generate the interactive catchment map**
    ```
-   python generate_map.py
+   python3 generate_map.py
    ```
-7. To rebuild the static JSON for the GitHub Pages site:
+   - Output:
+     - `neonatal_catchment_map.html`
+
+3. **Build the static JSON for the GitHub Pages / Netlify site**
    ```
-   python build_static.py
+   python3 build_static.py
    ```
-8. To run the local web app:
+   - Outputs:
+     - `docs/postcodes.json`
+     - `docs/hospitals.json`
+
+4. **Run the local Flask web app**
    ```
-   python app.py
+   python3 app.py
    ```
-   Then visit `http://127.0.0.1:5001` in your browser
-9. Or open `neonatal_catchment_map.html` directly for just the map
+   - Then visit `http://127.0.0.1:5001` in your browser
+
+5. **Open the map directly (optional)**
+   - Open `neonatal_catchment_map.html` in your browser
+
+### Local script runner (separate UI)
+
+If you want a small local frontend with buttons to run each script (or the full pipeline), start the runner:
+
+```
+python3 script_runner_app.py
+```
+
+Then open `http://127.0.0.1:5002` in your browser and use the buttons to run:
+- `postcode_lookup.py`
+- `generate_map.py`
+- `build_static.py`
+- or the full pipeline in order
