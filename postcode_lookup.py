@@ -21,8 +21,9 @@ def get_side(pc):
     pc = pc.strip().upper()
     # Specific postcodes that are exceptions — treated as South despite SW1 prefix
     south_exceptions = {'SW1W9FJ', 'SW1P9UP', 'SW1Y6YQ', 'SW1Y5WT',
-                        'SW1Y4ZB', 'SW1Y6WZ', 'SW1Y5ZP', 'SW1X9UQ', 'SW1X8AX', 'SW1Y5WD', "SW39GA", 'SW39EA', 'SW39BW',
-                        'SW39DU', 'SW39EG', 'SW39GG', 'SW1Y5ZG', 'SW1X9ZU','SW39FX', 'SW39DX' }
+                        'SW1Y4ZB', 'SW1Y6WZ', 'SW1Y5ZP', 'SW1X9UQ', 'SW1X8AX', 'SW1Y5WD', 'SW65DB', 'SW39GA', 'SW39EA', 'SW39BW',
+                        'SW39DU', 'SW39EG', 'SW39GG', 'SW1Y5ZG', 'SW1X9ZU', 'SW39FX', 'SW39DX', 'SW39FJ', 'SW36XP',
+                        'SW1W9AT', 'SW1X7WE', 'SW1X7ZJ', 'SW1P9RZ', 'SW1X6WL', 'SW1Y4ZA', 'SW39DN', 'SW39EF', 'SW39GF'}
     if pc.replace(' ', '') in south_exceptions:
         return 'South'
 
