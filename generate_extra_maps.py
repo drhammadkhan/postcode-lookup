@@ -24,7 +24,6 @@ import colorsys, os
 import numpy as np
 import pandas as pd
 import folium
-from scipy.spatial import ConvexHull
 
 os.makedirs('docs/maps', exist_ok=True)
 
@@ -182,57 +181,179 @@ def build_map4():
     print(f"Map 4 saved → {path}  ({n_hosp} hospitals)")
 
 
-# ── MAP 5 – Convex-hull catchment boundaries ─────────────────────────────────
+# ── MAP 5 – Grid rasterisation catchment map ──────────────────────────────────
 
 
 def build_map5():
-    """Data-driven catchment areas: convex hull of all assigned postcodes per hospital per level."""
-    level_defs = [
-        ('Any Level',                 'Closest_Any', True),
-        ('Level 1 — Special Care',    'Closest_L1',  False),
-        ('Level 2 — High Dependency', 'Closest_L2',  False),
-        ('Level 3 — NICU',            'Closest_L3',  False),
-    ]
-
-    m = folium.Map(location=CENTRE, zoom_start=ZOOM, tiles=None)
-    folium.TileLayer(BASETILE, name='Base Map').add_to(m)
-
-    total_hulls = 0
-    for label, col, show in level_defs:
-        fg = folium.FeatureGroup(name=label, show=show)
-        for hosp_name in hospital_names:
-            subset = results[results[col] == hosp_name]
-            if len(subset) < 3:
-                continue
-            pts = subset[['Latitude', 'Longitude']].to_numpy()
-            try:
-                hull = ConvexHull(pts)
-            except Exception:
-                continue
-            hull_latlons = [[float(pts[i, 0]), float(pts[i, 1])] for i in hull.vertices]
-            c = colour_map.get(hosp_name, '#888')
-            folium.Polygon(
-                locations=hull_latlons,
-                color=c, weight=1.5, opacity=0.85,
-                fill=True, fill_color=c, fill_opacity=0.25,
-                tooltip=hosp_name,
-                popup=(
-                    f"<b>{hosp_name}</b><br>"
-                    f"{label}<br>"
-                    f"<b>{len(subset):,}</b> postcodes"
-                ),
-            ).add_to(fg)
-            total_hulls += 1
-        fg.add_to(m)
-
-    add_hospital_markers(m)
-    add_layer_control(m)
-    add_legend(m, 'Catchment areas (convex hull)',
-               [(colour_map[name], name) for name in hospital_names])
-
+    """
+    Grid-rasterisation catchment map.
+    Every postcode is binned into a ~900 m × 900 m cell; each cell is coloured
+    by the hospital that serves the most postcodes inside it.  Produces a clean
+    pixel-grid of straight-edged catchment areas, togglable by care level.
+    Rendered as a Leaflet.js canvas layer – no folium required.
+    """
     path = 'docs/maps/map5_voronoi.html'
-    m.save(path)
-    print(f"Map 5 saved → {path}  ({total_hulls} hulls across {len(level_defs)} levels)")
+    html = r"""<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Catchment Grid</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+#map{height:100%;}
+#ctrl{position:absolute;top:10px;right:10px;z-index:800;background:white;border-radius:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,.2);padding:10px 14px;min-width:205px;font-size:13px;}
+#ctrl .t{font-weight:700;color:#1e3a5f;margin-bottom:8px;}
+#ctrl label{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;
+  cursor:pointer;transition:background .12s;color:#2d3748;}
+#ctrl label:hover{background:#f7fafc;}
+#ctrl label.sel{background:#ebf8ff;color:#2d6a9f;font-weight:600;}
+#ctrl input[type=radio]{accent-color:#2d6a9f;}
+#ctrl .sep{border-top:1px solid #e2e8f0;margin:8px 0;}
+#leg{position:absolute;bottom:20px;left:10px;z-index:800;background:white;border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);padding:10px 14px;font-size:11.5px;
+  max-height:55vh;overflow-y:auto;line-height:1.85;max-width:220px;display:none;}
+.sw{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:5px;vertical-align:middle;}
+</style></head><body>
+_LOADING_
+<div id="map"></div>
+<div id="ctrl" style="display:none;">
+  <div class="t">Care level</div>
+  <label class="sel"><input type="radio" name="lv" value="0" checked> Any Level</label>
+  <label><input type="radio" name="lv" value="1"> Level 1 &mdash; Special Care</label>
+  <label><input type="radio" name="lv" value="2"> Level 2 &mdash; High Dependency</label>
+  <label><input type="radio" name="lv" value="3"> Level 3 &mdash; NICU</label>
+  <div class="sep"></div>
+  <label><input type="checkbox" id="hTog" checked> Hospital markers</label>
+</div>
+<div id="leg"></div>
+_STATUS_
+<script>
+var GLAT=0.008,GLON=0.012;
+
+var GridLayer=L.Layer.extend({
+  initialize:function(cells,fn){this._cells=cells;this._fn=fn;},
+  onAdd:function(map){
+    this._map=map;var c=document.createElement('canvas');
+    c.style.cssText='position:absolute;top:0;left:0;pointer-events:none;z-index:400;';
+    map.getContainer().appendChild(c);this._canvas=c;this._resize();
+    map.on('movestart',function(){this._canvas.style.opacity='0';},this);
+    map.on('moveend zoomend',function(){this._canvas.style.opacity='1';this._draw();},this);
+    map.on('resize',function(){this._resize();this._draw();},this);this._draw();
+  },
+  onRemove:function(map){this._canvas.parentNode.removeChild(this._canvas);},
+  update:function(fn){this._fn=fn;this._draw();},
+  _resize:function(){var s=this._map.getSize();this._canvas.width=s.x;this._canvas.height=s.y;},
+  _draw:function(){
+    var ctx=this._canvas.getContext('2d'),s=this._map.getSize(),map=this._map,fn=this._fn;
+    ctx.clearRect(0,0,s.x,s.y);
+    this._cells.forEach(function(cell){
+      var col=fn(cell);if(!col)return;
+      ctx.fillStyle=col;
+      var tl=map.latLngToContainerPoint([cell[0]+GLAT,cell[1]]);
+      var br=map.latLngToContainerPoint([cell[0],cell[1]+GLON]);
+      ctx.fillRect(tl.x,tl.y,Math.max(2,br.x-tl.x),Math.max(2,br.y-tl.y));
+    });
+  }
+});
+
+var map=L.map('map').setView([51.5,-0.1],10);
+_BASE_TILE_
+
+var gridLayer,hospLayer;
+Promise.all([
+  fetch('../postcodes.json').then(function(r){document.getElementById('barFill').style.width='50%';return r.json();}),
+  fetch('../hospitals.json').then(function(r){return r.json();})
+]).then(function(res){
+  var pcData=res[0],hospData=res[1],names=pcData.names,data=pcData.data;
+  document.getElementById('barFill').style.width='80%';
+  document.getElementById('loadMsg').textContent='Building grid\u2026';
+
+  var nc=names.map(function(_,i){return 'hsl('+Math.round((i/names.length)*360)+',75%,45%)';});
+
+  // Bin every postcode into a grid cell, count votes per hospital per level
+  var grid={};
+  var keys=Object.keys(data);
+  for(var i=0;i<keys.length;i++){
+    var r=data[keys[i]];
+    var lat=r[1],lon=r[2];
+    var cLat=Math.floor(lat/GLAT)*GLAT;
+    var cLon=Math.floor(lon/GLON)*GLON;
+    var k=cLat+'|'+cLon;
+    if(!grid[k])grid[k]=[cLat,cLon,[{},{},{},{}]];
+    // r[4]=any_idx, r[6]=l1_idx, r[8]=l2_idx, r[10]=l3_idx
+    var lvCols=[4,6,8,10];
+    for(var li=0;li<4;li++){var h=r[lvCols[li]];if(h!=null)grid[k][2][li][h]=(grid[k][2][li][h]||0)+1;}
+  }
+
+  // Compute mode hospital for each level in each cell
+  var cells=[];
+  var gKeys=Object.keys(grid);
+  for(var gi=0;gi<gKeys.length;gi++){
+    var g=grid[gKeys[gi]];
+    var modes=[];
+    for(var li=0;li<4;li++){
+      var counts=g[2][li],best=-1,bestH=-1;
+      var hs=Object.keys(counts);
+      for(var hi=0;hi<hs.length;hi++){var hh=parseInt(hs[hi]);if(counts[hh]>best){best=counts[hh];bestH=hh;}}
+      modes.push(bestH);
+    }
+    cells.push([g[0],g[1],modes]); // [cellLat, cellLon, [m0,m1,m2,m3]]
+  }
+
+  var lv=0;
+  function makeColorFn(lvl){return function(cell){var h=cell[2][lvl];return h>=0?nc[h]+' / 0.55)'.replace(')',',0.55)').replace('hsl(','hsla('):null;};}
+
+  // Simpler: just use nc[h] with globalAlpha
+  function colorFn(cell){var h=cell[2][lv];return h>=0?nc[h]:null;}
+  gridLayer=new GridLayer(cells,colorFn);
+  gridLayer._canvas&&(gridLayer._canvas.style.opacity='0.7');
+  gridLayer.addTo(map);
+
+  // Set canvas opacity after add
+  setTimeout(function(){if(gridLayer._canvas)gridLayer._canvas.style.opacity='0.72';},100);
+
+  hospLayer=L.layerGroup().addTo(map);
+  var ncMap={};names.forEach(function(n,i){ncMap[n]=nc[i];});
+  hospData.forEach(function(h){
+    L.circleMarker([h.lat,h.lon],{radius:8,color:'#1a202c',weight:2,
+      fillColor:ncMap[h.name]||'#666',fillOpacity:1})
+     .bindPopup('<b>'+h.name+'</b><br>Level '+h.level+' | '+h.side)
+     .bindTooltip(h.name).addTo(hospLayer);
+  });
+
+  document.querySelectorAll('input[name=lv]').forEach(function(radio){
+    radio.addEventListener('change',function(){
+      lv=parseInt(this.value,10);
+      gridLayer.update(colorFn);
+      document.querySelectorAll('#ctrl label').forEach(function(l){l.classList.remove('sel');});
+      this.parentElement.classList.add('sel');
+    });
+  });
+  document.getElementById('hTog').addEventListener('change',function(){
+    if(this.checked)map.addLayer(hospLayer);else map.removeLayer(hospLayer);
+  });
+
+  var leg=document.getElementById('leg'),html='<b>Hospital catchment</b><br>';
+  names.forEach(function(n,i){html+='<span class="sw" style="background:'+nc[i]+'"></span>'+n+'<br>';});
+  leg.innerHTML=html;
+  document.getElementById('status').textContent=
+    cells.length.toLocaleString()+' grid cells from '+keys.length.toLocaleString()+' postcodes';
+  document.getElementById('loading').style.display='none';
+  document.getElementById('ctrl').style.display='';
+  leg.style.display='';document.getElementById('status').style.display='';
+}).catch(function(e){document.getElementById('loadMsg').textContent='Error: '+e.message;});
+</script></body></html>"""
+
+    content = (html
+               .replace('_LOADING_', _LOADING)
+               .replace('_STATUS_', _STATUS)
+               .replace('_BASE_TILE_', _BASE_TILE))
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(content)
+    kb = os.path.getsize(path) // 1024
+    print(f"Map 5 saved → {path}  ({kb} KB)")
 
 
 # ── MAPS 1–3: Lightweight Leaflet.js (canvas-based, ~6 KB each) ───────────────

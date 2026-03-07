@@ -344,27 +344,24 @@
 <!-- ── Panel 5 ── -->
 <div id="p5" class="panel">
     <div class="desc-bar">
-        <div class="desc-icon">🗺️</div>
+        <div class="desc-icon">�</div>
         <div class="desc-content">
-            <div class="desc-title">Convex Hull Catchment Boundaries</div>
+            <div class="desc-title">Catchment Grid Map</div>
             <p class="desc-text">
-                Each hospital's catchment is drawn as the
-                <strong>convex hull</strong> of all postcodes actually assigned to it —
-                the tightest straight-edged polygon that encloses every postcode in
-                that hospital's catchment area. Unlike theoretical Voronoi diagrams,
-                these shapes are derived directly from the postcode assignment data,
-                so they reflect reality rather than geometry.
-                Use the <strong>layer control (top right)</strong> to switch between
-                care levels: <em>Any Level</em>, <em>Level 1 — Special Care</em>,
-                <em>Level 2 — High Dependency</em>, and <em>Level 3 — NICU</em>.
-                Overlapping hulls show where catchments genuinely share geography;
-                gaps reveal areas far from any single dominant unit.
+                London is divided into a grid of <strong>~900 m × 900 m cells</strong>.
+                Every postcode is assigned to its cell, and each cell is coloured by the
+                hospital that serves the <strong>most postcodes within it</strong>.
+                Because the colour comes directly from the data rather than geometric
+                extrapolation, there are no spurious cross-river or cross-boundary
+                stretches — each hospital only lights up where it genuinely dominates.
+                Use the <strong>level control</strong> to compare how the grid
+                shifts between Any Level, L1, L2, and L3 care.
             </p>
             <div class="tags">
-                <span class="tag">Convex hull — data-driven boundaries</span>
-                <span class="tag green">Straight-edged polygons</span>
-                <span class="tag">4 care levels — toggleable layers</span>
-                <span class="tag">Click area for hospital &amp; postcode count</span>
+                <span class="tag">Grid rasterisation — data-driven</span>
+                <span class="tag green">~900 m cells — straight edges</span>
+                <span class="tag">4 care levels — toggleable</span>
+                <span class="tag">All 326 k postcodes processed</span>
             </div>
         </div>
     </div>
