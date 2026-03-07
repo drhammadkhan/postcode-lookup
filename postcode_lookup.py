@@ -37,7 +37,7 @@ def get_side(pc):
     north_sw_districts = {'1', '3', '5', '6', '7', '10'}
     # TW districts that sit north of the Thames
     # (TW7=Isleworth/WMX, TW8=Brentford, TW9=Kew, TW3-TW6=Hounslow/Heathrow, TW13-TW14=Feltham)
-    north_tw_districts = {'3', '4', '5', '6', '7', '8', '9', '13', '14'}
+    north_tw_districts = {'3', '4', '5', '6', '7', '8', '13', '14'}
 
     # Extract only LEADING letters as the area code (WC2R → WC, EC1A → EC, SW1A → SW)
     prefix = ''
