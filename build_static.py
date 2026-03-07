@@ -55,13 +55,9 @@ for _, row in hospitals.iterrows():
     tags = ''
     if pd.notna(row.get('Specialty Tags', '')):
         tags = str(row['Specialty Tags']).strip()
-    _SECTOR_NORM = {'South East': 'SE', 'South West': 'SW'}
-    raw_sector = str(row['Sector']).strip() if pd.notna(row.get('Sector', '')) else ''
-    sector = _SECTOR_NORM.get(raw_sector, raw_sector)
     hosp_list.append({
         'name': row['Hospital Name'],
         'level': int(row['Level']),
-        'sector': sector,
         'side': row['Side'],
         'lat': round(row['Latitude'], 4),
         'lon': round(row['Longitude'], 4),
