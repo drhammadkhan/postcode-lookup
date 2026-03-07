@@ -49,8 +49,9 @@ var GridLayer=L.Layer.extend({
   initialize:function(cells,fn){this._cells=cells;this._fn=fn;},
   onAdd:function(map){
     this._map=map;var c=document.createElement('canvas');
-    c.style.cssText='position:absolute;top:0;left:0;pointer-events:none;z-index:400;';
-    map.getContainer().appendChild(c);this._canvas=c;this._resize();
+    c.style.cssText='position:absolute;top:0;left:0;pointer-events:none;z-index:200;';
+    map.getPanes().tilePane.parentNode.insertBefore(c,map.getPanes().overlayPane);
+    this._canvas=c;this._resize();
     map.on('movestart',function(){this._canvas.style.opacity='0';},this);
     map.on('moveend zoomend',function(){this._canvas.style.opacity='1';this._draw();},this);
     map.on('resize',function(){this._resize();this._draw();},this);this._draw();
