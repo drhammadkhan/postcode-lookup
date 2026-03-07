@@ -16,20 +16,12 @@ def haversine(lat1, lon1, lat2, lon2):
     a = np.sin(dlat / 2) ** 2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2) ** 2
     return R * 2 * np.arcsin(np.sqrt(a))
 
-# Load extra South exceptions from the aberrant SW postcode list
-def load_aberrant_exceptions(path: str) -> set[str]:
-    try:
-        df = pd.read_csv(path, dtype={'Postcode': str})
-    except FileNotFoundError:
-        return set()
-    return {str(pc).replace(' ', '').upper() for pc in df['Postcode'].dropna()}
-
 SOUTH_EXCEPTIONS = {
     'SW1W9FJ', 'SW1P9UP', 'SW1Y6YQ', 'SW1Y5WT',
     'SW1Y4ZB', 'SW1Y6WZ', 'SW1Y5ZP', 'SW1X9UQ', 'SW1X8AX', 'SW1Y5WD', 'SW65DB', 'SW39GA', 'SW39EA', 'SW39BW',
     'SW39DU', 'SW39EG', 'SW39GG', 'SW1Y5ZG', 'SW1X9ZU', 'SW39FX', 'SW39DX', 'SW39FJ', 'SW36XP',
     'SW1W9AT', 'SW1X7WE', 'SW1X7ZJ', 'SW1P9RZ', 'SW1X6WL', 'SW1Y4ZA', 'SW39DN', 'SW39EF', 'SW39GF'
-} | load_aberrant_exceptions('aberrant_sw_postcodes.csv')
+}
 
 # 3. FUNCTION TO DETERMINE SIDE OF RIVER
 def get_side(pc):
@@ -43,6 +35,9 @@ def get_side(pc):
     north_prefixes = {'N', 'NW', 'E', 'EN', 'HA', 'IG', 'RM', 'UB', 'WD', 'WC', 'EC', 'W'}
     # SW districts that sit north of the Thames
     north_sw_districts = {'1', '3', '5', '6', '7', '10'}
+    # TW districts that sit north of the Thames
+    # (TW7=Isleworth/WMX, TW8=Brentford, TW9=Kew, TW3-TW6=Hounslow/Heathrow, TW13-TW14=Feltham)
+    north_tw_districts = {'3', '4', '5', '6', '7', '8', '9', '13', '14'}
 
     # Extract only LEADING letters as the area code (WC2R → WC, EC1A → EC, SW1A → SW)
     prefix = ''
@@ -56,6 +51,11 @@ def get_side(pc):
         # Extract the district number from the outcode (SW1V → '1', SW10 → '10')
         district_num = ''.join(c for c in outcode[len(prefix):] if c.isdigit())
         return 'North' if district_num in north_sw_districts else 'South'
+
+    if prefix == 'TW':
+        # Extract the district number from the outcode (TW7 → '7', TW13 → '13')
+        district_num = ''.join(c for c in outcode[len(prefix):] if c.isdigit())
+        return 'North' if district_num in north_tw_districts else 'South'
 
     return 'North' if prefix in north_prefixes else 'South'
 
