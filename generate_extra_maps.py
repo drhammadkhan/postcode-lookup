@@ -24,7 +24,7 @@ import colorsys, os
 import numpy as np
 import pandas as pd
 import folium
-from scipy.spatial import Voronoi
+from scipy.spatial import ConvexHull
 
 os.makedirs('docs/maps', exist_ok=True)
 
@@ -182,228 +182,57 @@ def build_map4():
     print(f"Map 4 saved → {path}  ({n_hosp} hospitals)")
 
 
-# ── MAP 5 – Voronoi catchment boundaries (North/South Thames-aware) ──────────
-
-# Thames centre-line, west→east, strictly increasing longitude.
-# Used as the clipping boundary between North and South Voronoi diagrams.
-THAMES_LINE = [
-    (51.413, -0.520),  # East Molesey
-    (51.444, -0.380),  # Twickenham
-    (51.461, -0.310),  # Richmond
-    (51.477, -0.260),  # Kew
-    (51.482, -0.245),  # Brentford
-    (51.487, -0.228),  # Chiswick
-    (51.490, -0.205),  # Hammersmith
-    (51.480, -0.175),  # Fulham / Putney
-    (51.476, -0.155),  # Chelsea Bridge
-    (51.485, -0.128),  # Vauxhall
-    (51.495, -0.120),  # Westminster
-    (51.503, -0.095),  # Waterloo
-    (51.507, -0.075),  # Blackfriars
-    (51.504, -0.048),  # London Bridge
-    (51.499,  0.005),  # Bermondsey
-    (51.494,  0.025),  # Rotherhithe
-    (51.489,  0.053),  # Greenwich
-    (51.480,  0.095),  # Woolwich
-    (51.468,  0.145),  # Erith
-    (51.457,  0.200),  # Purfleet
-    (51.445,  0.335),  # Gravesend
-]
-
-
-def _thames_lat_at(lon):
-    """Linearly interpolate Thames latitude at a given longitude."""
-    lons = [p[1] for p in THAMES_LINE]
-    lats = [p[0] for p in THAMES_LINE]
-    if lon <= lons[0]:  return lats[0]
-    if lon >= lons[-1]: return lats[-1]
-    for i in range(len(lons) - 1):
-        if lons[i] <= lon <= lons[i + 1]:
-            t = (lon - lons[i]) / (lons[i + 1] - lons[i])
-            return lats[i] + t * (lats[i + 1] - lats[i])
-    return lats[-1]
-
-
-def _north_of_thames(lat, lon):
-    return lat > _thames_lat_at(lon)
-
-
-def _thames_crossing(a, b):
-    """Binary-search intersection of edge a→b with the Thames line."""
-    na, nb = _north_of_thames(a[0], a[1]), _north_of_thames(b[0], b[1])
-    if na == nb:
-        return None
-    lo, hi = 0.0, 1.0
-    for _ in range(40):
-        mid = (lo + hi) / 2
-        m   = (a[0] + mid * (b[0] - a[0]), a[1] + mid * (b[1] - a[1]))
-        if _north_of_thames(m[0], m[1]) == na:
-            lo = mid
-        else:
-            hi = mid
-    t = (lo + hi) / 2
-    return (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
-
-
-def _clip_to_thames_side(polygon, want_north):
-    """Sutherland-Hodgman style clip using the Thames polyline as the boundary."""
-    result = []
-    n = len(polygon)
-    for i in range(n):
-        curr  = polygon[i]
-        prev  = polygon[i - 1]
-        c_in  = (_north_of_thames(curr[0], curr[1]) == want_north)
-        p_in  = (_north_of_thames(prev[0], prev[1]) == want_north)
-        if c_in:
-            if not p_in:
-                pt = _thames_crossing(prev, curr)
-                if pt: result.append(pt)
-            result.append(curr)
-        elif p_in:
-            pt = _thames_crossing(prev, curr)
-            if pt: result.append(pt)
-    return result
-
-
-def _clip_polygon(polygon, lat_min, lat_max, lon_min, lon_max):
-    """Sutherland–Hodgman clip of a (lat, lon) polygon to an axis-aligned box."""
-    def inside(p, edge):
-        lat, lon = p
-        return {'L': lon >= lon_min, 'R': lon <= lon_max,
-                'B': lat >= lat_min, 'T': lat <= lat_max}[edge]
-
-    def intersect(a, b, edge):
-        la, lna = a
-        lb, lnb = b
-        if edge in ('L', 'R'):
-            xb = lon_min if edge == 'L' else lon_max
-            t  = (xb - lna) / (lnb - lna) if lnb != lna else 0
-            return (la + t * (lb - la), xb)
-        else:
-            yb = lat_min if edge == 'B' else lat_max
-            t  = (yb - la) / (lb - la) if lb != la else 0
-            return (yb, lna + t * (lnb - lna))
-
-    out = polygon
-    for edge in ('L', 'R', 'B', 'T'):
-        if not out:
-            return []
-        inp, out = out, []
-        for i, curr in enumerate(inp):
-            prev = inp[i - 1]
-            in_c, in_p = inside(curr, edge), inside(prev, edge)
-            if in_c:
-                if not in_p:
-                    out.append(intersect(prev, curr, edge))
-                out.append(curr)
-            elif in_p:
-                out.append(intersect(prev, curr, edge))
-    return out
-
-
-def _densify(polygon, max_seg_deg=0.007):
-    """Insert intermediate vertices on long edges for smoother polygon rendering."""
-    result = []
-    n = len(polygon)
-    for i in range(n):
-        a = polygon[i]
-        b = polygon[(i + 1) % n]
-        result.append(a)
-        dist = np.hypot(b[0] - a[0], b[1] - a[1])
-        if dist > max_seg_deg:
-            steps = int(np.ceil(dist / max_seg_deg))
-            for j in range(1, steps):
-                t = j / steps
-                result.append((a[0] + t * (b[0] - a[0]),
-                                a[1] + t * (b[1] - a[1])))
-    return result
+# ── MAP 5 – Convex-hull catchment boundaries ─────────────────────────────────
 
 
 def build_map5():
-    """North/South Thames-aware Voronoi with densified edges."""
-    lat_ref  = 51.5
-    scale    = np.cos(np.radians(lat_ref))
-    LAT_MIN, LAT_MAX = 51.0, 52.1
-    LON_MIN, LON_MAX = -1.0,  0.75
+    """Data-driven catchment areas: convex hull of all assigned postcodes per hospital per level."""
+    level_defs = [
+        ('Any Level',                 'Closest_Any', True),
+        ('Level 1 — Special Care',    'Closest_L1',  False),
+        ('Level 2 — High Dependency', 'Closest_L2',  False),
+        ('Level 3 — NICU',            'Closest_L3',  False),
+    ]
 
     m = folium.Map(location=CENTRE, zoom_start=ZOOM, tiles=None)
     folium.TileLayer(BASETILE, name='Base Map').add_to(m)
 
-    # Draw the Thames as a visual reference line
-    folium.PolyLine(
-        THAMES_LINE, color='#4a90d9', weight=3, opacity=0.8,
-        tooltip='River Thames (approximate)',
-    ).add_to(m)
-
-    def _build_side(side_hosps, want_north):
-        """Compute Voronoi, clip to Thames side, densify, return list of region dicts."""
-        side_hosps = side_hosps.reset_index(drop=True)
-        n = len(side_hosps)
-        if n == 0:
-            return []
-        names_s  = list(side_hosps['Hospital Name'])
-        levels_s = list(side_hosps['Level'])
-        pts = np.array([
-            [r['Latitude'], r['Longitude'] * scale]
-            for _, r in side_hosps.iterrows()
-        ])
-        # 48-point mirror ring prevents unbounded outer regions
-        cx, cy  = pts.mean(axis=0)
-        angles  = np.linspace(0, 2 * np.pi, 48, endpoint=False)
-        mirrors = np.array([[cx + 25 * np.sin(a), cy + 25 * np.cos(a)] for a in angles])
-        vor     = Voronoi(np.vstack([pts, mirrors]))
-
-        out = []
-        for i in range(n):
-            region = vor.regions[vor.point_region[i]]
-            if not region or -1 in region:
-                continue
-            # Unscale longitude
-            verts = [(vor.vertices[v][0], vor.vertices[v][1] / scale) for v in region]
-            # 1. Clip to bounding box
-            v = _clip_polygon(verts, LAT_MIN, LAT_MAX, LON_MIN, LON_MAX)
-            if len(v) < 3: continue
-            # 2. Clip to correct side of Thames
-            v = _clip_to_thames_side(v, want_north)
-            if len(v) < 3: continue
-            # 3. Densify edges
-            v = _densify(v)
-            out.append({'name': names_s[i], 'level': levels_s[i], 'verts': v})
-        return out
-
-    north_hosps = hospitals[hospitals['Side'].isin(['North', 'Both'])]
-    south_hosps = hospitals[hospitals['Side'].isin(['South', 'Both'])]
-
-    north_regions = _build_side(north_hosps, want_north=True)
-    south_regions = _build_side(south_hosps, want_north=False)
-
-    for label, regions, show in [
-        ('North catchments', north_regions, True),
-        ('South catchments', south_regions, True),
-    ]:
+    total_hulls = 0
+    for label, col, show in level_defs:
         fg = folium.FeatureGroup(name=label, show=show)
-        for reg in regions:
-            name = str(reg['name'])
-            c    = colour_map.get(name, '#888')
-            lv   = int(reg['level']) if pd.notna(reg['level']) else '?'
+        for hosp_name in hospital_names:
+            subset = results[results[col] == hosp_name]
+            if len(subset) < 3:
+                continue
+            pts = subset[['Latitude', 'Longitude']].to_numpy()
+            try:
+                hull = ConvexHull(pts)
+            except Exception:
+                continue
+            hull_latlons = [[float(pts[i, 0]), float(pts[i, 1])] for i in hull.vertices]
+            c = colour_map.get(hosp_name, '#888')
             folium.Polygon(
-                locations=reg['verts'],
-                color=c, weight=1.2,
-                fill=True, fill_color=c, fill_opacity=0.35,
-                popup=f"<b>{name}</b><br>Level {lv}",
-                tooltip=name,
+                locations=hull_latlons,
+                color=c, weight=1.5, opacity=0.85,
+                fill=True, fill_color=c, fill_opacity=0.25,
+                tooltip=hosp_name,
+                popup=(
+                    f"<b>{hosp_name}</b><br>"
+                    f"{label}<br>"
+                    f"<b>{len(subset):,}</b> postcodes"
+                ),
             ).add_to(fg)
+            total_hulls += 1
         fg.add_to(m)
 
     add_hospital_markers(m)
     add_layer_control(m)
-    add_legend(m, 'Voronoi catchment regions (N/S aware)',
+    add_legend(m, 'Catchment areas (convex hull)',
                [(colour_map[name], name) for name in hospital_names])
 
     path = 'docs/maps/map5_voronoi.html'
     m.save(path)
-    print(f"Map 5 saved → {path}  "
-          f"({len(north_regions)} north + {len(south_regions)} south regions)")
+    print(f"Map 5 saved → {path}  ({total_hulls} hulls across {len(level_defs)} levels)")
 
 
 # ── MAPS 1–3: Lightweight Leaflet.js (canvas-based, ~6 KB each) ───────────────
