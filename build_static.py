@@ -58,6 +58,7 @@ for _, row in hospitals.iterrows():
     hosp_list.append({
         'name': row['Hospital Name'],
         'level': int(row['Level']),
+        'sector': {'South East': 'SE', 'South West': 'SW'}.get(str(row['Sector']).strip(), str(row['Sector']).strip()) if pd.notna(row.get('Sector', '')) else '',
         'side': row['Side'],
         'lat': round(row['Latitude'], 4),
         'lon': round(row['Longitude'], 4),

@@ -380,14 +380,48 @@
             maxZoom: 19,
         }).addTo(catchmentMap);
 
-        // Generate colours for hospitals
-        const names = postcodeData.names;
-        const colours = {};
-        names.forEach((name, i) => {
-            const hue = i / names.length;
-            const h = Math.round(hue * 360);
-            colours[name] = `hsl(${h}, 60%, 45%)`;
+        // Sector colour families — each hospital gets a distinct shade within its sector
+        // Hue ranges chosen to give clearly distinct families:
+        //   NC=Blue(210-240), NE=Green(100-145), NW=Purple(270-310),
+        //   SE=Orange(20-45), SW=Pink(330-355), Border=Brown(25-40 low-sat)
+        const SECTOR_RANGES = {
+            'NC':     { h: [210, 240], s: 75, lRange: [35, 60] },  // blues
+            'NE':     { h: [105, 148], s: 70, lRange: [30, 58] },  // greens
+            'NW':     { h: [270, 308], s: 65, lRange: [35, 58] },  // purples
+            'SE':     { h: [20,  44],  s: 85, lRange: [38, 60] },  // oranges
+            'SW':     { h: [330, 352], s: 70, lRange: [45, 65] },  // pinks
+            'Border': { h: [25,  38],  s: 35, lRange: [35, 55] },  // browns
+        };
+        const SECTOR_ORDER = ['NC', 'NE', 'NW', 'SE', 'SW', 'Border'];
+        const SECTOR_LABELS = {
+            'NC': 'North Central', 'NE': 'North East', 'NW': 'North West',
+            'SE': 'South East',    'SW': 'South West', 'Border': 'Border',
+        };
+
+        // Build sector → sorted hospital list
+        const sectorHosps = {};
+        SECTOR_ORDER.forEach(s => { sectorHosps[s] = []; });
+        hospitalData.forEach(h => {
+            const sec = h.sector || 'Border';
+            if (sectorHosps[sec]) sectorHosps[sec].push(h.name);
+            else sectorHosps['Border'].push(h.name);
         });
+
+        // Assign one shade per hospital within its sector's hue/lightness range
+        const colours = {};
+        SECTOR_ORDER.forEach(sec => {
+            const hosps = sectorHosps[sec];
+            const n = hosps.length;
+            const { h, s, lRange } = SECTOR_RANGES[sec];
+            hosps.forEach((name, i) => {
+                const t = n === 1 ? 0.5 : i / (n - 1);
+                const hue = Math.round(h[0] + t * (h[1] - h[0]));
+                const lit = Math.round(lRange[0] + t * (lRange[1] - lRange[0]));
+                colours[name] = `hsl(${hue},${s}%,${lit}%)`;
+            });
+        });
+
+        const names = postcodeData.names;
 
         // Create a layer group per hospital for the layer control
         const hospLayers = {};
@@ -405,35 +439,34 @@
             const batch = sample.slice(i, i + batchSize);
             batch.forEach(key => {
                 const r = postcodeData.data[key];
-                const hospName = names[r[4]]; // Closest_Any index
+                const hospName = names[r[4]];
+                const col = colours[hospName] || '#888';
                 L.circleMarker([r[1], r[2]], {
                     radius: 2,
-                    color: colours[hospName],
-                    fillColor: colours[hospName],
-                    fillOpacity: 0.6,
-                    weight: 0,
-                }).bindTooltip(r[0]).addTo(hospLayers[hospName]);
+                    color: col, fillColor: col, fillOpacity: 0.7, weight: 0,
+                }).addTo(hospLayers[hospName]);
             });
-            // Yield to browser
             await new Promise(r => setTimeout(r, 0));
         }
 
-        // Add hospital markers to a separate overlay
+        // Hospital markers
         const hospMarkerLayer = L.layerGroup().addTo(catchmentMap);
         hospitalData.forEach(h => {
             L.circleMarker([h.lat, h.lon], {
-                radius: 8,
-                color: 'black',
-                weight: 2,
-                fillColor: colours[h.name] || '#333',
-                fillOpacity: 1,
+                radius: 8, color: '#1a202c', weight: 2,
+                fillColor: colours[h.name] || '#333', fillOpacity: 1,
             }).bindPopup(`<b>${h.name}</b><br>Level ${h.level} | ${h.side}`)
-              .bindTooltip(h.name)
-              .addTo(hospMarkerLayer);
+              .bindTooltip(h.name).addTo(hospMarkerLayer);
         });
 
-        // Layer control
-        const overlays = { 'Hospitals': hospMarkerLayer, ...hospLayers };
+        // Layer control — hospitals grouped by sector
+        const overlays = { 'Hospitals': hospMarkerLayer };
+        SECTOR_ORDER.forEach(sec => {
+            sectorHosps[sec].forEach(name => {
+                const c = colours[name];
+                overlays[`<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${c};margin-right:5px;vertical-align:middle;"></span>${name}`] = hospLayers[name];
+            });
+        });
         L.control.layers({ 'Base Map': baseLayer }, overlays, { collapsed: false }).addTo(catchmentMap);
 
         // Add Deselect All / Select All toggle
@@ -457,15 +490,20 @@
             ctrl.appendChild(btn);
         }, 500);
 
-        // Add legend
+        // Add legend — grouped by sector
         const legend = L.control({ position: 'bottomleft' });
         legend.onAdd = function () {
             const div = L.DomUtil.create('div');
-            div.style.cssText = 'background:white;padding:12px 16px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.25);font-size:12px;max-height:60vh;overflow-y:auto;line-height:1.8;';
-            let html = '<b style="font-size:13px">Neonatal Catchment Areas</b><br>';
-            names.forEach(name => {
-                const c = colours[name];
-                html += `<span style="background:${c};width:12px;height:12px;display:inline-block;border-radius:2px;margin-right:6px;"></span>${name}<br>`;
+            div.style.cssText = 'background:white;padding:12px 16px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.25);font-size:12px;max-height:60vh;overflow-y:auto;line-height:1.7;min-width:190px;';
+            let html = '<b style="font-size:13px">Neonatal Catchment Areas</b>';
+            SECTOR_ORDER.forEach(sec => {
+                const hosps = sectorHosps[sec];
+                if (!hosps.length) return;
+                html += `<div style="margin-top:8px;margin-bottom:2px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#718096;font-weight:700;">${SECTOR_LABELS[sec]}</div>`;
+                hosps.forEach(name => {
+                    const c = colours[name];
+                    html += `<div><span style="background:${c};width:12px;height:12px;display:inline-block;border-radius:2px;margin-right:6px;vertical-align:middle;"></span>${name}</div>`;
+                });
             });
             div.innerHTML = html;
             return div;
