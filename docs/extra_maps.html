@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extra Maps — Neonatal Catchment Analysis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f8;
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ── Header ── */
+        header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d6a9f 100%);
+            color: white;
+            padding: 0.85rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            gap: 1rem;
+        }
+
+        header .title-group h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        header .title-group p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 1px;
+        }
+
+        header a.home-link {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-size: 0.82rem;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            white-space: nowrap;
+            transition: background 0.15s;
+            flex-shrink: 0;
+        }
+
+        header a.home-link:hover { background: rgba(255,255,255,0.15); }
+
+        /* ── Tab bar ── */
+        .tab-bar {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            overflow-x: auto;
+            flex-shrink: 0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 130px;
+            padding: 0.7rem 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: white;
+            color: #718096;
+            border-bottom: 3px solid transparent;
+            transition: all 0.15s;
+            white-space: nowrap;
+            line-height: 1.35;
+        }
+
+        .tab-btn:hover { color: #2d6a9f; background: #f7fafc; }
+        .tab-btn.active { color: #2d6a9f; border-bottom-color: #2d6a9f; background: #ebf8ff; }
+
+        .tab-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #e2e8f0;
+            color: #4a5568;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .tab-btn.active .tab-num { background: #2d6a9f; color: white; }
+
+        /* ── Panels ── */
+        .panel {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .panel.active { display: flex; }
+
+        /* ── Description bar ── */
+        .desc-bar {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .desc-icon {
+            font-size: 1.6rem;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .desc-content {}
+
+        .desc-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 0.2rem;
+        }
+
+        .desc-text {
+            font-size: 0.82rem;
+            color: #4a5568;
+            line-height: 1.55;
+            max-width: 900px;
+        }
+
+        .tags {
+            margin-top: 0.35rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #ebf8ff;
+            color: #2b6cb0;
+            padding: 0.1rem 0.55rem;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .tag.green  { background: #f0fff4; color: #276749; }
+        .tag.red    { background: #fff5f5; color: #9b2c2c; }
+        .tag.yellow { background: #fffff0; color: #744210; }
+
+        /* ── Map iframe ── */
+        .map-frame {
+            flex: 1;
+            border: none;
+            width: 100%;
+            background: #f7fafc;
+        }
+
+        /* ── Not-yet-generated placeholder ── */
+        .placeholder {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            color: #a0aec0;
+            background: #f7fafc;
+            font-size: 0.95rem;
+        }
+
+        .placeholder .icon { font-size: 2.5rem; }
+
+        .placeholder code {
+            background: #edf2f7;
+            padding: 0.2rem 0.6rem;
+            border-radius: 5px;
+            font-size: 0.88rem;
+            color: #4a5568;
+        }
+
+        @media (max-width: 600px) {
+            header { flex-direction: column; align-items: flex-start; }
+            .desc-icon { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="title-group">
+        <h1>🗺️ Extra Maps — Neonatal Catchment Analysis</h1>
+        <p>Five alternative views of the postcode–hospital catchment data</p>
+    </div>
+    <a class="home-link" href="index.html">← Postcode Lookup</a>
+</header>
+
+<div class="tab-bar" id="tabBar">
+    <button class="tab-btn active" data-panel="p1">
+        <span class="tab-num">1</span>Per-Level Catchments
+    </button>
+    <button class="tab-btn" data-panel="p2">
+        <span class="tab-num">2</span>Distance to NICU
+    </button>
+    <button class="tab-btn" data-panel="p3">
+        <span class="tab-num">3</span>Escalation Map
+    </button>
+    <button class="tab-btn" data-panel="p4">
+        <span class="tab-num">4</span>Catchment Size
+    </button>
+    <button class="tab-btn" data-panel="p5">
+        <span class="tab-num">5</span>Voronoi Boundaries
+    </button>
+</div>
+
+<!-- ── Panel 1 ── -->
+<div id="p1" class="panel active">
+    <div class="desc-bar">
+        <div class="desc-icon">🏥</div>
+        <div class="desc-content">
+            <div class="desc-title">Per-Level Catchment Areas</div>
+            <p class="desc-text">
+                Each dot represents a postcode, coloured by which hospital is nearest
+                at that level of care. Use the <strong>layer control (top right)</strong>
+                to switch between <em>Any Level</em>, <em>Level 1 — Special Care</em>,
+                <em>Level 2 — High Dependency</em>, and <em>Level 3 — NICU</em>.
+                Switching to L3 clearly shows how catchments expand and shift as fewer hospitals
+                offer intensive care — hospitals that appear small on the "Any" map can dominate
+                the L3 map when they are one of few NICUs serving a region.
+            </p>
+            <div class="tags">
+                <span class="tag">Colour = nearest hospital</span>
+                <span class="tag">Toggle levels via layer control</span>
+                <span class="tag">Hover dot for postcode detail</span>
+            </div>
+        </div>
+    </div>
+    <iframe class="map-frame" id="iframe-p1" data-src="maps/map1_levels.html"
+            title="Per-Level Catchment Map"></iframe>
+</div>
+
+<!-- ── Panel 2 ── -->
+<div id="p2" class="panel">
+    <div class="desc-bar">
+        <div class="desc-icon">🌡️</div>
+        <div class="desc-content">
+            <div class="desc-title">Distance to Nearest NICU (Level 3)</div>
+            <p class="desc-text">
+                Each postcode is coloured by how far away its nearest Level 3 (NICU) hospital
+                is. <span style="color:#1a9641;font-weight:600;">Green = very close</span>
+                (under 3 km), shading through yellow to
+                <span style="color:#d73027;font-weight:600;">red = far</span> (over 15 km).
+                This directly reveals coverage gaps — areas in red where families face
+                the longest journeys to access intensive neonatal care.
+                Inner London is largely well-covered; outer zones and areas near county
+                boundaries show the greatest distances.
+            </p>
+            <div class="tags">
+                <span class="tag green">&lt; 3 km — green</span>
+                <span class="tag yellow">6–10 km — yellow</span>
+                <span class="tag red">&gt; 15 km — red</span>
+                <span class="tag">Hover for exact distance &amp; hospital</span>
+            </div>
+        </div>
+    </div>
+    <iframe class="map-frame" id="iframe-p2" data-src="maps/map2_distance.html"
+            title="Distance to Nearest NICU Map"></iframe>
+</div>
+
+<!-- ── Panel 3 ── -->
+<div id="p3" class="panel">
+    <div class="desc-bar">
+        <div class="desc-icon">↗️</div>
+        <div class="desc-content">
+            <div class="desc-title">NICU Escalation Map</div>
+            <p class="desc-text">
+                Shows which postcodes have a Level 3 NICU
+                <strong>at their nearest hospital</strong>
+                (<span style="color:#888;font-weight:600;">grey</span> — no escalation needed),
+                versus those where the nearest NICU is at a
+                <strong>different, more distant hospital</strong>
+                (coloured by the NICU destination).
+                Hovering reveals the nearest hospital, the NICU destination, and the extra
+                kilometres that journey involves.
+                The coloured clusters show natural "escalation corridors" within the
+                London neonatal network — useful for understanding patient flow and
+                identifying where transport pressures are highest.
+            </p>
+            <div class="tags">
+                <span class="tag">Grey = nearest hospital has NICU</span>
+                <span class="tag">Colour = NICU destination hospital</span>
+                <span class="tag">Hover for extra km</span>
+            </div>
+        </div>
+    </div>
+    <iframe class="map-frame" id="iframe-p3" data-src="maps/map3_escalation.html"
+            title="NICU Escalation Map"></iframe>
+</div>
+
+<!-- ── Panel 4 ── -->
+<div id="p4" class="panel">
+    <div class="desc-bar">
+        <div class="desc-icon">🫧</div>
+        <div class="desc-content">
+            <div class="desc-title">Hospital Catchment Size (Bubble Map)</div>
+            <p class="desc-text">
+                Each hospital is shown as a bubble whose
+                <strong>area is proportional to the number of postcodes</strong>
+                for which it is the nearest unit at the selected care level.
+                Use the <strong>layer control</strong> to compare
+                Any Level, L1, L2, and L3 in turn.
+                A hospital that appears small on the "Any" map may dominate the
+                L3 map if it is one of the few NICUs in its part of London — revealing
+                which units carry a disproportionate intensive-care burden.
+                Click any bubble for the exact postcode count.
+            </p>
+            <div class="tags">
+                <span class="tag">Bubble area ∝ postcode count</span>
+                <span class="tag">Toggle levels via layer control</span>
+                <span class="tag">Click bubble for details</span>
+            </div>
+        </div>
+    </div>
+    <iframe class="map-frame" id="iframe-p4" data-src="maps/map4_bubbles.html"
+            title="Hospital Catchment Bubble Map"></iframe>
+</div>
+
+<!-- ── Panel 5 ── -->
+<div id="p5" class="panel">
+    <div class="desc-bar">
+        <div class="desc-icon">🔲</div>
+        <div class="desc-content">
+            <div class="desc-title">Voronoi Catchment Boundaries</div>
+            <p class="desc-text">
+                Geographic boundaries computed using a
+                <a href="https://en.wikipedia.org/wiki/Voronoi_diagram"
+                   target="_blank" rel="noopener"
+                   style="color:#2d6a9f;">Voronoi diagram</a>
+                — each filled region contains all points geometrically closer to that
+                hospital than any other.
+                The map runs <strong>two separate Voronoi diagrams</strong>: one for
+                hospitals serving <em>North</em> London (including "Both" hospitals),
+                one for <em>South</em> London.
+                Each diagram is then <strong>clipped at the River Thames</strong>
+                (shown in blue), so no North region bleeds south of the river and vice
+                versa — mirroring the routing rule used in the real postcode lookup.
+                Hospitals marked <em>Both</em> (e.g. West Middlesex) appear in both
+                halves. Polygon edges are <strong>densified</strong> with extra
+                intermediate vertices so boundaries follow the map projection smoothly
+                rather than as coarse straight lines.
+            </p>
+            <div class="tags">
+                <span class="tag">North &amp; South Voronoi — Thames-clipped</span>
+                <span class="tag green">Thames routing rule applied</span>
+                <span class="tag">Densified edges — smoother boundaries</span>
+                <span class="tag">Click region for hospital name &amp; level</span>
+            </div>
+        </div>
+    </div>
+    <iframe class="map-frame" id="iframe-p5" data-src="maps/map5_voronoi.html"
+            title="Voronoi Catchment Boundaries Map"></iframe>
+</div>
+
+<script>
+(function () {
+    var tabs   = document.querySelectorAll('.tab-btn');
+    var panels = document.querySelectorAll('.panel');
+
+    function loadIframe(panel) {
+        var iframe = panel.querySelector('iframe[data-src]');
+        if (iframe) {
+            iframe.src = iframe.dataset.src;
+            iframe.removeAttribute('data-src');
+        }
+    }
+
+    function activate(panelId) {
+        tabs.forEach(function (t) {
+            t.classList.toggle('active', t.dataset.panel === panelId);
+        });
+        panels.forEach(function (p) {
+            var isActive = p.id === panelId;
+            p.classList.toggle('active', isActive);
+            if (isActive) loadIframe(p);
+        });
+    }
+
+    // Eagerly load the first panel
+    loadIframe(document.getElementById('p1'));
+
+    tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            activate(tab.dataset.panel);
+        });
+    });
+}());
+</script>
+
+</body>
+</html>

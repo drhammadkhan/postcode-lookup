@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Distance to Nearest NICU</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+#map{height:100%;}
+#leg{position:absolute;bottom:20px;left:10px;z-index:800;background:white;border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);padding:12px 16px;font-size:12px;line-height:2;display:none;}
+.sw{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:7px;vertical-align:middle;}
+</style></head><body>
+<div id="loading" style="position:absolute;inset:0;z-index:9999;background:#f0f4f8;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#4a5568;">
+  <div style="font-weight:700;font-size:1rem;color:#1e3a5f;">Loading catchment data&hellip;</div>
+  <div style="width:260px;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;">
+    <div id="barFill" style="height:100%;background:#2d6a9f;border-radius:3px;width:0;transition:width .3s;"></div>
+  </div>
+  <div id="loadMsg" style="font-size:.82rem;">Fetching postcodes.json</div>
+</div>
+<div id="map"></div>
+<div id="leg"></div>
+<div id="status" style="position:absolute;bottom:10px;right:10px;z-index:800;background:rgba(255,255,255,.92);border-radius:6px;padding:4px 10px;font-size:11px;color:#718096;box-shadow:0 1px 4px rgba(0,0,0,.15);display:none;"></div>
+<script>
+var BINS=[{max:3,c:'#1a9641',l:'< 3 km'},{max:6,c:'#a6d96a',l:'3\u20136 km'},
+  {max:10,c:'#ffffbf',l:'6\u201310 km'},{max:15,c:'#fd8d3c',l:'10\u201315 km'},
+  {max:Infinity,c:'#d73027',l:'> 15 km'}];
+function dc(km){for(var i=0;i<BINS.length;i++)if(km<BINS[i].max)return BINS[i].c;return BINS[BINS.length-1].c;}
+var DotLayer=L.Layer.extend({
+  initialize:function(pts,fn){this._pts=pts;this._fn=fn;},
+  onAdd:function(map){
+    this._map=map;var c=document.createElement('canvas');
+    c.style.cssText='position:absolute;top:0;left:0;pointer-events:none;z-index:400;';
+    map.getContainer().appendChild(c);this._canvas=c;this._resize();
+    map.on('movestart',function(){this._canvas.style.opacity='0';},this);
+    map.on('moveend zoomend',function(){this._canvas.style.opacity='1';this._draw();},this);
+    map.on('resize',function(){this._resize();this._draw();},this);this._draw();
+  },
+  onRemove:function(map){this._canvas.parentNode.removeChild(this._canvas);},
+  update:function(fn){this._fn=fn;this._draw();},
+  _resize:function(){var s=this._map.getSize();this._canvas.width=s.x;this._canvas.height=s.y;},
+  _draw:function(){
+    var ctx=this._canvas.getContext('2d'),s=this._map.getSize(),map=this._map,fn=this._fn;
+    ctx.clearRect(0,0,s.x,s.y);
+    var g={};
+    this._pts.forEach(function(pt){var c=fn(pt);if(!g[c])g[c]=[];g[c].push(pt);});
+    Object.keys(g).forEach(function(col){
+      ctx.fillStyle=col;ctx.beginPath();
+      g[col].forEach(function(pt){var p=map.latLngToContainerPoint([pt[0],pt[1]]);
+        ctx.moveTo(p.x+2.2,p.y);ctx.arc(p.x,p.y,2.2,0,2*Math.PI);});
+      ctx.fill();});
+  }
+});
+var map=L.map('map').setView([51.5,-0.1],10);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap contributors &copy; CARTO',maxZoom:19}).addTo(map);
+Promise.all([
+  fetch('../postcodes.json').then(function(r){document.getElementById('barFill').style.width='50%';return r.json();}),
+  fetch('../hospitals.json').then(function(r){return r.json();})
+]).then(function(res){
+  var pcData=res[0],hospData=res[1],names=pcData.names,data=pcData.data;
+  document.getElementById('barFill').style.width='80%';
+  document.getElementById('loadMsg').textContent='Rendering\u2026';
+  var RATE=8,pts=[],keys=Object.keys(data);
+  for(var i=0;i<keys.length;i+=RATE){var r=data[keys[i]];pts.push([r[1],r[2],r[11]]);}
+  new DotLayer(pts,function(pt){return dc(pt[2]);}).addTo(map);
+  var nc={};names.forEach(function(n,i){nc[n]='hsl('+Math.round((i/names.length)*360)+',75%,45%)';});
+  hospData.forEach(function(h){
+    L.circleMarker([h.lat,h.lon],{radius:8,color:'#1a202c',weight:2,fillColor:nc[h.name]||'#666',fillOpacity:1})
+     .bindPopup('<b>'+h.name+'</b><br>Level '+h.level+' | '+h.side).bindTooltip(h.name).addTo(map);
+  });
+  var leg=document.getElementById('leg'),html='<b>Distance to nearest NICU (L3)</b><br>';
+  BINS.forEach(function(b){html+='<span class="sw" style="background:'+b.c+'"></span>'+b.l+'<br>';});
+  leg.innerHTML=html;
+  document.getElementById('status').textContent=pts.length.toLocaleString()+' postcodes (1/8 sample)';
+  document.getElementById('loading').style.display='none';
+  leg.style.display='';document.getElementById('status').style.display='';
+}).catch(function(e){document.getElementById('loadMsg').textContent='Error: '+e.message;});
+</script></body></html>
