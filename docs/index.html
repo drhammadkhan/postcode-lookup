@@ -385,12 +385,12 @@
         //   NC=Blue(210-240), NE=Green(100-145), NW=Purple(270-310),
         //   SE=Orange(20-45), SW=Pink(330-355), Border=Brown(25-40 low-sat)
         const SECTOR_RANGES = {
-            'NC':     { h: [210, 240], s: 75, lRange: [35, 60] },  // blues
-            'NE':     { h: [105, 148], s: 70, lRange: [30, 58] },  // greens
-            'NW':     { h: [270, 308], s: 65, lRange: [35, 58] },  // purples
-            'SE':     { h: [20,  44],  s: 85, lRange: [38, 60] },  // oranges
-            'SW':     { h: [330, 352], s: 70, lRange: [45, 65] },  // pinks
-            'Border': { h: [25,  38],  s: 35, lRange: [35, 55] },  // browns
+            'NC':     { h: [210, 240], s: [65, 85], l: [32, 60] },  // blues
+            'NE':     { h: [105, 148], s: [60, 80], l: [28, 58] },  // greens
+            'NW':     { h: [268, 310], s: [55, 78], l: [32, 60] },  // purples
+            'SE':     { h: [18,  44],  s: [75, 95], l: [36, 62] },  // oranges
+            'SW':     { h: [328, 355], s: [60, 82], l: [42, 68] },  // pinks
+            'Border': { h: [22,  38],  s: [28, 42], l: [32, 56] },  // browns
         };
         const SECTOR_ORDER = ['NC', 'NE', 'NW', 'SE', 'SW', 'Border'];
         const SECTOR_LABELS = {
@@ -407,17 +407,23 @@
             else sectorHosps['Border'].push(h.name);
         });
 
-        // Assign one shade per hospital within its sector's hue/lightness range
+        // Assign one shade per hospital — interleave lightness so adjacent
+        // hospitals alternate dark/light rather than ramping monotonically.
         const colours = {};
         SECTOR_ORDER.forEach(sec => {
             const hosps = sectorHosps[sec];
             const n = hosps.length;
-            const { h, s, lRange } = SECTOR_RANGES[sec];
+            const { h, s, l } = SECTOR_RANGES[sec];
+            // Build interleaved index order: 0, n-1, 1, n-2, 2, n-3 …
+            const order = [];
+            let lo = 0, hi = n - 1;
+            while (lo <= hi) { order.push(lo++); if (lo <= hi) order.push(hi--); }
             hosps.forEach((name, i) => {
-                const t = n === 1 ? 0.5 : i / (n - 1);
+                const t = n === 1 ? 0.5 : order[i] / (n - 1);
                 const hue = Math.round(h[0] + t * (h[1] - h[0]));
-                const lit = Math.round(lRange[0] + t * (lRange[1] - lRange[0]));
-                colours[name] = `hsl(${hue},${s}%,${lit}%)`;
+                const sat = Math.round(s[0] + t * (s[1] - s[0]));
+                const lit = Math.round(l[0] + t * (l[1] - l[0]));
+                colours[name] = `hsl(${hue},${sat}%,${lit}%)`;
             });
         });
 
