@@ -339,7 +339,7 @@
         // Build hospital coord lookup
         window.hospCoords = {};
         hospitalData.forEach(h => {
-            window.hospCoords[h.name] = { lat: h.lat, lon: h.lon, level: h.level, side: h.side, tags: h.tags || '' };
+            window.hospCoords[h.name] = { lat: h.lat, lon: h.lon, level: h.level, side: h.side, sector: h.sector || '', tags: h.tags || '' };
         });
 
         setTimeout(() => {
@@ -365,8 +365,6 @@
     // ── Build catchment map from hospital data ──
     async function buildCatchmentMap() {
         document.getElementById('catchment-loading').style.display = 'block';
-
-        // Wait for data if not loaded yet
         while (!postcodeData || !hospitalData) {
             await new Promise(r => setTimeout(r, 100));
         }
@@ -375,97 +373,150 @@
         mapDiv.style.display = 'block';
 
         catchmentMap = L.map(mapDiv).setView([51.5, -0.1], 10);
-        const baseLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-            maxZoom: 19,
-        }).addTo(catchmentMap);
+        const baseLayer = L.tileLayer(
+            'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+            { attribution: '&copy; OpenStreetMap contributors &copy; CARTO', maxZoom: 19 }
+        ).addTo(catchmentMap);
 
-        // Generate colours for hospitals
+        // ── Sector definitions ───────────────────────────────────────────
+        const SECTOR_COLOURS = {
+            'NC': '#3182ce', 'NE': '#805ad5', 'NW': '#38a169',
+            'SE': '#dd6b20', 'SW': '#e53e3e', 'Border': '#718096',
+        };
+        const SECTOR_LABELS = {
+            'NC': 'North Central', 'NE': 'North East', 'NW': 'North West',
+            'SE': 'South East',    'SW': 'South West', 'Border': 'Border units',
+        };
+        const SECTOR_ORDER = ['NC', 'NE', 'NW', 'SE', 'SW', 'Border'];
+
         const names = postcodeData.names;
-        const colours = {};
-        names.forEach((name, i) => {
-            const hue = i / names.length;
-            const h = Math.round(hue * 360);
-            colours[name] = `hsl(${h}, 60%, 45%)`;
+        const nameToSector = {};
+        hospitalData.forEach(h => { nameToSector[h.name] = h.sector || 'Border'; });
+        const nameColour = n => SECTOR_COLOURS[nameToSector[n] || 'Border'] || '#718096';
+
+        // ── Sector grid canvas (behind everything) ────────────────────────
+        const GLAT = 0.008, GLON = 0.012;
+        const gridVotes = {};
+        const allKeys = Object.keys(postcodeData.data);
+        for (let i = 0; i < allKeys.length; i++) {
+            const r = postcodeData.data[allKeys[i]];
+            const cLat = Math.floor(r[1] / GLAT) * GLAT;
+            const cLon = Math.floor(r[2] / GLON) * GLON;
+            const k = cLat + '|' + cLon;
+            const sec = nameToSector[names[r[4]]] || 'Border';
+            if (!gridVotes[k]) gridVotes[k] = { lat: cLat, lon: cLon, votes: {} };
+            gridVotes[k].votes[sec] = (gridVotes[k].votes[sec] || 0) + 1;
+        }
+        const gridCells = Object.values(gridVotes).map(c => {
+            const best = Object.entries(c.votes).sort((a, b) => b[1] - a[1])[0];
+            return [c.lat, c.lon, best[0]];
         });
 
-        // Create a layer group per hospital for the layer control
-        const hospLayers = {};
-        names.forEach(name => {
-            hospLayers[name] = L.layerGroup().addTo(catchmentMap);
-        });
-
-        // Sample every 10th postcode for performance
-        const keys = Object.keys(postcodeData.data);
-        const sample = keys.filter((_, i) => i % 10 === 0);
-
-        // Add dots in batches to avoid freezing
-        const batchSize = 2000;
-        for (let i = 0; i < sample.length; i += batchSize) {
-            const batch = sample.slice(i, i + batchSize);
-            batch.forEach(key => {
-                const r = postcodeData.data[key];
-                const hospName = names[r[4]]; // Closest_Any index
-                L.circleMarker([r[1], r[2]], {
-                    radius: 2,
-                    color: colours[hospName],
-                    fillColor: colours[hospName],
-                    fillOpacity: 0.6,
-                    weight: 0,
-                }).bindTooltip(r[0]).addTo(hospLayers[hospName]);
+        const gridCanvas = document.createElement('canvas');
+        gridCanvas.style.cssText = 'position:absolute;top:0;left:0;pointer-events:none;z-index:200;opacity:0.32;';
+        catchmentMap.getPanes().tilePane.parentNode.insertBefore(
+            gridCanvas, catchmentMap.getPanes().overlayPane
+        );
+        function resizeGrid() { const s = catchmentMap.getSize(); gridCanvas.width = s.x; gridCanvas.height = s.y; }
+        function drawGrid() {
+            const ctx = gridCanvas.getContext('2d'), map = catchmentMap;
+            const s = map.getSize(); ctx.clearRect(0, 0, s.x, s.y);
+            gridCells.forEach(([lat, lon, sec]) => {
+                ctx.fillStyle = SECTOR_COLOURS[sec] || '#888';
+                const tl = map.latLngToContainerPoint([lat + GLAT, lon]);
+                const br = map.latLngToContainerPoint([lat, lon + GLON]);
+                ctx.fillRect(tl.x, tl.y, Math.max(2, br.x - tl.x), Math.max(2, br.y - tl.y));
             });
-            // Yield to browser
+        }
+        resizeGrid();
+        catchmentMap.on('movestart', () => { gridCanvas.style.opacity = '0'; });
+        catchmentMap.on('moveend zoomend', () => { gridCanvas.style.opacity = '0.32'; drawGrid(); });
+        catchmentMap.on('resize', () => { resizeGrid(); drawGrid(); });
+        drawGrid();
+
+        // ── Dot layers (per sector) ────────────────────────────────────
+        const sectorLayers = {};
+        SECTOR_ORDER.forEach(s => { sectorLayers[s] = L.layerGroup().addTo(catchmentMap); });
+
+        const sample = allKeys.filter((_, i) => i % 10 === 0);
+        for (let i = 0; i < sample.length; i += 3000) {
+            sample.slice(i, i + 3000).forEach(key => {
+                const r = postcodeData.data[key];
+                const sec = nameToSector[names[r[4]]] || 'Border';
+                const col = SECTOR_COLOURS[sec];
+                L.circleMarker([r[1], r[2]], {
+                    radius: 2.2, color: col, fillColor: col, fillOpacity: 0.75, weight: 0,
+                }).addTo(sectorLayers[sec]);
+            });
             await new Promise(r => setTimeout(r, 0));
         }
 
-        // Add hospital markers to a separate overlay
+        // ── Hospital markers ───────────────────────────────────────────
         const hospMarkerLayer = L.layerGroup().addTo(catchmentMap);
         hospitalData.forEach(h => {
+            const col = SECTOR_COLOURS[h.sector || 'Border'] || '#333';
             L.circleMarker([h.lat, h.lon], {
-                radius: 8,
-                color: 'black',
-                weight: 2,
-                fillColor: colours[h.name] || '#333',
-                fillOpacity: 1,
-            }).bindPopup(`<b>${h.name}</b><br>Level ${h.level} | ${h.side}`)
-              .bindTooltip(h.name)
-              .addTo(hospMarkerLayer);
+                radius: 9, color: '#1a202c', weight: 2, fillColor: col, fillOpacity: 1,
+            })
+            .bindPopup(`<b>${h.name}</b><br>Level ${h.level} — ${SECTOR_LABELS[h.sector] || h.sector} | ${h.side}`)
+            .bindTooltip(h.name)
+            .addTo(hospMarkerLayer);
         });
 
-        // Layer control
-        const overlays = { 'Hospitals': hospMarkerLayer, ...hospLayers };
+        // ── Layer control ──────────────────────────────────────────────
+        const overlays = { 'Hospitals': hospMarkerLayer };
+        SECTOR_ORDER.forEach(s => {
+            overlays[`<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${SECTOR_COLOURS[s]};margin-right:5px;vertical-align:middle;"></span>${SECTOR_LABELS[s]}`] = sectorLayers[s];
+        });
         L.control.layers({ 'Base Map': baseLayer }, overlays, { collapsed: false }).addTo(catchmentMap);
 
-        // Add Deselect All / Select All toggle
         setTimeout(() => {
             const ctrl = document.querySelector('#catchment-map .leaflet-control-layers-overlays');
             if (!ctrl) return;
-            const btn = document.createElement('div');
-            btn.style.cssText = 'padding:6px 0 2px 0;text-align:center;border-top:1px solid #ccc;margin-top:4px;';
-            const a = document.createElement('a');
-            a.href = '#';
+
+            // Sector grid toggle — insert at top
+            const gridRow = document.createElement('label');
+            gridRow.style.cssText = 'display:flex;align-items:center;gap:6px;padding:3px 6px;cursor:pointer;border-bottom:1px solid #e2e8f0;margin-bottom:4px;';
+            const gridCb = document.createElement('input');
+            gridCb.type = 'checkbox'; gridCb.checked = true;
+            gridCb.style.accentColor = '#2d6a9f';
+            gridCb.addEventListener('change', () => {
+                gridCanvas.style.display = gridCb.checked ? '' : 'none';
+            });
+            const gridLbl = document.createElement('span');
+            gridLbl.textContent = 'Sector grid';
+            gridLbl.style.cssText = 'font-size:12px;color:#2d3748;';
+            gridRow.appendChild(gridCb); gridRow.appendChild(gridLbl);
+            ctrl.insertBefore(gridRow, ctrl.firstChild);
+
+            // Deselect all
+            const foot = document.createElement('div');
+            foot.style.cssText = 'padding:6px 0 2px;text-align:center;border-top:1px solid #ccc;margin-top:4px;';
+            const a = document.createElement('a'); a.href = '#';
             a.style.cssText = 'cursor:pointer;font-size:12px;color:#2d6a9f;text-decoration:none;font-weight:600;';
             a.textContent = 'Deselect All';
             let allOn = true;
-            a.onclick = function (e) {
-                e.preventDefault();
-                allOn = !allOn;
+            a.onclick = e => {
+                e.preventDefault(); allOn = !allOn;
                 ctrl.querySelectorAll('input[type=checkbox]').forEach(cb => { if (cb.checked !== allOn) cb.click(); });
                 a.textContent = allOn ? 'Deselect All' : 'Select All';
             };
-            btn.appendChild(a);
-            ctrl.appendChild(btn);
+            foot.appendChild(a); ctrl.appendChild(foot);
         }, 500);
 
-        // Add legend
+        // ── Legend (sector-grouped) ───────────────────────────────────
         const legend = L.control({ position: 'bottomleft' });
         legend.onAdd = function () {
             const div = L.DomUtil.create('div');
-            div.style.cssText = 'background:white;padding:12px 16px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.25);font-size:12px;max-height:60vh;overflow-y:auto;line-height:1.8;';
-            let html = '<b style="font-size:13px">Neonatal Catchment Areas</b><br>';
-            names.forEach(name => {
-                const c = colours[name];
-                html += `<span style="background:${c};width:12px;height:12px;display:inline-block;border-radius:2px;margin-right:6px;"></span>${name}<br>`;
+            div.style.cssText = 'background:white;padding:12px 16px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.25);font-size:12px;max-height:60vh;overflow-y:auto;line-height:1.7;min-width:180px;';
+            let html = '<b style="font-size:13px">London Neonatal Sectors</b><br>';
+            SECTOR_ORDER.forEach(sec => {
+                const c = SECTOR_COLOURS[sec];
+                const hosps = hospitalData.filter(h => (h.sector || 'Border') === sec);
+                html += `<div style="margin-top:7px;"><span style="background:${c};width:13px;height:13px;display:inline-block;border-radius:3px;margin-right:6px;vertical-align:middle;"></span><b>${SECTOR_LABELS[sec]}</b></div>`;
+                hosps.sort((a, b) => a.level - b.level).forEach(h => {
+                    html += `<div style="padding-left:19px;font-size:11px;color:#4a5568;">L${h.level} · ${h.name}</div>`;
+                });
             });
             div.innerHTML = html;
             return div;
