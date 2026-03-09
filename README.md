@@ -31,6 +31,14 @@ The outcode is extracted by stripping the last 3 characters (the incode) from th
 
 **SW postcodes** are handled specially — districts SW1, SW3, SW5, SW6, SW7 and SW10 are classified as North, while the rest are South. A small number of individual postcodes within those North districts are manually overridden as South (see `TECHNICAL.md` for the full list).
 
+**TW postcodes** are also split by district. Districts TW1–TW9 and TW11–TW14 (Twickenham, Hounslow, Heathrow, Brentford, Kew, Isleworth, Teddington, Hampton, Feltham) sit north of the Thames; TW10 (Richmond south) sits south.
+
+**KT postcodes** are mostly south of the Thames, but two sub-groups are north:
+- **KT1 4xx** — Hampton Wick (north bank, near Kingston Bridge)
+- **KT8 9xx** — East Molesey (north bank)
+
+These are identified by checking the incode (the last three characters of the full postcode) to avoid false matches against similar outcodes like KT14.
+
 Some hospitals near the river serve **both** sides (e.g. West Middlesex), so they are available to postcodes on either side.
 
 ### 2. Find the nearest hospitals
@@ -69,6 +77,12 @@ Results are saved to the `output/` folder in two formats:
 
 A separate script (`generate_map.py`) generates an interactive HTML map showing each hospital's catchment area as colour-coded dots. Hover over any dot to see its postcode. Hospital markers can be clicked for name, level and side. Use the layer control (top-right) to toggle individual hospitals on/off. A **Deselect All / Select All** button at the bottom of the control panel lets you quickly clear or restore all layers.
 
+Before plotting, three filters suppress postcodes with incorrect OS coordinates that would appear on the wrong side of the river:
+
+- **Cluster filter** — any coordinate shared by more than 50 postcodes in the full dataset (large-user/PO Box entries where OS assigns hundreds of postcodes to a single wrong grid reference).
+- **Thames polygon filter** — uses a [Shapely](https://shapely.readthedocs.io/) polygon tracing the south bank of the Thames from Hampton to Greenwich. A North-assigned postcode whose coordinate falls inside this polygon has a wrong/non-geographic OS grid reference and is suppressed. The polygon traces the actual meandering riverbank, so legitimate north-bank Fulham/Chelsea addresses (SW6, SW10, SW3) are correctly kept.
+- **Manual override list** (`MAP_SUPPRESS`) — individual postcodes with wrong coordinates in the opposite direction (South-assigned but plotted north of the river), e.g. SW9 7RT.
+
 ### 5. Local web app (Flask)
 
 A Flask-based frontend (`app.py`) provides a local web interface at `http://127.0.0.1:5001` with:
@@ -90,7 +104,7 @@ The script `build_static.py` compresses the output into two compact JSON files (
 1. Make sure you have Python 3 installed (use `python3` on macOS)
 2. Install the required packages:
    ```
-   pip install pandas numpy scipy folium flask
+   pip install pandas numpy scipy folium flask shapely
    ```
 3. Confirm the input files are present in the project root:
    - `hospitals_refined.csv`

@@ -59,6 +59,14 @@ If the area code is in this set → **North**. Otherwise → **South**.
 
 **Special case — SW postcodes:** The SW area straddles the river. Some districts (SW1, SW3, SW5, SW6, SW7, SW10) are north of the Thames (Chelsea, Knightsbridge, Earl's Court), while others (SW2, SW4, SW8, SW9, SW11–SW20) are south (Brixton, Clapham, Battersea). The script extracts the district number from the outcode and checks it against a known set of north-side districts.
 
+**Special case — TW postcodes:** The TW (Twickenham) area also straddles the river. Districts TW1–TW9 and TW11–TW14 are north of the Thames (Twickenham, Hounslow/Heathrow, Brentford, Kew, Isleworth, Teddington, Hampton, Feltham). TW10 (Richmond, south of the river) is classified as South.
+
+**Special case — KT postcodes:** KT postcodes are mostly south of the Thames (Kingston, Surbiton, New Malden etc.), but two specific incode ranges sit on the north bank:
+- **KT1 4xx** — Hampton Wick, on the north bank near Kingston Bridge
+- **KT8 9xx** — East Molesey, on the north bank
+
+These are identified by extracting the district number *and* checking the first character of the incode (the last three characters of the full postcode). This avoids false matches — e.g. KT14 has district `14`, not `1`, and KT8 9xx is distinct from any hypothetical KT89 outcode.
+
 ### Postcode exceptions
 
 Even within north-side SW districts, a small number of individual postcodes are geographically south of the Thames or are better served by South London hospitals. These are hardcoded as exceptions and always classified as **South**, regardless of their district:
@@ -66,16 +74,37 @@ Even within north-side SW districts, a small number of individual postcodes are 
 | Postcode | District | Reason for exception |
 |----------|----------|---------------------|
 | SW1W 9FJ | SW1 | South of the Thames |
+| SW1W 9AT | SW1 | South of the Thames |
 | SW1P 9UP | SW1 | South of the Thames |
+| SW1P 9RZ | SW1 | South of the Thames |
+| SW1X 9UQ | SW1 | South of the Thames |
+| SW1X 8AX | SW1 | South of the Thames |
+| SW1X 9ZU | SW1 | South of the Thames |
+| SW1X 7WE | SW1 | South of the Thames |
+| SW1X 7ZJ | SW1 | South of the Thames |
+| SW1X 6WL | SW1 | South of the Thames |
 | SW1Y 6YQ | SW1 | South of the Thames |
 | SW1Y 5WT | SW1 | South of the Thames |
 | SW1Y 4ZB | SW1 | South of the Thames |
 | SW1Y 6WZ | SW1 | South of the Thames |
 | SW1Y 5ZP | SW1 | South of the Thames |
-| SW1X 9UQ | SW1 | South of the Thames |
+| SW1Y 5WD | SW1 | South of the Thames |
+| SW1Y 5ZG | SW1 | South of the Thames |
+| SW1Y 4ZA | SW1 | South of the Thames |
+| SW3 9GA  | SW3 | South of the Thames |
+| SW3 9EA  | SW3 | South of the Thames |
+| SW3 9BW  | SW3 | South of the Thames |
 | SW3 9DU  | SW3 | South of the Thames |
 | SW3 9EG  | SW3 | South of the Thames |
 | SW3 9GG  | SW3 | South of the Thames |
+| SW3 9FX  | SW3 | South of the Thames |
+| SW3 9DX  | SW3 | South of the Thames |
+| SW3 9FJ  | SW3 | South of the Thames |
+| SW3 9DN  | SW3 | South of the Thames |
+| SW3 9EF  | SW3 | South of the Thames |
+| SW3 9GF  | SW3 | South of the Thames |
+| SW6 5DB  | SW6 | South of the Thames |
+| SW3 6XP  | SW3 | South of the Thames |
 
 In the code, these postcodes are stored **without spaces** (e.g. `SW1W9FJ`) because the comparison strips spaces from the input postcode before checking the set. The table above shows them in standard format for readability.
 
@@ -191,6 +220,58 @@ For postcode BR1 1AA (51.4015°N, 0.0154°E) and Princess Royal hospital (51.385
 
 ---
 
+---
+
+## Stage 4: Map Rendering and Non-Geographic Suppression
+
+### The problem
+
+Some postcodes — particularly large-user (business/government) and PO Box entries — are assigned default OS grid references that do not reflect their real physical location. For example, several hundred SW1P/SW1V/SW1W postcodes share the exact same coordinate near Lambeth, which is south of the Thames. Because the routing logic classifies these postcodes as North (correct for delivery purposes), they would appear as stray North-coloured dots south of the river on the map.
+
+Three complementary filters are applied **before sampling** (on the full 326,000-postcode dataset) to suppress these:
+
+### Filter A: Cluster filter
+
+Any coordinate shared by more than 50 postcodes in the full dataset is flagged as non-geographic. A genuine address coordinate is unique or shared by only a handful of postcodes (e.g. a large apartment block). Hundreds sharing the same point is only possible for default/placeholder OS references.
+
+This filter is applied only to North-assigned postcodes, because South-assigned postcodes at a South coordinate are correct regardless of cluster size.
+
+```
+cluster_mask = (coord_count > 50) AND (Side == 'North')
+```
+
+### Filter B: Thames polygon filter
+
+For postcodes not caught by the cluster filter (small clusters of 2–22, or unique coordinates), a Shapely polygon tracing the south bank of the Thames is used:
+
+```python
+SOUTH_OF_THAMES = Polygon([
+    (-0.420, 51.400),  # Hampton
+    ...                # south bank traced east...
+    ( 0.060, 51.484),  # Greenwich
+    ( 0.060, 51.380),  # closes south
+    (-0.420, 51.380),
+])
+```
+
+A North-assigned postcode whose coordinate falls *inside* this polygon is suppressed. The polygon traces the actual meandering riverbank rather than a flat latitude threshold, so legitimate north-bank addresses in Fulham, Chelsea, and Hammersmith (SW6, SW10, SW3) — which sit at lower latitudes because the river bends south there — are correctly kept.
+
+### Filter C: Manual override list
+
+A small `MAP_SUPPRESS` set handles the reverse problem: South-assigned postcodes whose OS coordinate is north of the river (wrong in the opposite direction). These cannot be caught by filters A or B because those filters only test North-assigned rows.
+
+```python
+MAP_SUPPRESS = {
+    'SW97RT',   # South-assigned but OS coord at 51.4956,-0.1760 (north of river)
+}
+```
+
+### Why counts must be computed before sampling
+
+The map plots every 5th postcode (1-in-5 sample) to keep the file size manageable. Coordinate counts **must** be computed on the full dataset before sampling. A cluster of 84 postcodes at one coordinate becomes only ~17 after sampling — well below any useful threshold — so the filter would silently fail to suppress it.
+
+---
+
 ## Summary of the pipeline
 
 ```
@@ -201,6 +282,7 @@ hospitals_refined.csv ──→ Filter by side & level ────────�
 
 | Step | Method | Purpose |
 |------|--------|---------|
-| Classification | Prefix parsing | Assign postcodes to correct side of the Thames |
+| Classification | Prefix parsing + incode checking (SW, TW, KT) | Assign postcodes to correct side of the Thames |
 | Nearest search | KD-tree with scaled coordinates | Efficiently find the closest hospital |
 | Distance | Haversine formula | Accurately measure real-world distance in km |
+| Map suppression | Cluster count + Shapely polygon + manual list | Remove non-geographic postcodes from map display |

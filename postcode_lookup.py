@@ -36,8 +36,8 @@ def get_side(pc):
     # SW districts that sit north of the Thames
     north_sw_districts = {'1', '3', '5', '6', '7', '10'}
     # TW districts that sit north of the Thames
-    # (TW7=Isleworth/WMX, TW8=Brentford, TW9=Kew, TW3-TW6=Hounslow/Heathrow, TW13-TW14=Feltham)
-    north_tw_districts = {'1', '2', '3', '4', '5', '6', '7', '8', '13', '14'}
+    # (TW7=Isleworth/WMX, TW8=Brentford, TW9=Kew, TW3-TW6=Hounslow/Heathrow, TW11=Teddington, TW12=Hampton, TW13-TW14=Feltham)
+    north_tw_districts = {'1', '2', '3', '4', '5', '6', '7', '8', '11', '12', '13', '14'}
 
     # Extract only LEADING letters as the area code (WC2R → WC, EC1A → EC, SW1A → SW)
     prefix = ''
@@ -56,6 +56,18 @@ def get_side(pc):
         # Extract the district number from the outcode (TW7 → '7', TW13 → '13')
         district_num = ''.join(c for c in outcode[len(prefix):] if c.isdigit())
         return 'North' if district_num in north_tw_districts else 'South'
+
+    if prefix == 'KT':
+        # Some KT sub-districts are north of the Thames:
+        #   KT1 4xx (Hampton Wick) — must check incode to avoid catching KT14
+        #   KT8 9xx (East Molesey, north bank) — must check incode to avoid catching KT89
+        district_num = ''.join(c for c in outcode[len(prefix):] if c.isdigit())
+        incode = pc.replace(' ', '')[-3:]
+        if district_num == '1' and incode[0] == '4':
+            return 'North'
+        if district_num == '8' and incode[0] == '9':
+            return 'North'
+        return 'South'
 
     return 'North' if prefix in north_prefixes else 'South'
 
