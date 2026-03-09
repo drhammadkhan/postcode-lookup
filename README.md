@@ -75,13 +75,29 @@ Results are saved to the `output/` folder in two formats:
 
 ### 4. Visualise on a map
 
-A separate script (`generate_map.py`) generates an interactive HTML map showing each hospital's catchment area as colour-coded dots. Hover over any dot to see its postcode. Hospital markers can be clicked for name, level and side. Use the layer control (top-right) to toggle individual hospitals on/off. A **Deselect All / Select All** button at the bottom of the control panel lets you quickly clear or restore all layers.
+
+A separate script (`generate_map.py`) generates an interactive HTML map showing each hospital's catchment area as colour-coded dots. Each hospital is assigned a distinct colour, grouped by sector (North Central, North East, North West, South East, South West, Border). The colour palette is designed for clear visual separation, and some hospitals (e.g. Evelina (St Thomas') and Chelsea & Westminster) have been lightened for better visibility. Hover over any dot to see its postcode. Hospital markers can be clicked for name, level and side. Use the layer control (top-right) to toggle individual hospitals on/off. A **Deselect All / Select All** button at the bottom of the control panel lets you quickly clear or restore all layers.
+
 
 Before plotting, three filters suppress postcodes with incorrect OS coordinates that would appear on the wrong side of the river:
 
 - **Cluster filter** — any coordinate shared by more than 50 postcodes in the full dataset (large-user/PO Box entries where OS assigns hundreds of postcodes to a single wrong grid reference).
 - **Thames polygon filter** — uses a [Shapely](https://shapely.readthedocs.io/) polygon tracing the south bank of the Thames from Hampton to Greenwich. A North-assigned postcode whose coordinate falls inside this polygon has a wrong/non-geographic OS grid reference and is suppressed. The polygon traces the actual meandering riverbank, so legitimate north-bank Fulham/Chelsea addresses (SW6, SW10, SW3) are correctly kept.
-- **Manual override list** (`MAP_SUPPRESS`) — individual postcodes with wrong coordinates in the opposite direction (South-assigned but plotted north of the river), e.g. SW9 7RT.
+- **Manual override list** (`MAP_SUPPRESS`) — individual postcodes with wrong coordinates in the opposite direction (South-assigned but plotted north of the river), e.g. SW9 7RT. This list is also used for any future manual suppressions.
+#### Sector-based colour logic
+
+Each hospital is assigned a colour from a palette grouped by sector:
+
+- North Central (NC)
+- North East (NE)
+- North West (NW)
+- South East (SE)
+- South West (SW)
+- Border
+
+The palette uses HSL colour ranges for each sector, ensuring that hospitals in the same sector are visually related but distinct. Some hospitals (e.g. Evelina (St Thomas') and Chelsea & Westminster) have their colours lightened for better map clarity.
+
+The map legend groups hospitals by sector and shows the assigned colour and postcode count for each.
 
 ### 5. Local web app (Flask)
 
