@@ -380,10 +380,7 @@
             maxZoom: 19,
         }).addTo(catchmentMap);
 
-        // Sector colour families — each hospital gets a distinct shade within its sector
-        // Hue ranges chosen to give clearly distinct families:
-        //   NC=Blue(210-240), NE=Green(100-145), NW=Purple(270-310),
-        //   SE=Orange(20-45), SW=Pink(330-355), Border=Brown(25-40 low-sat)
+        // Sector colour logic mirrors generate_map.py.
         const SECTOR_RANGES = {
             'NC':     { h: [210, 235], s: [80, 90], l: [22, 72] },  // blues
             'NE':     { h: [108, 145], s: [72, 88], l: [20, 68] },  // greens
@@ -397,37 +394,77 @@
             'NC': 'North Central', 'NE': 'North East', 'NW': 'North West',
             'SE': 'South East',    'SW': 'South West', 'Border': 'Border',
         };
+        const SECTOR_NORMALISATION = { 'South East': 'SE', 'South West': 'SW' };
 
-        // Build sector → sorted hospital list
+        function normaliseSector(raw) {
+            if (!raw) return 'Border';
+            const norm = SECTOR_NORMALISATION[String(raw).trim()] || String(raw).trim();
+            return SECTOR_RANGES[norm] ? norm : 'Border';
+        }
+
+        function interleavedOrder(n) {
+            const order = [];
+            let lo = 0;
+            let hi = n - 1;
+            while (lo <= hi) {
+                order.push(lo++);
+                if (lo <= hi) order.push(hi--);
+            }
+            return order;
+        }
+
+        function interpolate(start, end, t) {
+            return Math.round(start + t * (end - start));
+        }
+
+        const names = postcodeData.names;
+        const catchmentMeta = postcodeData.catchment || {};
+        const precomputedPoints = Array.isArray(catchmentMeta.points) ? catchmentMeta.points : null;
+        const sampleRate = Number.isInteger(catchmentMeta.sample_rate) ? catchmentMeta.sample_rate : 10;
+
+        // Build sector hospital lists in the same order as generate_map.py:
+        // iterate sorted hospital names, then sort inside each sector.
+        const hospitalSectorMap = {};
+        hospitalData.forEach(h => { hospitalSectorMap[h.name] = normaliseSector(h.sector); });
         const sectorHosps = {};
         SECTOR_ORDER.forEach(s => { sectorHosps[s] = []; });
-        hospitalData.forEach(h => {
-            const sec = h.sector || 'Border';
-            if (sectorHosps[sec]) sectorHosps[sec].push(h.name);
-            else sectorHosps['Border'].push(h.name);
+        names.forEach(name => {
+            const sec = hospitalSectorMap[name] || 'Border';
+            sectorHosps[sec].push(name);
         });
+        SECTOR_ORDER.forEach(sec => sectorHosps[sec].sort());
 
-        // Assign one shade per hospital — interleave lightness so adjacent
-        // hospitals alternate dark/light rather than ramping monotonically.
+        // Assign shades per sector with interleaved lightness, and apply the
+        // same explicit lightening used in generate_map.py.
         const colours = {};
         SECTOR_ORDER.forEach(sec => {
             const hosps = sectorHosps[sec];
             const n = hosps.length;
+            if (!n) return;
             const { h, s, l } = SECTOR_RANGES[sec];
-            // Build interleaved index order: 0, n-1, 1, n-2, 2, n-3 …
-            const order = [];
-            let lo = 0, hi = n - 1;
-            while (lo <= hi) { order.push(lo++); if (lo <= hi) order.push(hi--); }
+            const order = interleavedOrder(n);
             hosps.forEach((name, i) => {
                 const t = n === 1 ? 0.5 : order[i] / (n - 1);
-                const hue = Math.round(h[0] + t * (h[1] - h[0]));
-                const sat = Math.round(s[0] + t * (s[1] - s[0]));
-                const lit = Math.round(l[0] + t * (l[1] - l[0]));
+                const hue = interpolate(h[0], h[1], t);
+                const sat = interpolate(s[0], s[1], t);
+                let lit = interpolate(l[0], l[1], t);
+                if (name === "Evelina (St Thomas')" || name === 'Chelsea & Westminster') {
+                    lit = Math.min(lit + 12, 100);
+                }
                 colours[name] = `hsl(${hue},${sat}%,${lit}%)`;
             });
         });
 
-        const names = postcodeData.names;
+        const countsByName = {};
+        if (Array.isArray(catchmentMeta.counts_any) && catchmentMeta.counts_any.length === names.length) {
+            names.forEach((name, idx) => { countsByName[name] = catchmentMeta.counts_any[idx] || 0; });
+        } else {
+            Object.keys(postcodeData.data).forEach(key => {
+                const r = postcodeData.data[key];
+                const hospName = names[r[4]];
+                countsByName[hospName] = (countsByName[hospName] || 0) + 1;
+            });
+        }
 
         // Create a layer group per hospital for the layer control
         const hospLayers = {};
@@ -435,21 +472,32 @@
             hospLayers[name] = L.layerGroup().addTo(catchmentMap);
         });
 
-        // Sample every 10th postcode for performance
-        const keys = Object.keys(postcodeData.data);
-        const sample = keys.filter((_, i) => i % 10 === 0);
+        const points = precomputedPoints || (() => {
+            const keys = Object.keys(postcodeData.data);
+            return keys
+                .filter((_, i) => i % sampleRate === 0)
+                .map(key => {
+                    const r = postcodeData.data[key];
+                    return [r[1], r[2], r[4]];
+                });
+        })();
+
+        const suppressedTotal = Number.isInteger(catchmentMeta.suppressed_total) ? catchmentMeta.suppressed_total : 0;
+        const displaySampleRate = precomputedPoints ? (catchmentMeta.sample_rate || 5) : sampleRate;
+        document.getElementById('catchment-loading').textContent =
+            `Rendering ${points.length.toLocaleString()} sampled points (1/${displaySampleRate}${suppressedTotal ? `, ${suppressedTotal.toLocaleString()} suppressed` : ''})...`;
 
         // Add dots in batches to avoid freezing
         const batchSize = 2000;
-        for (let i = 0; i < sample.length; i += batchSize) {
-            const batch = sample.slice(i, i + batchSize);
-            batch.forEach(key => {
-                const r = postcodeData.data[key];
-                const hospName = names[r[4]];
+        for (let i = 0; i < points.length; i += batchSize) {
+            const batch = points.slice(i, i + batchSize);
+            batch.forEach(pt => {
+                const hospName = names[pt[2]];
+                if (!hospName || !hospLayers[hospName]) return;
                 const col = colours[hospName] || '#888';
-                L.circleMarker([r[1], r[2]], {
-                    radius: 2,
-                    color: col, fillColor: col, fillOpacity: 0.7, weight: 0,
+                L.circleMarker([pt[0], pt[1]], {
+                    radius: 4,
+                    color: col, fillColor: col, fillOpacity: 0.6, weight: 0,
                 }).addTo(hospLayers[hospName]);
             });
             await new Promise(r => setTimeout(r, 0));
@@ -508,7 +556,8 @@
                 html += `<div style="margin-top:8px;margin-bottom:2px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#718096;font-weight:700;">${SECTOR_LABELS[sec]}</div>`;
                 hosps.forEach(name => {
                     const c = colours[name];
-                    html += `<div><span style="background:${c};width:12px;height:12px;display:inline-block;border-radius:2px;margin-right:6px;vertical-align:middle;"></span>${name}</div>`;
+                    const count = countsByName[name] || 0;
+                    html += `<div><span style="background:${c};width:12px;height:12px;display:inline-block;border-radius:2px;margin-right:6px;vertical-align:middle;"></span>${name} (${count.toLocaleString()})</div>`;
                 });
             });
             div.innerHTML = html;

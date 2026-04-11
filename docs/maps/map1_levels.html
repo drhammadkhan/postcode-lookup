@@ -75,25 +75,96 @@ Promise.all([
   fetch('../postcodes.json').then(function(r){document.getElementById('barFill').style.width='50%';return r.json();}),
   fetch('../hospitals.json').then(function(r){return r.json();})
 ]).then(function(res){
-  var pcData=res[0],hospData=res[1],names=pcData.names,data=pcData.data;
+  var pcData=res[0],hospData=res[1],names=pcData.names,data=pcData.data,catchment=pcData.catchment||{};
   document.getElementById('barFill').style.width='80%';
   document.getElementById('loadMsg').textContent='Rendering\u2026';
-  var RATE=10,pts=[],keys=Object.keys(data);
-  for(var i=0;i<keys.length;i+=RATE){var r=data[keys[i]];pts.push([r[1],r[2],r[4],r[6],r[8],r[10]]);}
-  var nc2=names.map(function(_,i){return 'hsl('+Math.round((i/names.length)*360)+',75%,45%)';});
-  var lv=0;
-  dotLayer=new DotLayer(pts,function(pt){return nc2[pt[2+lv]];});
-  dotLayer.addTo(map);
-  hospLayer=L.layerGroup().addTo(map);
-  var nc={};names.forEach(function(n,i){nc[n]='hsl('+Math.round((i/names.length)*360)+',75%,45%)';});
-  hospData.forEach(function(h){
-    L.circleMarker([h.lat,h.lon],{radius:8,color:'#1a202c',weight:2,fillColor:nc[h.name]||'#666',fillOpacity:1})
-     .bindPopup('<b>'+h.name+'</b><br>Level '+h.level+' | '+h.side).bindTooltip(h.name).addTo(map);
+
+  var SECTOR_RANGES={
+    'NC':{h:[210,235],s:[80,90],l:[22,72]},
+    'NE':{h:[108,145],s:[72,88],l:[20,68]},
+    'NW':{h:[268,308],s:[68,85],l:[22,70]},
+    'SE':{h:[18,44],s:[82,95],l:[28,70]},
+    'SW':{h:[328,354],s:[68,88],l:[32,74]},
+    'Border':{h:[22,40],s:[45,60],l:[22,62]}
+  };
+  var SECTOR_ORDER=['NC','NE','NW','SE','SW','Border'];
+  var SECTOR_LABELS={'NC':'North Central','NE':'North East','NW':'North West','SE':'South East','SW':'South West','Border':'Border'};
+  var SECTOR_NORMALISATION={'South East':'SE','South West':'SW'};
+
+  function normaliseSector(raw){
+    if(!raw)return 'Border';
+    var s=String(raw).trim();
+    s=SECTOR_NORMALISATION[s]||s;
+    return SECTOR_RANGES[s]?s:'Border';
+  }
+  function interleavedOrder(n){
+    var order=[],lo=0,hi=n-1;
+    while(lo<=hi){order.push(lo++);if(lo<=hi)order.push(hi--);}
+    return order;
+  }
+  function interpolate(a,b,t){return Math.round(a+t*(b-a));}
+
+  var hospitalSectorMap={};
+  hospData.forEach(function(h){hospitalSectorMap[h.name]=normaliseSector(h.sector);});
+  var sectorHosps={};
+  SECTOR_ORDER.forEach(function(sec){sectorHosps[sec]=[];});
+  names.forEach(function(name){
+    var sec=hospitalSectorMap[name]||'Border';
+    if(!sectorHosps[sec])sec='Border';
+    sectorHosps[sec].push(name);
   });
+  SECTOR_ORDER.forEach(function(sec){sectorHosps[sec].sort();});
+
+  var colours={};
+  SECTOR_ORDER.forEach(function(sec){
+    var hosps=sectorHosps[sec],n=hosps.length;
+    if(!n)return;
+    var range=SECTOR_RANGES[sec],order=interleavedOrder(n);
+    hosps.forEach(function(name,i){
+      var t=n===1?0.5:order[i]/(n-1);
+      var hue=interpolate(range.h[0],range.h[1],t);
+      var sat=interpolate(range.s[0],range.s[1],t);
+      var lit=interpolate(range.l[0],range.l[1],t);
+      if(name==="Evelina (St Thomas')"||name==='Chelsea & Westminster')lit=Math.min(lit+12,100);
+      colours[name]='hsl('+hue+','+sat+'%,'+lit+'%)';
+    });
+  });
+
+  var RATE=Number.isInteger(catchment.sample_rate)?catchment.sample_rate:5;
+  var usePrecomputed=Array.isArray(catchment.points)&&catchment.points.length>0&&catchment.points[0].length>=6;
+  var pts=[];
+  if(usePrecomputed){
+    pts=catchment.points;
+  }else{
+    var keys=Object.keys(data);
+    for(var i=0;i<keys.length;i+=RATE){var r=data[keys[i]];pts.push([r[1],r[2],r[4],r[6],r[8],r[10]]);}
+  }
+
+  var countsAny={};
+  if(Array.isArray(catchment.counts_any)&&catchment.counts_any.length===names.length){
+    names.forEach(function(name,i){countsAny[name]=catchment.counts_any[i]||0;});
+  }else{
+    var keys=Object.keys(data);
+    for(var i=0;i<keys.length;i++){
+      var r=data[keys[i]],name=names[r[4]];
+      countsAny[name]=(countsAny[name]||0)+1;
+    }
+  }
+
+  var lv=0;
+  dotLayer=new DotLayer(pts,function(pt){var name=names[pt[2+lv]];return colours[name]||'#888';});
+  dotLayer.addTo(map);
+
+  hospLayer=L.layerGroup().addTo(map);
+  hospData.forEach(function(h){
+    L.circleMarker([h.lat,h.lon],{radius:8,color:'#1a202c',weight:2,fillColor:colours[h.name]||'#666',fillOpacity:1})
+     .bindPopup('<b>'+h.name+'</b><br>Level '+h.level+' | '+h.side).bindTooltip(h.name).addTo(hospLayer);
+  });
+
   document.querySelectorAll('input[name=lv]').forEach(function(r){
     r.addEventListener('change',function(){
       lv=parseInt(this.value,10);
-      dotLayer.update(function(pt){return nc2[pt[2+lv]];});
+      dotLayer.update(function(pt){var name=names[pt[2+lv]];return colours[name]||'#888';});
       document.querySelectorAll('#ctrl label').forEach(function(l){l.classList.remove('sel');});
       this.parentElement.classList.add('sel');
     });
@@ -101,10 +172,26 @@ Promise.all([
   document.getElementById('hTog').addEventListener('change',function(){
     if(this.checked)map.addLayer(hospLayer);else map.removeLayer(hospLayer);
   });
+
   var leg=document.getElementById('leg'),html='<b>Hospital catchment</b><br>';
-  names.forEach(function(n,i){html+='<span class="sw" style="background:'+nc2[i]+'"></span>'+n+'<br>';});
+  SECTOR_ORDER.forEach(function(sec){
+    var hosps=sectorHosps[sec];
+    if(!hosps.length)return;
+    html+='<div style="margin-top:8px;margin-bottom:2px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#718096;font-weight:700;">'+SECTOR_LABELS[sec]+'</div>';
+    hosps.forEach(function(name){
+      var c=colours[name]||'#888';
+      var n=countsAny[name]||0;
+      html+='<span class="sw" style="background:'+c+'"></span>'+name+' ('+n.toLocaleString()+')<br>';
+    });
+  });
   leg.innerHTML=html;
-  document.getElementById('status').textContent=pts.length.toLocaleString()+' postcodes (1/'+RATE+' sample)';
+
+  var status=pts.length.toLocaleString()+' postcodes (1/'+RATE+' sample';
+  if(usePrecomputed&&Number.isInteger(catchment.suppressed_total)){
+    status+=', '+catchment.suppressed_total.toLocaleString()+' suppressed';
+  }
+  status+=')';
+  document.getElementById('status').textContent=status;
   document.getElementById('loading').style.display='none';
   document.getElementById('ctrl').style.display='';
   leg.style.display='';document.getElementById('status').style.display='';

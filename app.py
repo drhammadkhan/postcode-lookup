@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import pandas as pd
 import numpy as np
+import os
 
 app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DOCS_DIR = os.path.join(BASE_DIR, 'docs')
 
 # Load data once at startup
 print("Loading data...")
@@ -18,6 +21,32 @@ print(f"Loaded {len(lookup):,} postcodes and {len(hospitals)} hospitals.")
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/index.html')
+def index_alias():
+    return render_template('index.html')
+
+
+@app.route('/extra-maps')
+@app.route('/extra_maps.html')
+def extra_maps():
+    return send_from_directory(DOCS_DIR, 'extra_maps.html')
+
+
+@app.route('/maps/<path:filename>')
+def extra_maps_assets(filename):
+    return send_from_directory(os.path.join(DOCS_DIR, 'maps'), filename)
+
+
+@app.route('/postcodes.json')
+def postcodes_json():
+    return send_from_directory(DOCS_DIR, 'postcodes.json')
+
+
+@app.route('/hospitals.json')
+def hospitals_json():
+    return send_from_directory(DOCS_DIR, 'hospitals.json')
 
 
 @app.route('/search')

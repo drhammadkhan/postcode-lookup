@@ -56,15 +56,28 @@ Promise.all([
   fetch('../postcodes.json').then(function(r){document.getElementById('barFill').style.width='50%';return r.json();}),
   fetch('../hospitals.json').then(function(r){return r.json();})
 ]).then(function(res){
-  var pcData=res[0],hospData=res[1],names=pcData.names,data=pcData.data;
+  var pcData=res[0],hospData=res[1],names=pcData.names,data=pcData.data,catchment=pcData.catchment||{};
   document.getElementById('barFill').style.width='80%';
   document.getElementById('loadMsg').textContent='Rendering\u2026';
   var nc3=names.map(function(_,i){return 'hsl('+Math.round((i/names.length)*360)+',75%,45%)';});
-  var RATE=8,pts=[],keys=Object.keys(data),same=0,diff=0;
-  for(var i=0;i<keys.length;i+=RATE){
-    var r=data[keys[i]];pts.push([r[1],r[2],r[4],r[10]]);
-    if(r[4]===r[10])same++;else diff++;
+
+  var RATE=Number.isInteger(catchment.sample_rate)?catchment.sample_rate:8;
+  var usePrecomputed=Array.isArray(catchment.points)&&catchment.points.length>0&&catchment.points[0].length>=6;
+  var pts=[],same=0,diff=0;
+  if(usePrecomputed){
+    for(var i=0;i<catchment.points.length;i++){
+      var p=catchment.points[i];
+      pts.push([p[0],p[1],p[2],p[5]]);
+      if(p[2]===p[5])same++;else diff++;
+    }
+  }else{
+    var keys=Object.keys(data);
+    for(var i=0;i<keys.length;i+=RATE){
+      var r=data[keys[i]];pts.push([r[1],r[2],r[4],r[10]]);
+      if(r[4]===r[10])same++;else diff++;
+    }
   }
+
   new DotLayer(pts,function(pt){return pt[2]===pt[3]?'#aaaaaa':nc3[pt[3]];}).addTo(map);
   var nc={};names.forEach(function(n,i){nc[n]='hsl('+Math.round((i/names.length)*360)+',75%,45%)';});
   hospData.forEach(function(h){
@@ -76,7 +89,12 @@ Promise.all([
     '<b style="font-size:13px">Escalation to NICU</b><br>'+
     '<span class="sw" style="background:#aaa"></span>No escalation: '+same.toLocaleString()+'<br>'+
     '<span class="sw" style="background:#e53e3e"></span>Escalation needed: '+diff.toLocaleString()+' ('+pct+'%)';
-  document.getElementById('status').textContent=pts.length.toLocaleString()+' postcodes (1/8 sample)';
+  var status=pts.length.toLocaleString()+' postcodes (1/'+RATE+' sample';
+  if(usePrecomputed&&Number.isInteger(catchment.suppressed_total)){
+    status+=', '+catchment.suppressed_total.toLocaleString()+' suppressed';
+  }
+  status+=')';
+  document.getElementById('status').textContent=status;
   document.getElementById('loading').style.display='none';
   document.getElementById('info').style.display='';document.getElementById('status').style.display='';
 }).catch(function(e){document.getElementById('loadMsg').textContent='Error: '+e.message;});

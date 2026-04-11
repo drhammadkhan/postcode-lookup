@@ -59,11 +59,23 @@ Promise.all([
   fetch('../postcodes.json').then(function(r){document.getElementById('barFill').style.width='50%';return r.json();}),
   fetch('../hospitals.json').then(function(r){return r.json();})
 ]).then(function(res){
-  var pcData=res[0],hospData=res[1],names=pcData.names,data=pcData.data;
+  var pcData=res[0],hospData=res[1],names=pcData.names,data=pcData.data,catchment=pcData.catchment||{};
   document.getElementById('barFill').style.width='80%';
   document.getElementById('loadMsg').textContent='Rendering\u2026';
-  var RATE=8,pts=[],keys=Object.keys(data);
-  for(var i=0;i<keys.length;i+=RATE){var r=data[keys[i]];pts.push([r[1],r[2],r[11]]);}
+
+  var RATE=Number.isInteger(catchment.sample_rate)?catchment.sample_rate:8;
+  var usePrecomputed=Array.isArray(catchment.points)&&catchment.points.length>0&&catchment.points[0].length>=7;
+  var pts=[];
+  if(usePrecomputed){
+    for(var i=0;i<catchment.points.length;i++){
+      var p=catchment.points[i];
+      pts.push([p[0],p[1],p[6]]);
+    }
+  }else{
+    var keys=Object.keys(data);
+    for(var i=0;i<keys.length;i+=RATE){var r=data[keys[i]];pts.push([r[1],r[2],r[11]]);}
+  }
+
   new DotLayer(pts,function(pt){return dc(pt[2]);}).addTo(map);
   var nc={};names.forEach(function(n,i){nc[n]='hsl('+Math.round((i/names.length)*360)+',75%,45%)';});
   hospData.forEach(function(h){
@@ -73,7 +85,12 @@ Promise.all([
   var leg=document.getElementById('leg'),html='<b>Distance to nearest NICU (L3)</b><br>';
   BINS.forEach(function(b){html+='<span class="sw" style="background:'+b.c+'"></span>'+b.l+'<br>';});
   leg.innerHTML=html;
-  document.getElementById('status').textContent=pts.length.toLocaleString()+' postcodes (1/8 sample)';
+  var status=pts.length.toLocaleString()+' postcodes (1/'+RATE+' sample';
+  if(usePrecomputed&&Number.isInteger(catchment.suppressed_total)){
+    status+=', '+catchment.suppressed_total.toLocaleString()+' suppressed';
+  }
+  status+=')';
+  document.getElementById('status').textContent=status;
   document.getElementById('loading').style.display='none';
   leg.style.display='';document.getElementById('status').style.display='';
 }).catch(function(e){document.getElementById('loadMsg').textContent='Error: '+e.message;});
