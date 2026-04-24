@@ -480,7 +480,7 @@
                 .filter((_, i) => i % sampleRate === 0)
                 .map(key => {
                     const r = postcodeData.data[key];
-                    return [r[1], r[2], r[4]];
+                    return [r[0], r[1], r[2], r[4]];
                 });
         })();
 
@@ -494,13 +494,13 @@
         for (let i = 0; i < points.length; i += batchSize) {
             const batch = points.slice(i, i + batchSize);
             batch.forEach(pt => {
-                const hospName = names[pt[2]];
+                const hospName = names[pt[3]];
                 if (!hospName || !hospLayers[hospName]) return;
                 const col = colours[hospName] || '#888';
-                L.circleMarker([pt[0], pt[1]], {
-                    radius: 4,
+                L.circleMarker([pt[1], pt[2]], {
+                    radius: 3,
                     color: col, fillColor: col, fillOpacity: 0.6, weight: 0,
-                }).addTo(hospLayers[hospName]);
+                }).bindTooltip(pt[0], { sticky: true }).addTo(hospLayers[hospName]);
             });
             await new Promise(r => setTimeout(r, 0));
         }

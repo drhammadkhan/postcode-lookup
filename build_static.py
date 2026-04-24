@@ -100,13 +100,10 @@ sampled_plot = results_plot.iloc[::sample_rate]
 
 catchment_points = [
     [
+        row.Postcode,
         float(row.Latitude),
         float(row.Longitude),
         name_to_idx[row.Closest_Any],
-        name_to_idx[row.Closest_L1],
-        name_to_idx[row.Closest_L2],
-        name_to_idx[row.Closest_L3],
-        round(row.Distance_L3_km, 2),
     ]
     for row in sampled_plot.itertuples(index=False)
 ]
