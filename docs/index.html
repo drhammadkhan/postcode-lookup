@@ -220,10 +220,16 @@
         }
 
         #catchment-map {
-            height: calc(100vh - 140px);
+            height: calc(100vh - 250px);
             width: 100%;
             border: none;
             border-radius: 0;
+        }
+
+        /* Keep layer control within the map viewport */
+        #catchment-map .leaflet-control-layers {
+            max-height: calc(100vh - 310px);
+            overflow-y: auto;
         }
 
         /* Spinner */
@@ -375,6 +381,7 @@
         mapDiv.style.display = 'block';
 
         catchmentMap = L.map(mapDiv).setView([51.5, -0.1], 10);
+        setTimeout(() => catchmentMap.invalidateSize(), 50);
         const baseLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
             maxZoom: 19,
