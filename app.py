@@ -49,6 +49,54 @@ def hospitals_json():
     return send_from_directory(DOCS_DIR, 'hospitals.json')
 
 
+@app.route('/population.html')
+def population_page():
+    return send_from_directory(DOCS_DIR, 'population.html')
+
+
+@app.route('/populations.json')
+def populations_json():
+    return send_from_directory(DOCS_DIR, 'populations.json')
+
+
+@app.route('/births.json')
+def births_json():
+    return send_from_directory(DOCS_DIR, 'births.json')
+
+
+@app.route('/outcode_population.html')
+def outcode_population_page():
+    return send_from_directory(DOCS_DIR, 'outcode_population.html')
+
+
+@app.route('/outcode_populations.json')
+def outcode_populations_json():
+    return send_from_directory(DOCS_DIR, 'outcode_populations.json')
+
+
+@app.route('/outcode_births.json')
+def outcode_births_json():
+    return send_from_directory(DOCS_DIR, 'outcode_births.json')
+
+
+@app.route('/equalised_catchment.html')
+def equalised_catchment_page():
+    return send_from_directory(DOCS_DIR, 'equalised_catchment.html')
+
+
+@app.route('/comparison.html')
+def comparison_page():
+    return send_from_directory(DOCS_DIR, 'comparison.html')
+
+@app.route('/comparison_dots.json')
+def comparison_dots():
+    return send_from_directory(DOCS_DIR, 'comparison_dots.json')
+
+@app.route('/equalised_dots.json')
+def equalised_dots_json():
+    return send_from_directory(DOCS_DIR, 'equalised_dots.json')
+
+
 @app.route('/search')
 def search():
     raw = request.args.get('postcode', '').strip()

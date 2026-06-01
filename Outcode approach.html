@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HO.ME – Hospital Near Me (Neonatal)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 1.5rem;
+      background: #f3f2f1;
+      color: #111;
+    }
+    header {
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-size: 1.8rem; /* INCREASED SIZE for HO.ME title */
+      margin: 0;
+      color: #005eb8;
+    }
+    .subtitle {
+      font-size: 0.9rem;
+      color: #444;
+      margin-top: 0.6rem; /* INCREASED SPACE BELOW H1 */
+    }
+    .search-box {
+      margin: 1rem 0;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: 1px solid #aeb7bd;
+      box-sizing: border-box;
+    }
+    .hint {
+      font-size: 0.8rem;
+      color: #555;
+      margin-top: 0.25rem;
+    }
+    .pill {
+      display: inline-block;
+      padding: 0.15rem 0.45rem;
+      margin: 0 0.2rem 0.2rem 0;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: #e5eff7;
+      color: #005eb8;
+    }
+    .badge-level {
+      background: #005eb8;
+      color: #fff;
+    }
+    .badge-warning {
+      background: #ffdf9e;
+      color: #333;
+    }
+    .results {
+      margin-top: 1rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 6px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 0.8rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
+    .card h2 {
+      font-size: 1rem;
+      margin: 0 0 0.2rem;
+    }
+    .meta {
+      font-size: 0.8rem;
+      color: #555;
+      margin-bottom: 0.3rem;
+    }
+    .actions {
+      margin-top: 0.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    button {
+      padding: 0.25rem 0.6rem;
+      font-size: 0.8rem;
+      border-radius: 4px;
+      border: 1px solid #005eb8;
+      background: #005eb8;
+      color: #fff;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: #fff;
+      color: #005eb8;
+    }
+    .no-results {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 0.6rem;
+    }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      color: #666;
+    }
+    /* New Style for Map Link Button */
+    .map-link-btn {
+        display: inline-block;
+        margin-top: 1.5rem;
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background: #005eb8;
+        border-radius: 4px;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  
+
+
+ <header style="display:flex; align-items:center; gap:0.6rem; margin-bottom:1.5rem;">
+
+  <div>
+    <h1 style="margin:0;">HO.ME – Hospital Near Me (Neonatal)</h1>
+    <div class="subtitle">Identify the local neonatal unit for a baby based on postcode or hospital.</div>
+  </div>
+
+     <img src="images/evelina-logo-tp.png"
+       alt="Evelina London"
+       style="height:60px; width:auto; flex-shrink:0;">
+   
+</header>
+
+  <section class="search-box">
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Enter full postcode (e.g. SE1 7EH), outward code (e.g. SE1), area prefix (e.g. SE) or hospital name (e.g. Queen's Romford)…"
+    />
+    <div class="hint">
+      Data source: London Neonatal Networks & HO.ME tool (Sept 2025).
+    </div>
+  </section>
+
+  <section id="results" class="results"></section>
+  
+<section style="margin: 2rem 0;">
+  <h2 style="margin-bottom:0.5rem; font-size:1.4rem;">London Neonatal & Maternity Catchment Map</h2> <p class="hint" style="margin-top:0.5rem; font-size:0.85rem; color:#111; line-height:1.4;">
+    ⚠️ **Important Difference between Search and Map**<br>
+    The search box above uses the **outward code** (first half of postcode) which may show **multiple** local units.<br>
+    The interactive map (via the link below) allows you to enter the **full postcode** for a more precise, single catchment area match.
+  </p>
+  
+  <a 
+      href="https://www.google.com/maps/d/u/0/embed?mid=1e_VFhHS_iYmjecO8lu2MuR2yJ3vivkJm&z=11"
+      target="_blank"
+      class="map-link-btn"
+      rel="noopener noreferrer"
+  >
+    View London Maternity & Neonatal Catchment Map (Interactive)
+  </a>
+  
+  <p class="hint" style="margin-top:1.5rem; font-size:0.85rem; color:#555; line-height:1.35;">
+    **Map Instructions:**<br>
+    1. **Search**: Enter the full postcode (e.g., *SE1 7EH*) into the map's search box and press Enter.<br>
+    2. **Clear Search**: Delete the postcode from the map's search box to view the coloured area beneath the result.<br>
+    3. **Tap Area**: Tap the coloured region to see a pop-up with the name of the responsible hospital.<br>
+    *Note: The map is not a product of this tool's creator. Source/Credit needed.*
+  </p>
+
+</section>
+
+  
+  <footer>
+     
+    HO.ME v2025.09 • For clinical reference only. Always check latest ODN guidance / retrieval advice.<br>
+    This tool was designed and developed by Erin Coupland with help from colleagues at Evelina London Children's Hospital.<br>
+    The interactive catchment map is external and not the work of the HO.ME tool creator.
+  </footer>
+
+  <script>
+    // =========================
+    //  UNIT METADATA
+    // =========================
+    const units = [
+      // --- NORTH CENTRAL LONDON ---
+      {
+        name: "Royal Free Hospital",
+        aliases: ["Royal Free"],
+        network: "North Central London",
+        level: 1,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Royal+Free+Hospital+London"
+      },
+      {
+        name: "North Middlesex University Hospital",
+        aliases: ["North Middlesex"],
+        network: "North Central London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/North+Middlesex+Hospital+London"
+      },
+      {
+        name: "Barnet Hospital",
+        aliases: ["Barnet"],
+        network: "North Central London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Barnet+Hospital"
+      },
+      {
+        name: "Whittington Hospital",
+        aliases: ["Whittington", "Whittingdon"],
+        network: "North Central London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Whittington+Hospital+London"
+      },
+      {
+        name: "University College Hospital",
+        aliases: ["UCH", "UCLH", "University College Hospital"],
+        network: "North Central London",
+        level: 3,
+        specialties: ["Neuro"],
+        mapUrl: "https://www.google.com/maps/search/University+College+Hospital+London"
+      },
+      {
+        name: "Great Ormond Street Hospital",
+        aliases: ["GOSH"],
+        network: "North Central London",
+        level: 3,
+        specialties: ["Surgery", "Cardiac", "Neuro Surgery", "ENT"],
+        mapUrl: "https://www.google.com/maps/search/Great+Ormond+Street+Hospital"
+      },
+
+      // --- NORTH WEST LONDON ---
+      {
+        name: "West Middlesex University Hospital",
+        aliases: ["West Middlesex"],
+        network: "North West London",
+        level: 1,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/West+Middlesex+Hospital"
+      },
+      {
+        name: "Hillingdon Hospital",
+        aliases: ["Hillingdon"],
+        network: "North West London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Hillingdon+Hospital"
+      },
+      {
+        name: "Northwick Park Hospital",
+        aliases: ["Northwick Park"],
+        network: "North West London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Northwick+Park+Hospital"
+      },
+      {
+        name: "St Mary's Hospital, Paddington",
+        aliases: ["St. Mary's", "St Mary's"],
+        network: "North West London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/St+Marys+Hospital+Paddington"
+      },
+      {
+        name: "Chelsea and Westminster Hospital",
+        aliases: ["Chelsea & Westminster"],
+        network: "North West London",
+        level: 3,
+        specialties: ["Surgery", "ENT"],
+        mapUrl: "https://www.google.com/maps/search/Chelsea+and+Westminster+Hospital"
+      },
+      {
+        name: "Queen Charlotte's and Chelsea Hospital",
+        aliases: ["Queen Charlotte's", "Queen Charlottes"],
+        network: "North West London",
+        level: 3,
+        specialties: ["Neuro"],
+        mapUrl: "https://www.google.com/maps/search/Queen+Charlottes+Hospital"
+      },
+
+      // --- NORTH EAST LONDON ---
+      {
+        name: "Queen's Hospital, Romford",
+        aliases: ["Queen's Romford", "Queens Romford"],
+        network: "North East London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Queens+Hospital+Romford"
+      },
+      {
+        name: "Newham Hospital",
+        aliases: ["Newham"],
+        network: "North East London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Newham+Hospital+London"
+      },
+      {
+        name: "Whipps Cross Hospital",
+        aliases: ["Whipps Cross"],
+        network: "North East London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Whipps+Cross+Hospital"
+      },
+      {
+        name: "Homerton University Hospital",
+        aliases: ["Homerton"],
+        network: "North East London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Homerton+Hospital"
+      },
+      {
+        name: "Royal London Hospital",
+        aliases: ["Royal London"],
+        network: "North East London",
+        level: 3,
+        specialties: ["Surgery"],
+        mapUrl: "https://www.google.com/maps/search/Royal+London+Hospital"
+      },
+
+      // --- SOUTH WEST LONDON ---
+      {
+        name: "Epsom Hospital",
+        aliases: ["Epsom"],
+        network: "South West London",
+        level: 1,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Epsom+Hospital"
+      },
+      {
+        name: "Kingston Hospital",
+        aliases: ["Kingston"],
+        network: "South West London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Kingston+Hospital+London"
+      },
+      {
+        name: "Croydon University Hospital",
+        aliases: ["Croydon"],
+        network: "South West London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Croydon+University+Hospital"
+      },
+      {
+        name: "St Helier Hospital",
+        aliases: ["St. Helier", "St Helier", "St. Helier's"],
+        network: "South West London",
+        level: 2,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/St+Helier+Hospital"
+      },
+      {
+        name: "St George's Hospital",
+        aliases: ["St. George's", "St Georges"],
+        network: "South West London",
+        level: 3,
+        specialties: ["Surgery", "Neuro Surgery", "ENT"],
+        mapUrl: "https://www.google.com/maps/search/St+Georges+Hospital+Tooting"
+      },
+
+      // --- SOUTH EAST LONDON ---
+      {
+        name: "Lewisham Hospital",
+        aliases: ["Lewisham"],
+        network: "South East London",
+        level: 1,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Lewisham+Hospital"
+      },
+      {
+        name: "Queen Elizabeth Hospital, Woolwich",
+        aliases: ["QEW", "Queen Elizabeth – Woolwich", "Queen Elizabeth - Woolwich", "Queen Elizabeth Hospital Woolwich"],
+        network: "South East London",
+        level: 1,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Queen+Elizabeth+Hospital+Woolwich"
+      },
+      {
+        name: "Princess Royal University Hospital",
+        aliases: ["PRUH", "Princess Royal", "Princess Royal (PRUH)"],
+        network: "South East London",
+        level: 1,
+        specialties: [],
+        mapUrl: "https://www.google.com/maps/search/Princess+Royal+University+Hospital"
+      },
+      {
+        name: "King's College Hospital",
+        aliases: ["King's", "Kings"],
+        network: "South East London",
+        level: 3,
+        specialties: ["Surgery", "Neuro Surgery"],
+        mapUrl: "https://www.google.com/maps/search/Kings+College+Hospital"
+      },
+      {
+        name: "Evelina London Children's Hospital / St Thomas'",
+        aliases: ["Evelina", "GSTT", "St. Thomas'", "St Thomas'", "Evelina London", "St Thomas Hospital"],
+        network: "South East London",
+        level: 3,
+        specialties: ["Surgery", "Cardiac", "ENT", "Neuro"],
+        mapUrl: "https://www.google.com/maps/search/Evelina+London"
+      }
+    ];
+
+    // =========================
+    //  OUTWARD CODE → UNITS
+    // =========================
+    const outwardToUnits = {
+      "BR1": ["PRUH", "QEW"],
+      "BR2": ["PRUH"],
+      "BR3": ["PRUH", "QEW"],
+      "BR4": ["PRUH"],
+      "BR5": ["PRUH"],
+      "BR6": ["PRUH"],
+      "BR7": ["PRUH"],
+      "BR8": ["PRUH", "outside London Neonatal Network"],
+      "CR0": ["Croydon", "St. Helier"],
+      "CR2": ["Croydon"],
+      "CR3": ["Croydon", "outside London Neonatal Network"],
+      "CR4": ["St. Helier"],
+      "CR5": ["Croydon", "St. Helier", "Epsom"],
+      "CR6": ["Croydon", "outside London Neonatal Network"],
+      "CR7": ["Croydon", "St. Helier"],
+      "CR8": ["Croydon", "St. Helier"],
+      "CR9": ["Croydon"],
+      "CR90": ["Croydon"],
+      "DA1": ["QEW", "outside London Neonatal Network"],
+      "DA14": ["QEW", "PRUH"],
+      "DA15": ["QEW"],
+      "DA16": ["QEW"],
+      "DA17": ["QEW"],
+      "DA18": ["QEW"],
+      "DA5": ["QEW", "outside London Neonatal Network"],
+      "DA6": ["QEW"],
+      "DA7": ["QEW"],
+      "DA8": ["QEW", "outside London Neonatal Network"],
+      "E1": ["Royal London", "Homerton"],
+      "E10": ["Homerton", "Whipps Cross"],
+      "E11": ["Whipps Cross", "Homerton"],
+      "E12": ["Newham", "Whipps Cross"],
+      "E13": ["Newham"],
+      "E14": ["Royal London"],
+      "E15": ["Newham", "Homerton"],
+      "E16": ["Newham"],
+      "E17": ["Whipps Cross"],
+      "E18": ["Whipps Cross"],
+      "E1W": ["Royal London"],
+      "E2": ["Royal London", "Homerton"],
+      "E22": ["Royal London"],
+      "E3": ["Royal London", "Newham"],
+      "E4": ["Whipps Cross", "North Middlesex"],
+      "E5": ["Homerton", "Whipps Cross"],
+      "E6": ["Newham"],
+      "E7": ["Newham", "Whipps Cross", "Homerton"],
+      "E8": ["Homerton"],
+      "E9": ["Homerton", "Royal London"],
+      "E98": ["Royal London"],
+      "EC1A": ["Homerton", "UCLH"],
+      "EC1M": ["UCLH", "Homerton"],
+      "EC1N": ["UCLH", "Homerton"],
+      "EC1P": ["UCLH"],
+      "EC1R": ["UCLH"],
+      "EC1V": ["UCLH", "Homerton", "Whittington"],
+      "EC1Y": ["UCLH", "Homerton"],
+      "EC2A": ["Homerton", "UCLH"],
+      "EC2M": ["Homerton", "UCLH", "Royal London"],
+      "EC2N": ["Homerton"],
+      "EC2P": ["Homerton"],
+      "EC2R": ["Homerton"],
+      "EC2V": ["Homerton"],
+      "EC2Y": ["Homerton", "UCLH"],
+      "EC3A": ["Homerton"],
+      "EC3M": ["Homerton"],
+      "EC3N": ["Homerton", "Royal London"],
+      "EC3P": ["Homerton", "UCLH"],
+      "EC3R": ["Homerton"],
+      "EC3V": ["Homerton"],
+      "EC4A": ["Homerton", "UCLH"],
+      "EC4M": ["Homerton"],
+      "EC4N": ["Homerton"],
+      "EC4P": ["UCLH"],
+      "EC4R": ["Homerton"],
+      "EC4V": ["Homerton"],
+      "EC4Y": ["Homerton", "UCLH"],
+      "EN1": ["North Middlesex", "Barnet"],
+      "EN2": ["Barnet", "North Middlesex"],
+      "EN3": ["North Middlesex"],
+      "EN4": ["Barnet"],
+      "EN5": ["Barnet"],
+      "EN6": ["Barnet", "outside London Neonatal Network"],
+      "EN7": ["outside London Neonatal Network"],
+      "EN8": ["North Middlesex", "outside London Neonatal Network"],
+      "EN9": ["outside London Neonatal Network"],
+      "HA0": ["Northwick Park"],
+      "HA1": ["Northwick Park"],
+      "HA2": ["Northwick Park"],
+      "HA3": ["Northwick Park"],
+      "HA4": ["Hillingdon", "Northwick Park"],
+      "HA5": ["Northwick Park", "Hillingdon"],
+      "HA6": ["Hillingdon", "outside London Neonatal Network"],
+      "HA7": ["Northwick Park"],
+      "HA8": ["Barnet", "Northwick Park"],
+      "HA9": ["Northwick Park"],
+      "IG1": ["Queen's Romford", "Whipps Cross"],
+      "IG11": ["Newham", "Queen's Romford"],
+      "IG2": ["Queen's Romford", "Whipps Cross"],
+      "IG3": ["Queen's Romford"],
+      "IG4": ["Whipps Cross"],
+      "IG5": ["Whipps Cross"],
+      "IG6": ["Whipps Cross", "Queen's Romford"],
+      "IG7": ["Queen's Romford", "outside London Neonatal Network"],
+      "IG8": ["Whipps Cross"],
+      "IG9": ["Whipps Cross", "outside London Neonatal Network"],
+      "KT1": ["Kingston"],
+      "KT17": ["Epsom", "St. Helier"],
+      "KT18": ["Epsom", "outside London Neonatal Network"],
+      "KT19": ["Epsom", "Kingston"],
+      "KT2": ["Kingston"],
+      "KT22": ["Epsom"],
+      "KT3": ["Kingston", "St. Helier"],
+      "KT4": ["St. Helier", "Kingston", "Epsom"],
+      "KT5": ["Kingston"],
+      "KT6": ["Kingston"],
+      "KT7": ["Kingston"],
+      "KT8": ["Kingston"],
+      "KT9": ["Kingston"],
+      "N1": ["Whittingdon", "Homerton", "UCLH"],
+      "N10": ["Whittingdon", "Royal Free", "Barnet"],
+      "N11": ["Royal Free", "Barnet", "North Middlesex", "Whittingdon"],
+      "N12": ["Barnet", "Royal Free"],
+      "N13": ["Barnet", "Royal Free", "North Middlesex"],
+      "N14": ["Royal Free", "Barnet"],
+      "N15": ["North Middlesex", "Homerton"],
+      "N16": ["Homerton", "Whittingdon"],
+      "N17": ["North Middlesex"],
+      "N18": ["North Middlesex"],
+      "N19": ["Whittingdon", "UCH", "Royal Free"],
+      "N1C": ["UCH"],
+      "N1P": ["Whittingdon"],
+      "N2": ["Royal Free", "Whittindon", "Barnet"],
+      "N20": ["Royal Free", "Barnet"],
+      "N21": ["Barnet", "North Middlesex"],
+      "N22": ["North Middlesex", "Whittingdon"],
+      "N3": ["Royal Free", "Barnet"],
+      "N4": ["North Middlesex", "Whittingdon", "Homerton"],
+      "N5": ["Whittingdon", "Homerton"],
+      "N6": ["Whittingdon", "Royal Free"],
+      "N7": ["Whittingdon", "UCH"],
+      "N8": ["Whittingdon", "North Middlesex"],
+      "N81": ["Newham", "North Middlesex"],
+      "N9": ["North Middlesex"],
+      "NW1": ["UCH", "St. Mary's", "Royal Free"],
+      "NW10": ["Northwick Park", "Queen Charlotte's", "St. Mary's"],
+      "NW11": ["Royal Free", "Barnet"],
+      "NW1W": ["UCH"],
+      "NW2": ["Royal Free", "Northwick Park", "St. Mary's"],
+      "NW3": ["Royal Free", "Barnet"],
+      "NW4": ["Royal Free", "Barnet"],
+      "NW5": ["Royal Free", "UCH"],
+      "NW6": ["St. Mary's", "Royal Free"],
+      "NW7": ["Barnet", "Royal Free"],
+      "NW8": ["St. Mary's", "Royal Free"],
+      "NW9": ["Northwick Park", "Royal Free", "Barnet"],
+      "RM1": ["Queen's Romford"],
+      "RM10": ["Queen's Romford"],
+      "RM11": ["Queen's Romford"],
+      "RM12": ["Queen's Romford"],
+      "RM13": ["Queen's Romford"],
+      "RM14": ["Queen's Romford", "outside London Neonatal Network"],
+      "RM15": ["Queen's Romford", "outside London Neonatal Network"],
+      "RM2": ["Queen's Romford"],
+      "RM3": ["Queen's Romford"],
+      "RM4": ["Queen's Romford", "outside London Neonatal Network"],
+      "RM5": ["Queen's Romford", "outside London Neonatal Network"],
+      "RM6": ["Queen's Romford"],
+      "RM7": ["Queen's Romford"],
+      "RM8": ["Queen's Romford"],
+      "RM9": ["Queen's Romford", "Newham"],
+      "SE1": ["GSTT", "King's"],
+      "SE10": ["QEW"],
+      "SE11": ["GSTT", "King's"],
+      "SE12": ["QEW"],
+      "SE13": ["QEW"],
+      "SE14": ["Lewisham", "QEW", "King's"],
+      "SE15": ["King's", "GSTT", "Lewisham"],
+      "SE16": ["GSTT", "Lewisham"],
+      "SE17": ["GSTT"],
+      "SE18": ["QEW"],
+      "SE19": ["Croydon", "King's", "PRUH"],
+      "SE1P": ["GSTT"],
+      "SE2": ["QEW"],
+      "SE20": ["PRUH"],
+      "SE21": ["King's"],
+      "SE22": ["King's"],
+      "SE23": ["QEW", "King's"],
+      "SE24": ["King's"],
+      "SE25": ["Croydon"],
+      "SE26": ["QEW", "PRUH", "King's"],
+      "SE27": ["King's"],
+      "SE28": ["QEW"],
+      "SE3": ["QEW"],
+      "SE4": ["QEW", "King's"],
+      "SE5": ["King's", "GSTT"],
+      "SE6": ["QEW"],
+      "SE7": ["QEW"],
+      "SE8": ["Lewisham", "QEW", "GSTT"],
+      "SE9": ["QEW", "PRUH"],
+      "SM1": ["St. Helier"],
+      "SM2": ["St. Helier", "Epsom"],
+      "SM3": ["St. Helier"],
+      "SM4": ["St. Helier"],
+      "SM5": ["St. Helier"],
+      "SM6": ["St. Helier"],
+      "SM7": ["Epsom", "St. Helier"],
+      "SW10": ["Chelsea & Westminster"],
+      "SW11": ["St. George's"],
+      "SW12": ["St. George's", "GSTT"],
+      "SW13": ["Kingston"],
+      "SW14": ["Kingston"],
+      "SW15": ["St. George's", "Kingston"],
+      "SW16": ["GSTT", "King's", "St. George's", "Croydon", "St. Helier"],
+      "SW17": ["St. George's", "St. Helier"],
+      "SW18": ["St. George's", "St. Helier"],
+      "SW19": ["St. Helier", "St. George's"],
+      "SW1A": ["Chelsea & Westminster"],
+      "SW1E": ["Chelsea & Westminster"],
+      "SW1H": ["Chelsea & Westminster"],
+      "SW1P": ["Chelsea & Westminster"],
+      "SW1V": ["Chelsea & Westminster", "St. George's"],
+      "SW1W": ["Chelsea & Westminster"],
+      "SW1X": ["Chelsea & Westminster"],
+      "SW1Y": ["Chelsea & Westminster"],
+      "SW2": ["King's", "GSTT"],
+      "SW20": ["St. Helier", "Kingston"],
+      "SW3": ["Chelsea & Westminster"],
+      "SW4": ["GSTT", "St. George's"],
+      "SW5": ["Chelsea & Westminster"],
+      "SW6": ["Chelsea & Westminster"],
+      "SW7": ["Chelsea & Westminster"],
+      "SW8": ["GSTT", "St. George's"],
+      "SW9": ["GSTT", "King's"],
+      "SW95": ["St. George's"],
+      "TN14": ["PRUH", "outside London Neonatal Network"],
+      "TN16": ["PRUH", "outside London Neonatal Network"],
+      "TW1": ["West Middlesex"],
+      "TW10": ["Kingston"],
+      "TW11": ["Kingston", "West Middlesex"],
+      "TW12": ["Kingston", "West Middlesex"],
+      "TW13": ["West Middlesex"],
+      "TW14": ["West Middlesex"],
+      "TW15": ["West Middlesex", "outside London Neonatal Network"],
+      "TW19": ["West Middlesex", "outside London Neonatal Network"],
+      "TW2": ["West Middlesex"],
+      "TW3": ["West Middlesex"],
+      "TW4": ["West Middlesex"],
+      "TW5": ["West Middlesex"],
+      "TW6": ["West Middlesex", "outside London Neonatal Network"],
+      "TW7": ["West Middlesex"],
+      "TW8": ["West Middlesex", "Queen Charlotte's"],
+      "TW9": ["Kingston"],
+      "UB1": ["Queen Charlotte's", "Hillingdon", "West Middlesex"],
+      "UB10": ["Hillingdon"],
+      "UB11": ["Hillingdon"],
+      "UB18": ["West Middlesex"],
+      "UB2": ["West Middlesex", "Queen Charlotte's"],
+      "UB3": ["Hillingdon"],
+      "UB4": ["Hillingdon"],
+      "UB5": ["Hillingdon", "Northwick Park"],
+      "UB6": ["Northwick Park", "Queen Charlotte's"],
+      "UB7": ["Hillingdon", "outside London Neonatal Network"],
+      "UB8": ["Hillingdon"],
+      "UB9": ["Hillingdon", "outside London Neonatal Network"],
+      "W10": ["St. Mary's"],
+      "W11": ["St. Mary's", "Chelsea & Westminster"],
+      "W12": ["Queen Charlotte's", "St. Mary's"],
+      "W13": ["Queen Charlotte's", "West Middlesex"],
+      "W14": ["Chelsea & Westminster"],
+      "W1A": ["UCH"],
+      "W1B": ["UCH", "St. Mary's"],
+      "W1C": ["St. Mary's"],
+      "W1D": ["UCH"],
+      "W1F": ["UCH"],
+      "W1G": ["St. Mary's"],
+      "W1H": ["St. Mary's"],
+      "W1J": ["St. Mary's", "Chelsea & Westminster"],
+      "W1K": ["St. Mary's"],
+      "W1S": ["St. Mary's"],
+      "W1T": ["UCH"],
+      "W1U": ["St. Mary's"],
+      "W1W": ["UCH"],
+      "W2": ["St. Mary's"],
+      "W3": ["Queen Charlotte's", "Northwick Park"],
+      "W4": ["Queen Charlotte's", "Chelsea & Westminster"],
+      "W5": ["Queen Charlotte's", "West Middlesex", "Northwick Park"],
+      "W6": ["Queen Charlotte's", "Chelsea & Westminster"],
+      "W7": ["Queen Charlotte's", "West Middlesex"],
+      "W8": ["Chelsea & Westminster"],
+      "W9": ["St. Mary's"],
+      "WC1A": ["UCH"],
+      "WC1B": ["UCH"],
+      "WC1E": ["UCH"],
+      "WC1H": ["UCH"],
+      "WC1N": ["UCH"],
+      "WC1R": ["UCH"],
+      "WC1V": ["UCH"],
+      "WC1X": ["UCH"],
+      "WC2A": ["UCH"],
+      "WC2B": ["UCH"],
+      "WC2E": ["UCH"],
+      "WC2H": ["UCH", "Chelsea & Westminster"],
+      "WC2N": ["UCH", "Chelsea & Westminster"],
+      "WC2R": ["UCH"],
+      "WD23": ["Northwick Park", "outside London Neonatal Network"],
+      "WD3": ["Hillingdon", "outside London Neonatal Network"],
+      "WD6": ["Barnet", "outside London Neonatal Network"]
+    };
+
+    // =========================
+    //  HELPER FUNCTIONS
+    // =========================
+    function normaliseInput(str) {
+      return str.trim().toUpperCase();
+    }
+
+    function isFullPostcode(str) {
+      return /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/.test(str);
+    }
+
+    function isOutwardCode(str) {
+      return /^[A-Z]{1,2}\d[A-Z\d]?$/.test(str);
+    }
+
+    // NEW: 1–2 letter area prefix (N, E, EC, SE, SW, NW, W, BR, CR, RM, etc.)
+    function isAreaPrefix(str) {
+      return /^[A-Z]{1,2}$/.test(str);
+    }
+
+
+
+    function outwardFromPostcode(pc) {
+      // Normalise and strip spaces
+      const value = normaliseInput(pc).replace(/\s+/g, "");
+
+      // UK outward code = everything except the last 3 characters
+      if (value.length > 3) {
+        return value.slice(0, value.length - 3);
+      }
+
+      // Fallback – in case someone types something odd but passes regex
+      return value;
+    }
+
+
+    
+    function findUnitMetaByName(name) {
+      const target = name.trim().toLowerCase();
+      return (
+        units.find(u =>
+          u.aliases.some(a => a.toLowerCase() === target) ||
+          u.name.toLowerCase() === target
+        ) || null
+      );
+    }
+
+    function findUnitsByOutward(outward) {
+      const names = outwardToUnits[outward];
+      if (!names) return [];
+
+      const results = [];
+      for (const rawName of names) {
+        const name = rawName.trim();
+
+        if (name.toLowerCase().includes("outside london neonatal network")) {
+          results.push({
+            name: "Outside London Neonatal Network",
+            network: "Outside London Neonatal Network",
+            level: null,
+            specialties: [],
+            outside: true
+          });
+          continue;
+        }
+
+        const meta = findUnitMetaByName(name);
+        if (meta) {
+          results.push(meta);
+        } else {
+          results.push({
+            name,
+            network: "Unknown network",
+            level: null,
+            specialties: [],
+            outside: false
+          });
+        }
+      }
+      return results;
+    }
+
+    // NEW: find all units for an area prefix (N, E, EC, SE, SW, etc.)
+    function findUnitsByPrefix(prefix) {
+      const p = prefix.toUpperCase();
+      const seen = new Set();
+      const results = [];
+
+      for (const outward of Object.keys(outwardToUnits)) {
+        if (!outward.startsWith(p)) continue;
+
+        const unitsForOutward = findUnitsByOutward(outward);
+        unitsForOutward.forEach(u => {
+          const key = (u.name || "") + "|" + (u.network || "") + "|" + (u.outside ? "1" : "0");
+          if (!seen.has(key)) {
+            seen.add(key);
+            results.push(u);
+          }
+        });
+      }
+
+      return results;
+    }
+
+    function fuzzyFindUnitsByName(query) {
+      const q = query.toLowerCase();
+      return units.filter(
+        u =>
+          u.name.toLowerCase().includes(q) ||
+          u.aliases.some(a => a.toLowerCase().includes(q))
+      );
+    }
+
+    function createPill(text, extraClass = "") {
+      const span = document.createElement("span");
+      span.className = "pill" + (extraClass ? " " + extraClass : "");
+      span.textContent = text;
+      return span;
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      }
+    }
+
+    function renderResults(results, contextText) {
+      const container = document.getElementById("results");
+      container.innerHTML = "";
+
+      if (!results.length) {
+        container.innerHTML =
+          '<div class="no-results">No matching neonatal units found. Check the postcode/outward code, or try a hospital name.</div>';
+        return;
+      }
+
+      if (contextText) {
+        const div = document.createElement("div");
+        div.className = "hint";
+        div.style.marginBottom = "0.5rem";
+        div.textContent = contextText;
+        container.appendChild(div);
+      }
+
+      results.forEach(r => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const h2 = document.createElement("h2");
+        h2.textContent = r.name;
+        card.appendChild(h2);
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        if (r.outside) {
+          meta.textContent = "Outside London Neonatal Network – check local services / retrieval advice.";
+        } else {
+          meta.textContent = `${r.network}${
+            r.level ? " • Level " + r.level + " neonatal unit" : ""
+          }`;
+        }
+        card.appendChild(meta);
+
+        const pills = document.createElement("div");
+
+        if (r.level) {
+          pills.appendChild(createPill("Level " + r.level, "badge-level"));
+        }
+
+        if (r.specialties && r.specialties.length) {
+          r.specialties.forEach(s => pills.appendChild(createPill(s)));
+        }
+
+        if (r.outside) {
+          pills.appendChild(createPill("Outside Network", "badge-warning"));
+        }
+
+        card.appendChild(pills);
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const summary =
+          `${r.name}` +
+          (r.network ? ` (${r.network})` : "") +
+          (r.level ? ` – Level ${r.level}` : "") +
+          (r.specialties?.length ? `, ${r.specialties.join(", ")}` : "");
+
+        const copyBtn = document.createElement("button");
+        copyBtn.textContent = "Copy summary";
+        copyBtn.addEventListener("click", () => copyToClipboard(summary));
+        actions.appendChild(copyBtn);
+
+        if (r.mapUrl && !r.outside) {
+          const mapBtn = document.createElement("button");
+          mapBtn.textContent = "Open in Maps";
+          mapBtn.className = "secondary";
+          mapBtn.addEventListener("click", () => {
+            window.open(r.mapUrl, "_blank");
+          });
+          actions.appendChild(mapBtn);
+        }
+
+        card.appendChild(actions);
+        container.appendChild(card);
+      });
+    }
+
+    // =========================
+    //  MAIN SEARCH WIRING
+    // =========================
+    const inputEl = document.getElementById("searchInput");
+
+    inputEl.addEventListener("input", () => {
+      const raw = inputEl.value;
+      const value = normaliseInput(raw);
+      const container = document.getElementById("results");
+
+      if (!value) {
+        container.innerHTML =
+          '<div class="hint">Start typing a postcode, outward code, area prefix (e.g. SE, NW) or hospital name…</div>';
+        return;
+      }
+
+      if (isFullPostcode(value)) {
+        const outward = outwardFromPostcode(value);
+        const unitsFound = findUnitsByOutward(outward);
+        renderResults(unitsFound, `Full postcode detected. Outward code: ${outward}.`);
+      } else if (isOutwardCode(value)) {
+        const unitsFound = findUnitsByOutward(value);
+        renderResults(unitsFound, `Outward code: ${value}.`);
+      } else if (isAreaPrefix(value)) {
+        const unitsFound = findUnitsByPrefix(value);
+        renderResults(
+          unitsFound,
+          `Area prefix: ${value}. Showing all units covering outward codes beginning with “${value}”.`
+        );
+      } else {
+        const unitsFound = fuzzyFindUnitsByName(value);
+        renderResults(
+          unitsFound,
+          `Interpreted as hospital name search: “${raw.trim()}”.`
+        );
+      }
+    });
+
+    // Initial hint
+    document.getElementById("results").innerHTML =
+      '<div class="hint">Start typing a postcode, outward code, area prefix (e.g. SE, NW) or hospital name…</div>';
+  </script>
+</body>
+</html>

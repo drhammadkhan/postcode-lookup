@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catchment Data &ndash; HO.ME Neonatal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --blue:#1855A3;--blue-dark:#0F3D7A;--blue-light:#EBF3FF;--blue-mid:#2D74CC;
+            --bg:#F4F7FC;--surface:#fff;--border:#E2E8F2;
+            --text:#1A2340;--text-mid:#4A5577;--text-soft:#8A95B0;
+            --green:#16A34A;--green-light:#F0FDF4;
+            --amber:#D97706;--amber-light:#FFFBEB;
+            --red:#DC2626;--red-light:#FFF5F5;
+            --radius:14px;--shadow:0 2px 16px rgba(24,85,163,.08);
+        }
+        body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+        header{background:var(--surface);border-bottom:1px solid var(--border)}
+        .header-inner{max-width:1200px;margin:0 auto;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem}
+        .brand-home{font-size:2rem;font-weight:900;color:var(--blue);letter-spacing:-.04em;line-height:1}
+        .brand-sep{font-size:1.5rem;font-weight:300;color:var(--text-soft)}
+        .brand-full{font-size:1.25rem;font-weight:700;color:var(--blue);letter-spacing:-.02em}
+        .brand-tagline{font-size:.875rem;color:var(--text-mid);margin-top:.1rem}
+        .header-title-row{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap}
+        .header-brand{display:flex;flex-direction:column;gap:.15rem}
+        .back-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.1rem;border-radius:10px;background:var(--blue-light);color:var(--blue);font-size:.875rem;font-weight:600;text-decoration:none;white-space:nowrap;transition:background .15s}
+        .back-btn:hover{background:#d0e6ff}
+        main{flex:1}
+        .container{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+        .page-tabs{display:flex;gap:4px;background:var(--surface);border-radius:var(--radius);padding:5px;box-shadow:var(--shadow);width:fit-content;margin-bottom:1.75rem}
+        .page-tab{padding:.6rem 1.4rem;font-size:.9rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text-mid);border-radius:10px;transition:all .18s;font-family:inherit;display:flex;align-items:center;gap:.45rem;white-space:nowrap}
+        .page-tab:hover{color:var(--blue);background:var(--blue-light)}
+        .page-tab.active{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(24,85,163,.3)}
+        .tab-panel{display:none}
+        .tab-panel.active{display:block}
+        .section-title{font-size:1.4rem;font-weight:800;color:var(--text);letter-spacing:-.03em;margin-bottom:.3rem}
+        .section-subtitle{font-size:.9rem;color:var(--text-mid);line-height:1.55;margin-bottom:1.5rem}
+        .legend-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem}
+        .legend-pill{display:inline-flex;align-items:center;gap:.45rem;padding:.35rem .9rem;border-radius:99px;font-size:.8rem;font-weight:700;letter-spacing:.03em}
+        .pill-any{background:var(--blue-light);color:var(--blue)}
+        .pill-l1{background:var(--green-light);color:var(--green)}
+        .pill-l2{background:var(--amber-light);color:var(--amber)}
+        .pill-l3{background:var(--red-light);color:var(--red)}
+        .legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+        .dot-any{background:var(--blue-mid)}.dot-l1{background:var(--green)}.dot-l2{background:var(--amber)}.dot-l3{background:var(--red)}
+        .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin-bottom:1.75rem}
+        .stat-card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.2rem 1.4rem}
+        .stat-card.s-any{border-top:4px solid var(--blue-mid)}.stat-card.s-l1{border-top:4px solid var(--green)}.stat-card.s-l2{border-top:4px solid var(--amber)}.stat-card.s-l3{border-top:4px solid var(--red)}
+        .stat-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-soft);margin-bottom:.4rem}
+        .stat-value{font-size:1.5rem;font-weight:800;color:var(--text);letter-spacing:-.03em;line-height:1}
+        .stat-sub{font-size:.78rem;color:var(--text-soft);margin-top:.3rem}
+        .chart-card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.5rem 1.75rem;margin-bottom:1.25rem}
+        .chart-title{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.25rem}
+        .chart-subtitle{font-size:.82rem;color:var(--text-soft);margin-bottom:1.25rem}
+        .chart-wrap{position:relative}
+        .controls-row{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap}
+        .ctrl-label{font-size:.8rem;font-weight:600;color:var(--text-mid)}
+        .level-btn-group{display:flex;gap:3px;background:var(--bg);border-radius:9px;padding:3px}
+        .lvl-btn{padding:.35rem .85rem;font-size:.8rem;font-weight:600;border:none;background:transparent;color:var(--text-mid);border-radius:7px;cursor:pointer;font-family:inherit;transition:all .15s}
+        .lvl-btn.active-any{background:var(--blue);color:#fff}.lvl-btn.active-l1{background:var(--green);color:#fff}.lvl-btn.active-l2{background:var(--amber);color:#fff}.lvl-btn.active-l3{background:var(--red);color:#fff}
+        .lvl-btn:not([class*="active"]):hover{background:var(--border)}
+        .table-wrap{overflow-x:auto}
+        table{width:100%;border-collapse:collapse;font-size:.875rem}
+        thead th{background:var(--bg);padding:.75rem 1rem;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-soft);border-bottom:2px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
+        thead th:hover{color:var(--blue)}
+        thead th.sort-asc::after{content:" \u25b2";font-size:.65rem}thead th.sort-desc::after{content:" \u25bc";font-size:.65rem}
+        tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+        tbody tr:last-child{border-bottom:none}
+        tbody tr:hover{background:var(--blue-light)}
+        tbody td{padding:.7rem 1rem;color:var(--text)}
+        tbody td.hospital-name{font-weight:600}
+        tbody td.num{text-align:right;font-variant-numeric:tabular-nums;color:var(--text-mid)}
+        tbody td.num.highlight{color:var(--text);font-weight:700}
+        .level-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;flex-shrink:0}
+        .method-note{background:var(--blue-light);border-left:4px solid var(--blue-mid);border-radius:0 10px 10px 0;padding:.85rem 1.1rem;font-size:.82rem;color:var(--text-mid);line-height:1.55;margin-bottom:1.5rem}
+        .method-note strong{color:var(--blue)}
+        footer{background:var(--surface);border-top:1px solid var(--border);padding:1.1rem 1.5rem;text-align:center;color:var(--text-soft);font-size:.82rem;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap}
+        footer a{color:var(--blue);text-decoration:none;font-weight:600;display:flex;align-items:center;gap:.3rem;transition:color .15s}
+        footer a:hover{color:var(--blue-dark)}
+        .footer-sep{color:var(--border)}
+        @media(max-width:800px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:560px){.stat-grid{grid-template-columns:1fr 1fr}.chart-card{padding:1rem}.page-tabs{width:100%}.page-tab{flex:1;justify-content:center}}
+    </style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-title-row">
+        <span class="brand-home">HO.ME V2</span>
+        <span class="brand-sep">&ndash;</span>
+        <span class="brand-full">Hospital Near Me (Neonatal)</span>
+      </div>
+      <div class="brand-tagline">Catchment area data by care level</div>
+    </div>
+    <a href="index.html" class="back-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Lookup
+    </a>
+  </div>
+</header>
+
+<main><div class="container">
+
+  <div class="page-tabs">
+    <button class="page-tab active" data-page="population" onclick="switchPage('population')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Residential Population
+    </button>
+    <button class="page-tab" data-page="births" onclick="switchPage('births')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      Live Births
+    </button>
+  </div>
+
+  <!-- POPULATION PANEL -->
+  <div class="tab-panel active" id="panel-population">
+    <h2 class="section-title">Residential Population by Catchment</h2>
+    <p class="section-subtitle">ONS Census 2021 residential populations assigned to each hospital&rsquo;s catchment area by care level. <strong>Any</strong> = nearest unit regardless of level; <strong>L1/L2/L3</strong> = postcodes routed to that hospital for that specific care level.</p>
+    <div class="legend-row">
+      <span class="legend-pill pill-any"><span class="legend-dot dot-any"></span>Any &mdash; Nearest unit</span>
+      <span class="legend-pill pill-l1"><span class="legend-dot dot-l1"></span>L1 &mdash; Special Care</span>
+      <span class="legend-pill pill-l2"><span class="legend-dot dot-l2"></span>L2 &mdash; High Dependency</span>
+      <span class="legend-pill pill-l3"><span class="legend-dot dot-l3"></span>L3 &mdash; NICU</span>
+    </div>
+    <div class="stat-grid" id="pop-statGrid"></div>
+    <div class="chart-card">
+      <div class="chart-title">Population by Hospital</div>
+      <div class="chart-subtitle">Ranked by catchment population for the selected level. Only hospitals operating at that level are shown.</div>
+      <div class="controls-row">
+        <span class="ctrl-label">Level:</span>
+        <div class="level-btn-group" id="pop-levelBtns">
+          <button class="lvl-btn active-any" data-level="any">Any</button>
+          <button class="lvl-btn" data-level="l1">L1</button>
+          <button class="lvl-btn" data-level="l2">L2</button>
+          <button class="lvl-btn" data-level="l3">L3</button>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="pop-barChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Care Level Population Composition</div>
+      <div class="chart-subtitle">L1 / L2 / L3 population stacked per hospital, sorted by total. Hospitals with no level-specific catchment excluded.</div>
+      <div class="chart-wrap"><canvas id="pop-stackedChart"></canvas></div>
+    </div>
+    <div class="chart-card" style="padding:0;overflow:hidden">
+      <div style="padding:1.5rem 1.75rem .75rem">
+        <div class="chart-title">Full Data Table</div>
+        <div class="chart-subtitle" style="margin-bottom:0">Click any column header to sort.</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th data-tbl="pop" data-col="hospital">Hospital</th>
+            <th data-tbl="pop" data-col="any_population" class="sort-desc">Any Pop</th>
+            <th data-tbl="pop" data-col="l1_population">L1 Pop</th>
+            <th data-tbl="pop" data-col="l2_population">L2 Pop</th>
+            <th data-tbl="pop" data-col="l3_population">L3 Pop</th>
+          </tr></thead>
+          <tbody id="pop-tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIRTHS PANEL -->
+  <div class="tab-panel" id="panel-births">
+    <h2 class="section-title">Live Births by Catchment</h2>
+    <p class="section-subtitle">ONS live birth registrations 2016&ndash;2018 (combined 3-year total) allocated to each hospital&rsquo;s catchment area by care level.</p>
+    <div class="method-note">
+      <strong>Methodology &mdash; proportional sector splitting:</strong> Birth data is published at postcode-sector level (e.g. <em>SW1A 1</em>). Because a single sector can span multiple hospital catchments, births are split in proportion to the share of full postcodes within each sector assigned to each hospital. For example, if 70% of postcodes in a sector route to Hospital A and 30% to Hospital B, Hospital A receives 70% of that sector&rsquo;s births.
+    </div>
+    <div class="legend-row">
+      <span class="legend-pill pill-any"><span class="legend-dot dot-any"></span>Any &mdash; Nearest unit</span>
+      <span class="legend-pill pill-l1"><span class="legend-dot dot-l1"></span>L1 &mdash; Special Care</span>
+      <span class="legend-pill pill-l2"><span class="legend-dot dot-l2"></span>L2 &mdash; High Dependency</span>
+      <span class="legend-pill pill-l3"><span class="legend-dot dot-l3"></span>L3 &mdash; NICU</span>
+    </div>
+    <div class="stat-grid" id="births-statGrid"></div>
+    <div class="chart-card">
+      <div class="chart-title">Births by Hospital</div>
+      <div class="chart-subtitle">Ranked by allocated births for the selected level. Only hospitals operating at that level are shown.</div>
+      <div class="controls-row">
+        <span class="ctrl-label">Level:</span>
+        <div class="level-btn-group" id="births-levelBtns">
+          <button class="lvl-btn active-any" data-level="any">Any</button>
+          <button class="lvl-btn" data-level="l1">L1</button>
+          <button class="lvl-btn" data-level="l2">L2</button>
+          <button class="lvl-btn" data-level="l3">L3</button>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="births-barChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Care Level Births Composition</div>
+      <div class="chart-subtitle">L1 / L2 / L3 births stacked per hospital, sorted by total. Hospitals with no level-specific catchment excluded.</div>
+      <div class="chart-wrap"><canvas id="births-stackedChart"></canvas></div>
+    </div>
+    <div class="chart-card" style="padding:0;overflow:hidden">
+      <div style="padding:1.5rem 1.75rem .75rem">
+        <div class="chart-title">Full Data Table</div>
+        <div class="chart-subtitle" style="margin-bottom:0">Click any column header to sort. Values are 3-year totals (2016&ndash;2018) allocated by postcode-count weighting.</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th data-tbl="births" data-col="hospital">Hospital</th>
+            <th data-tbl="births" data-col="any_births" class="sort-desc">Any Births</th>
+            <th data-tbl="births" data-col="l1_births">L1 Births</th>
+            <th data-tbl="births" data-col="l2_births">L2 Births</th>
+            <th data-tbl="births" data-col="l3_births">L3 Births</th>
+          </tr></thead>
+          <tbody id="births-tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div></main>
+
+<footer>
+  <span>&copy; 2026 Evelina London Neonatal</span>
+  <span class="footer-sep">|</span>
+  <a href="index.html">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    Postcode Lookup
+  </a>
+  <span class="footer-sep">|</span>
+  <a href="outcode_population.html">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+    Outcode Catchment
+  </a>
+  <span class="footer-sep">|</span>
+  <span>Population: ONS Census 2021 &nbsp;&middot;&nbsp; Births: ONS 2016&ndash;2018</span>
+</footer>
+
+<script>
+const COLOURS={any:{bar:'#2D74CC',bg:'rgba(45,116,204,0.82)'},l1:{bar:'#16A34A',bg:'rgba(22,163,74,0.82)'},l2:{bar:'#D97706',bg:'rgba(217,119,6,0.82)'},l3:{bar:'#DC2626',bg:'rgba(220,38,38,0.82)'}};
+const LEVEL_ACTIVE={any:'active-any',l1:'active-l1',l2:'active-l2',l3:'active-l3'};
+const LEVEL_DOT=['#16A34A','#D97706','#DC2626'];
+const state={pop:{data:[],level:'any',sortCol:'any_population',sortDir:-1,bar:null,stacked:null},births:{data:[],level:'any',sortCol:'any_births',sortDir:-1,bar:null,stacked:null}};
+
+function fmt(n){return n?n.toLocaleString('en-GB'):'&#8212;';}
+function tickFmt(v){return v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'k':v;}
+function scaleFmt(v){return v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?(v/1e3).toFixed(1)+'k':String(v);}
+
+function switchPage(page){
+  document.querySelectorAll('.page-tab').forEach(t=>t.classList.toggle('active',t.dataset.page===page));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+page));
+}
+
+function buildStatCards(ns,keyAny,kL1,kL2,kL3,suffix){
+  const d=state[ns].data;
+  const tot=k=>d.reduce((s,r)=>s+(r[k]||0),0);
+  const max=k=>d.reduce((m,r)=>(r[k]||0)>m.v?{v:r[k],h:r.hospital}:m,{v:0,h:''});
+  const stats=[
+    {cls:'s-any',label:'Total Any '+suffix,value:tot(keyAny),sub:d.length+' hospitals'},
+    {cls:'s-l1',label:'Largest L1 '+suffix,value:max(kL1).v,sub:max(kL1).h},
+    {cls:'s-l2',label:'Largest L2 '+suffix,value:max(kL2).v,sub:max(kL2).h},
+    {cls:'s-l3',label:'Largest L3 '+suffix,value:max(kL3).v,sub:max(kL3).h},
+  ];
+  document.getElementById(ns+'-statGrid').innerHTML=stats.map(s=>`<div class="stat-card ${s.cls}"><div class="stat-label">${s.label}</div><div class="stat-value">${scaleFmt(s.value)}</div><div class="stat-sub">${s.sub}</div></div>`).join('');
+}
+
+function barKey(ns){return state[ns].level+'_'+(ns==='pop'?'population':'births');}
+
+function buildBar(ns,unitLabel){
+  const s=state[ns],k=barKey(ns),c=COLOURS[s.level];
+  const filtered=s.data.filter(d=>d[k]>0).sort((a,b)=>b[k]-a[k]);
+  if(s.bar)s.bar.destroy();
+  const canvas=document.getElementById(ns+'-barChart');
+  canvas.parentElement.style.height=Math.max(320,filtered.length*28)+'px';
+  s.bar=new Chart(canvas,{type:'bar',data:{labels:filtered.map(d=>d.hospital),datasets:[{data:filtered.map(d=>d[k]),backgroundColor:c.bg,borderColor:c.bar,borderWidth:1.5,borderRadius:5,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.x.toLocaleString('en-GB')+' '+unitLabel}}},scales:{x:{grid:{color:'#E2E8F2'},ticks:{font:{family:'Inter',size:11},color:'#8A95B0',callback:tickFmt}},y:{grid:{display:false},ticks:{font:{family:'Inter',size:11,weight:'500'},color:'#1A2340'}}}}});
+}
+
+function buildStacked(ns,unitLabel){
+  const s=state[ns],sfx='_'+(ns==='pop'?'population':'births');
+  const active=s.data.filter(d=>(d['l1'+sfx]||0)+(d['l2'+sfx]||0)+(d['l3'+sfx]||0)>0).sort((a,b)=>((b['l1'+sfx]||0)+(b['l2'+sfx]||0)+(b['l3'+sfx]||0))-((a['l1'+sfx]||0)+(a['l2'+sfx]||0)+(a['l3'+sfx]||0)));
+  if(s.stacked)s.stacked.destroy();
+  const canvas=document.getElementById(ns+'-stackedChart');
+  canvas.parentElement.style.height=Math.max(320,active.length*28)+'px';
+  s.stacked=new Chart(canvas,{type:'bar',data:{labels:active.map(d=>d.hospital),datasets:[{label:'L1 Special Care',data:active.map(d=>d['l1'+sfx]||0),backgroundColor:'rgba(22,163,74,0.78)',borderRadius:0},{label:'L2 High Dependency',data:active.map(d=>d['l2'+sfx]||0),backgroundColor:'rgba(217,119,6,0.78)',borderRadius:0},{label:'L3 NICU',data:active.map(d=>d['l3'+sfx]||0),backgroundColor:'rgba(220,38,38,0.78)',borderRadius:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{family:'Inter',size:12},color:'#1A2340',boxWidth:12,padding:16}},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+ctx.parsed.x.toLocaleString('en-GB')+' '+unitLabel}}},scales:{x:{stacked:true,grid:{color:'#E2E8F2'},ticks:{font:{family:'Inter',size:11},color:'#8A95B0',callback:tickFmt}},y:{stacked:true,grid:{display:false},ticks:{font:{family:'Inter',size:11,weight:'500'},color:'#1A2340'}}}}});
+}
+
+function buildTable(ns){
+  const s=state[ns],sfx=ns==='pop'?'_population':'_births';
+  const cols=['any','l1','l2','l3'].map(l=>l+sfx);
+  const sorted=[...s.data].sort((a,b)=>s.sortCol==='hospital'?s.sortDir*a.hospital.localeCompare(b.hospital):s.sortDir*((a[s.sortCol]||0)-(b[s.sortCol]||0)));
+  document.getElementById(ns+'-tableBody').innerHTML=sorted.map(d=>{
+    const opIdx=['l1','l2','l3'].findIndex(l=>d[l+sfx]>0);
+    const dot=LEVEL_DOT[opIdx]||'#8A95B0';
+    return'<tr><td class="hospital-name"><span class="level-dot" style="background:'+dot+'"></span>'+d.hospital+'</td>'+cols.map(c=>'<td class="num'+(s.sortCol===c?' highlight':'')+'">'+fmt(d[c])+'</td>').join('')+'</tr>';
+  }).join('');
+  document.querySelectorAll('[data-tbl="'+ns+'"]').forEach(th=>{
+    th.classList.remove('sort-asc','sort-desc');
+    if(th.dataset.col===s.sortCol)th.classList.add(s.sortDir===1?'sort-asc':'sort-desc');
+  });
+}
+
+function wireLevelBtns(ns,unitLabel){
+  document.getElementById(ns+'-levelBtns').addEventListener('click',e=>{
+    const btn=e.target.closest('[data-level]');if(!btn)return;
+    const level=btn.dataset.level;if(level===state[ns].level)return;
+    state[ns].level=level;
+    document.querySelectorAll('#'+ns+'-levelBtns .lvl-btn').forEach(b=>b.className='lvl-btn'+(b.dataset.level===level?' '+LEVEL_ACTIVE[level]:''));
+    buildBar(ns,unitLabel);
+  });
+}
+
+function wireSort(ns){
+  document.querySelectorAll('[data-tbl="'+ns+'"]').forEach(th=>{
+    th.addEventListener('click',()=>{
+      const col=th.dataset.col,s=state[ns];
+      if(col===s.sortCol)s.sortDir*=-1;else{s.sortCol=col;s.sortDir=col==='hospital'?1:-1;}
+      buildTable(ns);
+    });
+  });
+}
+
+Promise.all([fetch('populations.json').then(r=>r.json()),fetch('births.json').then(r=>r.json())])
+.then(([popData,birthsData])=>{
+  state.pop.data=popData;state.births.data=birthsData;
+  buildStatCards('pop','any_population','l1_population','l2_population','l3_population','Population');
+  wireLevelBtns('pop','residents');wireSort('pop');
+  buildBar('pop','residents');buildStacked('pop','residents');buildTable('pop');
+  buildStatCards('births','any_births','l1_births','l2_births','l3_births','Births');
+  wireLevelBtns('births','births');wireSort('births');
+  buildBar('births','births');buildStacked('births','births');buildTable('births');
+})
+.catch(err=>{
+  console.error(err);
+  document.querySelector('.container').innerHTML='<div style="padding:2rem;color:#DC2626;font-weight:600;">Failed to load data. Run <code>python3 calculate_catchment_populations.py</code> and <code>python3 calculate_catchment_births.py</code> first.</div>';
+});
+</script>
+</body>
+</html>

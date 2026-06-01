@@ -106,12 +106,42 @@ A Flask-based frontend (`app.py`) provides a local web interface at `http://127.
 - **Postcode search** — enter any London postcode to see the nearest neonatal unit at each level, with distances and an interactive map.
 - **Embedded catchment map** — the generated map is viewable directly within the app.
 - **Hospital API** — a `/hospitals` endpoint returning all hospitals as JSON.
+- **Catchment data pages** — links to population and births analysis pages (see below).
 
 ### 6. Static site (GitHub Pages)
 
 A fully client-side version lives in the `docs/` folder and is published via GitHub Pages at **https://drhammadkhan.github.io/postcode-lookup/**.
 
 The script `build_static.py` compresses the output into two compact JSON files (`docs/postcodes.json` and `docs/hospitals.json`) which `docs/index.html` loads and searches entirely in the browser — no server required.
+
+### 7. Catchment population & births analysis
+
+Two complementary analyses estimate how many people and births each hospital's catchment area covers, using two different routing methodologies.
+
+#### Methodology A — Full-postcode routing
+
+Each postcode is assigned to the nearest hospital (from `output/All_Postcodes.csv`). ONS Census 2021 residential population (`pcd_p001.csv`) and 2016–2018 birth registration data (`birthsbypcdfinal.xlsx`) are aggregated directly to each hospital.
+
+Scripts:
+- `calculate_catchment_populations.py` → `docs/populations.json`, `output/Catchment_Populations.csv`
+- `calculate_catchment_births.py` → `docs/births.json`, `output/Catchment_Births.csv`
+- Results visualised at `/population.html` (Population and Births tabs, with L1/L2/L3 breakdowns)
+
+#### Methodology B — Outcode routing
+
+Outward codes (e.g. `TW7`, `BR1`) are mapped to a set of candidate hospitals drawn from a clinical routing guide. Where an outcode maps to multiple hospitals, the postcode count from `All_Postcodes.csv` is used to weight the population/births split proportionally.
+
+Scripts:
+- `extract_outcode_json.py` → `docs/outcode_map.json` (307 outcodes, 26 hospitals)
+- `calculate_outcode_catchment.py` → `docs/outcode_populations.json`, `docs/outcode_births.json`
+- Results visualised at `/outcode_population.html`
+
+#### Input data files
+
+| File | Source | Description |
+|------|--------|-------------|
+| `pcd_p001.csv` | ONS Census 2021 | Residential population by postcode (Male + Female rows, summed) |
+| `birthsbypcdfinal.xlsx` | ONS birth registrations | 3-year combined 2016–2018 births by postcode sector (sheet: *Table 4*, column: *Total births*) |
 
 ## How to run it
 
@@ -120,11 +150,13 @@ The script `build_static.py` compresses the output into two compact JSON files (
 1. Make sure you have Python 3 installed (use `python3` on macOS)
 2. Install the required packages:
    ```
-   pip install pandas numpy scipy folium flask shapely
+   pip install pandas numpy scipy folium flask shapely openpyxl
    ```
 3. Confirm the input files are present in the project root:
    - `hospitals_refined.csv`
    - `postcodes_master.csv`
+   - `pcd_p001.csv` (for population/births analysis)
+   - `birthsbypcdfinal.xlsx` (for births analysis)
 
 ### Run each script (explicit commands)
 
@@ -159,6 +191,26 @@ The script `build_static.py` compresses the output into two compact JSON files (
 
 5. **Open the map directly (optional)**
    - Open `neonatal_catchment_map.html` in your browser
+
+6. **Generate full-postcode catchment data (population & births)**
+   ```
+   python3 calculate_catchment_populations.py
+   python3 calculate_catchment_births.py
+   ```
+   - Outputs:
+     - `docs/populations.json`, `docs/births.json`
+     - CSVs in `output/`
+   - View at `http://127.0.0.1:5001/population.html`
+
+7. **Generate outcode catchment data**
+   ```
+   python3 extract_outcode_json.py      # only needed if Outcode approach.html changes
+   python3 calculate_outcode_catchment.py
+   ```
+   - Outputs:
+     - `docs/outcode_map.json`
+     - `docs/outcode_populations.json`, `docs/outcode_births.json`
+   - View at `http://127.0.0.1:5001/outcode_population.html`
 
 ### Local script runner (separate UI)
 

@@ -272,12 +272,116 @@ The map plots every 5th postcode (1-in-5 sample) to keep the file size manageabl
 
 ---
 
+## Stage 5: Catchment Population & Births Analysis
+
+Two scripts estimate how many people and births fall within each hospital's catchment area, using two independent methodologies.
+
+### Methodology A — Full-postcode routing
+
+`calculate_catchment_populations.py` and `calculate_catchment_births.py` use the assignment in `output/All_Postcodes.csv` directly: every postcode is already assigned to exactly one hospital per level. Population and birth counts are simply aggregated by hospital name.
+
+**Population source — `pcd_p001.csv` (ONS Census 2021)**
+
+The file has one row per postcode per sex (two rows per postcode: Male code `1`, Female code `2`). The `Count` column holds the number of residents. Rows are grouped by `Postcode` and summed to get the total residential population per postcode.
+
+```python
+df = pd.read_csv('pcd_p001.csv')
+pop = df.groupby('Postcode')['Count'].sum()   # sums Male + Female
+```
+
+**Births source — `birthsbypcdfinal.xlsx` (ONS birth registrations 2016–2018)**
+
+The workbook sheet named `"Table 4"` contains births by postcode *sector* (e.g. `TW7 6`). Column index 0 holds the sector string; column index 3 holds `"Total births"` (3-year combined 2016–2018). Sectors are matched to outward codes by normalising the sector string and checking if it begins with `{outcode} `.
+
+**Outputs**
+- `docs/populations.json` — `[{"hospital": "...", "population": 123456, "l1": ..., "l2": ..., "l3": ...}, ...]`
+- `docs/births.json` — same structure with `births` instead of `population`
+- Visualised at `/population.html` (Population + Births tabs, with L1/L2/L3 breakdowns)
+
+---
+
+### Methodology B — Outcode routing
+
+The outcode approach maps entire outward codes (e.g. `TW7`, `BR1`) to a set of candidate hospitals drawn from a clinical routing guide, then splits population/births proportionally across those hospitals.
+
+#### Step 1 — Extract the outcode map (`extract_outcode_json.py`)
+
+The clinical routing guide (`Outcode approach.html`) contains a JavaScript object `outwardToUnits` mapping each outward code to an array of abbreviated hospital names. The script:
+
+1. Regex-extracts the JS object literal from the HTML
+2. Resolves abbreviated names to canonical names via a `NAME_MAP` dict (e.g. `PRUH → Princess Royal (PRUH)`, `GSTT → Evelina (St Thomas')`)
+3. Drops entries mapped to `None` (i.e. `"outside London Neonatal Network"`)
+4. Writes `docs/outcode_map.json`:
+
+```json
+{
+  "outward_to_hospitals": {
+    "BR1": ["Princess Royal (PRUH)", "Queen Elizabeth Woolwich"],
+    "TW7": ["West Middlesex"],
+    ...
+  }
+}
+```
+
+Coverage: 307 outward codes → 26 unique hospitals.
+
+#### Step 2 — Weighted allocation (`calculate_outcode_catchment.py`)
+
+Where an outward code maps to multiple hospitals, the split is **weighted by postcode count** — i.e. the number of postcodes in `All_Postcodes.csv` assigned to each hospital within that outward code:
+
+```python
+# For outcode 'BR1' → ['Princess Royal (PRUH)', 'Queen Elizabeth Woolwich']
+counts = {h: count_of_BR1_postcodes_assigned_to_h for h in hospitals}
+total  = sum(counts.values())
+weight = {h: counts[h] / total if total > 0 else 1/len(hospitals)}
+```
+
+If no postcodes in `All_Postcodes.csv` fall within a given outward code (rare, for boundary codes), equal weights are used as a fallback.
+
+Population and births for the outward code are then multiplied by each hospital's weight:
+
+```
+hospital_population += outcode_population × weight[hospital]
+```
+
+**Outputs**
+- `docs/outcode_populations.json` — `[{"hospital": "...", "population": 123456}, ...]`
+- `docs/outcode_births.json` — `[{"hospital": "...", "births": 12345}, ...]`
+- `output/Outcode_Catchment_Populations.csv`, `output/Outcode_Catchment_Births.csv`
+- Visualised at `/outcode_population.html`
+
+#### Comparing the two methodologies
+
+| Characteristic | Full-postcode | Outcode |
+|----------------|--------------|---------|
+| Routing unit | Individual postcode | Outward code (e.g. BR1) |
+| Assignment | Nearest hospital (geographic) | Clinical routing guide |
+| Split for multi-hospital outcodes | N/A (one hospital per postcode) | Postcode-count weighted |
+| Population total | 9,415,498 | 9,415,498 (same source) |
+| Births total | 247,913 | 247,913 (same source) |
+| Primary use | Geographic nearest-unit planning | Network capacity planning using clinical pathways |
+
+---
+
 ## Summary of the pipeline
 
 ```
 postcodes_master.csv ──→ Classify N/S ──→ Group by side ──┐
-                                                           ├──→ KD-tree query ──→ Haversine distance ──→ Output CSV
+                                                           ├──→ KD-tree query ──→ Haversine distance ──→ output/All_Postcodes.csv
 hospitals_refined.csv ──→ Filter by side & level ──────────┘
+                                                                        │
+                              ┌─────────────────────────────────────────┤
+                              │                                         │
+                    pcd_p001.csv                            Outcode approach.html
+                    birthsbypcdfinal.xlsx                        │
+                              │                          extract_outcode_json.py
+                              │                          docs/outcode_map.json
+                              │                                         │
+                  calculate_catchment_*.py         calculate_outcode_catchment.py
+                              │                                         │
+                  docs/populations.json            docs/outcode_populations.json
+                  docs/births.json                 docs/outcode_births.json
+                  docs/population.html             docs/outcode_population.html
 ```
 
 | Step | Method | Purpose |
@@ -286,3 +390,5 @@ hospitals_refined.csv ──→ Filter by side & level ────────�
 | Nearest search | KD-tree with scaled coordinates | Efficiently find the closest hospital |
 | Distance | Haversine formula | Accurately measure real-world distance in km |
 | Map suppression | Cluster count + Shapely polygon + manual list | Remove non-geographic postcodes from map display |
+| Population analysis (A) | Direct aggregation from All_Postcodes.csv | Full-postcode catchment populations & births |
+| Population analysis (B) | Outcode map + postcode-count weighting | Outcode-based catchment populations & births |
