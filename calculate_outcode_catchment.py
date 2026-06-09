@@ -7,7 +7,7 @@ hospitals using the outcode-based catchment defined in docs/outcode_map.json.
 Split method: postcode-count weighted
   For each outcode that maps to N hospitals, the outcode's population/births
   are shared in proportion to how many *full postcodes* from that outcode
-  each hospital already owns in output/All_Postcodes.csv (any-level routing).
+    each hospital already owns in output/analysis/All_Postcodes.csv (any-level routing).
   If none of the listed hospitals own any postcodes from that outcode (e.g.
   non-residential outcodes like EC1P), the outcode's value is split equally.
 
@@ -27,11 +27,11 @@ with open("docs/outcode_map.json", encoding="utf-8") as f:
 
 all_hospitals = sorted({h for hs in outcode_map.values() for h in hs})
 
-# ── 2. Build postcode-count weights from All_Postcodes.csv ─────────────────
+# ── 2. Build postcode-count weights from output/analysis/All_Postcodes.csv ──
 # outcode_any_counts[outcode][hospital] = # postcodes routed there at Any level
 outcode_any_counts = collections.defaultdict(lambda: collections.defaultdict(int))
 
-with open("output/All_Postcodes.csv", encoding="utf-8") as f:
+with open("output/analysis/All_Postcodes.csv", encoding="utf-8") as f:
     reader = csv.DictReader(f)
     for row in reader:
         pc = row["Postcode"].replace(" ", "").upper()

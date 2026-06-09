@@ -25,11 +25,13 @@ import numpy as np
 import pandas as pd
 import folium
 
+from hospital_profiles import load_hospitals_for_profile
+
 os.makedirs('docs/maps', exist_ok=True)
 
 # ── Load data ─────────────────────────────────────────────────────────────────
-results   = pd.read_csv('output/All_Postcodes.csv', dtype={'Postcode': str})
-hospitals = pd.read_csv('hospitals_refined.csv')
+results   = pd.read_csv('output/lookup/All_Postcodes.csv', dtype={'Postcode': str})
+hospitals = load_hospitals_for_profile('hospitals_refined.csv', profile='lookup')
 
 hospital_names = sorted(results['Closest_Any'].unique())
 n_hosp         = len(hospital_names)

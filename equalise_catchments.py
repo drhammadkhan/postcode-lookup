@@ -28,9 +28,11 @@ import numpy as np
 import pandas as pd
 from scipy.spatial import cKDTree
 
+from hospital_profiles import load_hospitals_for_profile
+
 # ── Configuration ─────────────────────────────────────────────────────────────
 
-ALL_POSTCODES_CSV = "output/All_Postcodes.csv"
+ALL_POSTCODES_CSV = "output/analysis/All_Postcodes.csv"
 POPULATION_CSV    = "pcd_p001.csv"
 HOSPITALS_CSV     = "hospitals_refined.csv"
 OUTPUT_CSV        = "output/All_Postcodes_Equalised.csv"
@@ -60,7 +62,7 @@ pop_raw["Postcode"] = pop_raw["Postcode"].str.strip()
 population_by_pc = pop_raw.groupby("Postcode")["Count"].sum()
 pc_df["population"] = pc_df["Postcode"].map(population_by_pc).fillna(0).astype(int)
 
-hosp_df = pd.read_csv(HOSPITALS_CSV)
+hosp_df = load_hospitals_for_profile(HOSPITALS_CSV, profile="analysis")
 hosp_df["Hospital Name"] = hosp_df["Hospital Name"].str.strip()
 
 print(f"  {len(pc_df):,} postcodes  |  {len(hosp_df)} hospital rows  |  balancing on: {BALANCE_ON}")

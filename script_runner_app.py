@@ -11,9 +11,10 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 SCRIPTS = [
-    {"key": "postcode_lookup", "label": "postcode_lookup.py", "cmd": [sys.executable, "-u", "postcode_lookup.py"]},
-    {"key": "generate_map",    "label": "generate_map.py",    "cmd": [sys.executable, "-u", "generate_map.py"]},
-    {"key": "build_static",    "label": "build_static.py",    "cmd": [sys.executable, "-u", "build_static.py"]},
+    {"key": "postcode_lookup_lookup", "label": "postcode_lookup.py --profile lookup", "cmd": [sys.executable, "-u", "postcode_lookup.py", "--profile", "lookup"]},
+    {"key": "postcode_lookup_analysis", "label": "postcode_lookup.py --profile analysis", "cmd": [sys.executable, "-u", "postcode_lookup.py", "--profile", "analysis"]},
+    {"key": "generate_map", "label": "generate_map.py", "cmd": [sys.executable, "-u", "generate_map.py"]},
+    {"key": "build_static", "label": "build_static.py", "cmd": [sys.executable, "-u", "build_static.py"]},
 ]
 SCRIPT_MAP = {s["key"]: s for s in SCRIPTS}
 
@@ -97,8 +98,9 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <p class="note">Run the data pipeline without the terminal. Separate from the main app (port 5001).</p>
 
 <div class="buttons">
-  <button class="primary" id="btn-all" onclick="go('all')">Run All  (lookup → map → static)</button>
-  <button id="btn-postcode_lookup" onclick="go('postcode_lookup')">postcode_lookup.py</button>
+  <button class="primary" id="btn-all" onclick="go('all')">Run All  (lookup + analysis → map → static)</button>
+  <button id="btn-postcode_lookup_lookup" onclick="go('postcode_lookup_lookup')">postcode_lookup.py --profile lookup</button>
+  <button id="btn-postcode_lookup_analysis" onclick="go('postcode_lookup_analysis')">postcode_lookup.py --profile analysis</button>
   <button id="btn-generate_map" onclick="go('generate_map')">generate_map.py</button>
   <button id="btn-build_static" onclick="go('build_static')">build_static.py</button>
 </div>

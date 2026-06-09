@@ -6,11 +6,20 @@ A detailed, human-readable breakdown of how the postcode lookup script works, in
 
 ## Overview
 
-The script takes ~326,000 London postcodes and ~34 neonatal hospitals, and for each postcode finds the nearest hospital at each care level (1, 2, 3, and any). It does this in three stages:
+The script takes ~326,000 London postcodes and a profile-filtered neonatal hospital list, and for each postcode finds the nearest hospital at each care level (1, 2, 3, and any). It does this in three stages:
 
 1. **Classify** each postcode as North or South of the Thames
 2. **Search** for the nearest hospital using a spatial data structure (KD-tree)
 3. **Measure** the actual distance using the Haversine formula
+
+### Hospital profiles
+
+`hospitals_refined.csv` is the canonical hospital source. It has two boolean profile flags:
+
+- `include_lookup` — hospitals included in the public postcode lookup, interactive map and static site.
+- `include_analysis` — hospitals included in population, births, outcode and equalised-catchment analysis.
+
+`postcode_lookup.py --profile lookup` writes `output/lookup/All_Postcodes.csv` and per-hospital lookup CSVs. `postcode_lookup.py --profile analysis` writes `output/analysis/All_Postcodes.csv` and per-hospital analysis CSVs. This keeps lookup-only boundary hospitals available to users without letting them change population/birth-rate analysis.
 
 ---
 
@@ -278,7 +287,7 @@ Two scripts estimate how many people and births fall within each hospital's catc
 
 ### Methodology A — Full-postcode routing
 
-`calculate_catchment_populations.py` and `calculate_catchment_births.py` use the assignment in `output/All_Postcodes.csv` directly: every postcode is already assigned to exactly one hospital per level. Population and birth counts are simply aggregated by hospital name.
+`calculate_catchment_populations.py` and `calculate_catchment_births.py` use the assignment in `output/analysis/All_Postcodes.csv` directly: every postcode is already assigned to exactly one hospital per level. Population and birth counts are simply aggregated by hospital name.
 
 **Population source — `pcd_p001.csv` (ONS Census 2021)**
 
@@ -327,7 +336,7 @@ Coverage: 307 outward codes → 26 unique hospitals.
 
 #### Step 2 — Weighted allocation (`calculate_outcode_catchment.py`)
 
-Where an outward code maps to multiple hospitals, the split is **weighted by postcode count** — i.e. the number of postcodes in `All_Postcodes.csv` assigned to each hospital within that outward code:
+Where an outward code maps to multiple hospitals, the split is **weighted by postcode count** — i.e. the number of postcodes in `output/analysis/All_Postcodes.csv` assigned to each hospital within that outward code:
 
 ```python
 # For outcode 'BR1' → ['Princess Royal (PRUH)', 'Queen Elizabeth Woolwich']
@@ -336,7 +345,7 @@ total  = sum(counts.values())
 weight = {h: counts[h] / total if total > 0 else 1/len(hospitals)}
 ```
 
-If no postcodes in `All_Postcodes.csv` fall within a given outward code (rare, for boundary codes), equal weights are used as a fallback.
+If no postcodes in `output/analysis/All_Postcodes.csv` fall within a given outward code (rare, for boundary codes), equal weights are used as a fallback.
 
 Population and births for the outward code are then multiplied by each hospital's weight:
 
@@ -367,8 +376,15 @@ hospital_population += outcode_population × weight[hospital]
 
 ```
 postcodes_master.csv ──→ Classify N/S ──→ Group by side ──┐
-                                                           ├──→ KD-tree query ──→ Haversine distance ──→ output/All_Postcodes.csv
-hospitals_refined.csv ──→ Filter by side & level ──────────┘
+                                                           ├──→ KD-tree query ──→ Haversine distance ──→ output/lookup/All_Postcodes.csv
+hospitals_refined.csv ──→ profile=lookup ──→ Filter side/level ─────────┘                                  │
+                                                                                                            │
+postcodes_master.csv ──→ Classify N/S ──→ Group by side ──┐                                                │
+                                                           ├──→ KD-tree query ──→ Haversine distance ──→ output/analysis/All_Postcodes.csv
+hospitals_refined.csv ──→ profile=analysis ──→ Filter side/level ───────┘                                  │
+                                                                        │                                   │
+                                                                        │                                   │
+                                                         generate_map.py / build_static.py ◄────────────────┘
                                                                         │
                               ┌─────────────────────────────────────────┤
                               │                                         │
@@ -390,5 +406,5 @@ hospitals_refined.csv ──→ Filter by side & level ────────�
 | Nearest search | KD-tree with scaled coordinates | Efficiently find the closest hospital |
 | Distance | Haversine formula | Accurately measure real-world distance in km |
 | Map suppression | Cluster count + Shapely polygon + manual list | Remove non-geographic postcodes from map display |
-| Population analysis (A) | Direct aggregation from All_Postcodes.csv | Full-postcode catchment populations & births |
+| Population analysis (A) | Direct aggregation from output/analysis/All_Postcodes.csv | Full-postcode catchment populations & births |
 | Population analysis (B) | Outcode map + postcode-count weighting | Outcode-based catchment populations & births |

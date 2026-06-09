@@ -3,14 +3,16 @@ import pandas as pd
 import numpy as np
 import os
 
+from hospital_profiles import load_hospitals_for_profile
+
 app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DOCS_DIR = os.path.join(BASE_DIR, 'docs')
 
 # Load data once at startup
 print("Loading data...")
-all_postcodes = pd.read_csv('output/All_Postcodes.csv', dtype={'Postcode': str})
-hospitals = pd.read_csv('hospitals_refined.csv')
+all_postcodes = pd.read_csv('output/lookup/All_Postcodes.csv', dtype={'Postcode': str})
+hospitals = load_hospitals_for_profile('hospitals_refined.csv', profile='lookup')
 
 # Build a lookup dict keyed by normalised postcode (no spaces, uppercase)
 all_postcodes['_key'] = all_postcodes['Postcode'].str.replace(' ', '', regex=False).str.upper()

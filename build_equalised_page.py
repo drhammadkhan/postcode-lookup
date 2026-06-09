@@ -24,6 +24,8 @@ import pandas as pd
 import numpy as np
 from shapely.geometry import Polygon, Point
 
+from hospital_profiles import load_hospitals_for_profile
+
 # ── Inputs ────────────────────────────────────────────────────────────────────
 
 EQUALISED_CSV  = "output/All_Postcodes_Equalised.csv"
@@ -65,7 +67,7 @@ def hsl_str(h, s, l):
 print("Loading data …")
 eq  = pd.read_csv(EQUALISED_CSV)
 summ = pd.read_csv(SUMMARY_CSV)
-hosp_df = pd.read_csv(HOSPITALS_CSV)
+hosp_df = load_hospitals_for_profile(HOSPITALS_CSV, profile="analysis")
 hosp_df["Hospital Name"] = hosp_df["Hospital Name"].str.strip()
 
 # One row per hospital name (take first occurrence — enough for lat/lon/sector/level)

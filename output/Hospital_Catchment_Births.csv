@@ -1,31 +1,27 @@
 Hospital,Any_Births,L1_Births,L2_Births,L3_Births
 Barnet Hospital,6212,0,9831,0
-Chelsea & Westminster,5997,0,0,6583
-Croydon University,11728,0,14294,0
-Darent Valley,3338,22517,0,0
-East Surrey,58,0,58,0
-Epsom Hospital,750,40765,0,0
+Chelsea & Westminster,5997,0,0,6593
+Croydon University,11751,0,14317,0
 Evelina (St Thomas'),2421,0,0,2421
-Hillingdon Hospital,10611,0,19135,0
+Hillingdon Hospital,10857,0,19381,0
 Homerton University,10691,0,0,80820
 Kings College Hospital,7017,0,0,31586
-Kingston Hospital,6126,0,6853,0
+Kingston Hospital,6852,0,6853,0
 Newham General,19440,0,30821,0
+None Found,0,63281,0,0
 North Middlesex,21367,84449,0,0
-Northwick Park,21711,0,27293,0
+Northwick Park,22547,0,28129,0
 Princess Royal (PRUH),7416,0,7416,0
-Queen Charlottes',8009,0,0,63161
-Queen Elizabeth Woolwich,6351,0,9689,0
+Queen Charlottes',8009,0,0,65008
+Queen Elizabeth Woolwich,9689,0,9689,0
 Queens Hospital,13064,0,13064,0
 Royal Free Hospital,7958,64818,0,0
-St Heliers Hospital,8898,0,10445,0
+St Heliers Hospital,8957,0,10480,0
 St Marys Hospital,5890,0,24273,0
-St Peters Hospital,0,0,0,1857
 St. Georges Hospital,2132,0,0,29274
 The Royal London,13100,0,0,17773
 UCH (University College),4085,0,0,19625
 University Lewisham,7047,0,14527,0
-Watford General,1082,0,1082,0
 West Middlesex,13902,40552,0,0
 Whipps Cross,17119,0,33774,0
 Whittington Hospital,9582,0,30544,0

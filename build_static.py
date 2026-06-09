@@ -9,11 +9,13 @@ import json
 import os
 from shapely.geometry import Point, Polygon
 
+from hospital_profiles import load_hospitals_for_profile
+
 os.makedirs('docs', exist_ok=True)
 
 # 1. Load data
-df = pd.read_csv('output/All_Postcodes.csv', dtype={'Postcode': str})
-hospitals = pd.read_csv('hospitals_refined.csv')
+df = pd.read_csv('output/lookup/All_Postcodes.csv', dtype={'Postcode': str})
+hospitals = load_hospitals_for_profile('hospitals_refined.csv', profile='lookup')
 
 # Thames south-bank polygon (lon, lat) used by generate_map.py.
 SOUTH_OF_THAMES = Polygon([

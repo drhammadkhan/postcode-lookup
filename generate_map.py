@@ -3,7 +3,8 @@ import numpy as np
 import folium
 from folium.plugins import FastMarkerCluster
 from shapely.geometry import Point, Polygon
-import os
+
+from hospital_profiles import load_hospitals_for_profile
 
 # Thames south-bank polygon (lon, lat).
 # Traces the south bank of the Thames from Hampton in the west to
@@ -41,13 +42,8 @@ SOUTH_OF_THAMES = Polygon([
 ])
 
 # 1. LOAD RESULTS & HOSPITALS
-output_files = [f for f in os.listdir('output') if f.endswith('.csv') and f != 'All_Postcodes.csv']
-frames = []
-for f in output_files:
-    df = pd.read_csv(os.path.join('output', f))
-    frames.append(df)
-results = pd.concat(frames, ignore_index=True)
-hospitals = pd.read_csv('hospitals_refined.csv')
+results = pd.read_csv('output/lookup/All_Postcodes.csv', dtype={'Postcode': str})
+hospitals = load_hospitals_for_profile('hospitals_refined.csv', profile='lookup')
 
 # 2. GENERATE DISTINCT COLOURS FOR EACH HOSPITAL, GROUPED BY SECTOR
 hospital_names = sorted(results['Closest_Any'].unique())

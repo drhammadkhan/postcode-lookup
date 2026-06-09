@@ -18,7 +18,7 @@ Not every hospital has every level of unit, so knowing which is closest — and 
 
 The script takes two input files:
 
-- **`hospitals_refined.csv`** — A list of ~31 neonatal hospitals across London, including their location (latitude/longitude), care level (1–3), and which side of the Thames they serve (North, South, or Both).
+- **`hospitals_refined.csv`** — A list of ~31 neonatal hospitals across London, including their location (latitude/longitude), care level (1–3), which side of the Thames they serve (North, South, or Both), and profile flags (`include_lookup`, `include_analysis`).
 - **`postcodes_master.csv`** — A list of ~326,000 London-area postcodes with their geographic coordinates.
 
 It then runs through three steps:
@@ -52,11 +52,13 @@ For each postcode, the script finds the closest neonatal hospital on the same si
 
 ### 3. Output the results
 
-Results are saved to the `output/` folder in two formats:
+Results are saved to profile-specific folders under `output/`:
 
-**Individual hospital files** — one CSV per hospital (e.g. `output/West_Middlesex.csv`), containing all postcodes where that hospital is the nearest at any level.
+**Lookup profile** — `output/lookup/` is used by the postcode search, map and static site. It includes hospitals with `include_lookup = 1`.
 
-**Combined file** — `output/All_Postcodes.csv` with one row per postcode:
+**Analysis profile** — `output/analysis/` is used by the population, births and equalisation scripts. It includes hospitals with `include_analysis = 1`, so lookup-only boundary hospitals do not affect the analysis outputs.
+
+Each profile writes one CSV per hospital (e.g. `output/lookup/West_Middlesex.csv`) plus a combined file (`output/lookup/All_Postcodes.csv` or `output/analysis/All_Postcodes.csv`) with one row per postcode:
 
 | Column | Example |
 |--------|---------|
@@ -120,7 +122,7 @@ Two complementary analyses estimate how many people and births each hospital's c
 
 #### Methodology A — Full-postcode routing
 
-Each postcode is assigned to the nearest hospital (from `output/All_Postcodes.csv`). ONS Census 2021 residential population (`pcd_p001.csv`) and 2016–2018 birth registration data (`birthsbypcdfinal.xlsx`) are aggregated directly to each hospital.
+Each postcode is assigned to the nearest hospital (from `output/analysis/All_Postcodes.csv`). ONS Census 2021 residential population (`pcd_p001.csv`) and 2016–2018 birth registration data (`birthsbypcdfinal.xlsx`) are aggregated directly to each hospital.
 
 Scripts:
 - `calculate_catchment_populations.py` → `docs/populations.json`, `output/Catchment_Populations.csv`
@@ -129,7 +131,7 @@ Scripts:
 
 #### Methodology B — Outcode routing
 
-Outward codes (e.g. `TW7`, `BR1`) are mapped to a set of candidate hospitals drawn from a clinical routing guide. Where an outcode maps to multiple hospitals, the postcode count from `All_Postcodes.csv` is used to weight the population/births split proportionally.
+Outward codes (e.g. `TW7`, `BR1`) are mapped to a set of candidate hospitals drawn from a clinical routing guide. Where an outcode maps to multiple hospitals, the postcode count from `output/analysis/All_Postcodes.csv` is used to weight the population/births split proportionally.
 
 Scripts:
 - `extract_outcode_json.py` → `docs/outcode_map.json` (307 outcodes, 26 hospitals)
@@ -148,9 +150,10 @@ Scripts:
 ### Prerequisites
 
 1. Make sure you have Python 3 installed (use `python3` on macOS)
-2. Install the required packages:
+2. Create a local virtual environment and install the required packages:
    ```
-   pip install pandas numpy scipy folium flask shapely openpyxl
+   python3 -m venv .venv
+   .venv/bin/python -m pip install -r requirements.txt
    ```
 3. Confirm the input files are present in the project root:
    - `hospitals_refined.csv`
@@ -160,22 +163,34 @@ Scripts:
 
 ### Run each script (explicit commands)
 
-1. **Generate postcode lookups (main pipeline)**
+Use `.venv/bin/python` in place of `python3` if you are running through the local virtual environment.
+
+1. **Generate postcode lookups (lookup profile for app/map/static)**
    ```
-   python3 postcode_lookup.py
+   python3 postcode_lookup.py --profile lookup
    ```
    - Outputs:
-     - `output/All_Postcodes.csv`
-     - One CSV per hospital in `output/`
+     - `output/lookup/All_Postcodes.csv`
+     - One CSV per hospital in `output/lookup/`
 
-2. **Generate the interactive catchment map**
+2. **Generate postcode lookups (analysis profile for births/population/equalisation)**
+   ```
+   python3 postcode_lookup.py --profile analysis
+   ```
+   - Outputs:
+     - `output/analysis/All_Postcodes.csv`
+     - One CSV per hospital in `output/analysis/`
+
+The lookup profile keeps all hospitals needed for the public postcode lookup. The analysis profile excludes lookup-only boundary hospitals so population, births and equalisation outputs are not affected by those lookup-specific units.
+
+3. **Generate the interactive catchment map**
    ```
    python3 generate_map.py
    ```
    - Output:
      - `neonatal_catchment_map.html`
 
-3. **Build the static JSON for the GitHub Pages / Netlify site**
+4. **Build the static JSON for the GitHub Pages / Netlify site**
    ```
    python3 build_static.py
    ```
@@ -183,16 +198,16 @@ Scripts:
      - `docs/postcodes.json`
      - `docs/hospitals.json`
 
-4. **Run the local Flask web app**
+5. **Run the local Flask web app**
    ```
    python3 app.py
    ```
    - Then visit `http://127.0.0.1:5001` in your browser
 
-5. **Open the map directly (optional)**
+6. **Open the map directly (optional)**
    - Open `neonatal_catchment_map.html` in your browser
 
-6. **Generate full-postcode catchment data (population & births)**
+7. **Generate full-postcode catchment data (population & births)**
    ```
    python3 calculate_catchment_populations.py
    python3 calculate_catchment_births.py
@@ -202,7 +217,7 @@ Scripts:
      - CSVs in `output/`
    - View at `http://127.0.0.1:5001/population.html`
 
-7. **Generate outcode catchment data**
+8. **Generate outcode catchment data**
    ```
    python3 extract_outcode_json.py      # only needed if Outcode approach.html changes
    python3 calculate_outcode_catchment.py
@@ -221,7 +236,8 @@ python3 script_runner_app.py
 ```
 
 Then open `http://127.0.0.1:5002` in your browser and use the buttons to run:
-- `postcode_lookup.py`
+- `postcode_lookup.py --profile lookup`
+- `postcode_lookup.py --profile analysis`
 - `generate_map.py`
 - `build_static.py`
 - or the full pipeline in order

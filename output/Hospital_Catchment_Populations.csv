@@ -1,32 +1,27 @@
 Hospital,Any_Population,L1_Population,L2_Population,L3_Population
 Barnet Hospital,186882,0,267058,0
-Chelsea & Westminster,215785,0,0,246213
-Croydon University,446923,0,710575,0
-Darent Valley,55686,1084674,0,0
-East Surrey,2351,0,2351,0
-Epsom Hospital,20380,2095557,0,0
+Chelsea & Westminster,215785,0,0,246585
+Croydon University,447749,0,711401,0
 Evelina (St Thomas'),165437,0,0,165449
-Hillingdon Hospital,295768,0,662146,0
+Hillingdon Hospital,302484,0,668862,0
 Homerton University,284487,0,0,2209110
 Kings College Hospital,429038,0,0,1629355
-Kingston Hospital,257406,0,426955,0
+Kingston Hospital,275950,0,426977,0
 Newham General,468800,0,722329,0
+None Found,0,3180231,0,0
 North Middlesex,519841,2252825,0,0
-Northwick Park,598991,0,789412,0
-Princess Royal (PRUH),246123,0,246194,0
-Queen Charlottes',381908,0,0,1957296
-Queen Elizabeth Woolwich,444710,0,500325,0
+Northwick Park,630849,0,821270,0
+Princess Royal (PRUH),246194,0,246194,0
+Queen Charlottes',381908,0,0,2093385
+Queen Elizabeth Woolwich,500325,0,500325,0
 Queens Hospital,500554,0,500554,0
 Royal Free Hospital,242321,2024372,0,0
-St Heliers Hospital,269130,0,405566,0
+St Heliers Hospital,272592,0,407091,0
 St Marys Hospital,158384,0,920212,0
-St Peters Hospital,159,0,0,136584
-St. Georges Hospital,447674,0,0,1385304
+St. Georges Hospital,447674,0,0,1385427
 The Royal London,314759,0,0,428807
 UCH (University College),169218,0,0,641599
 University Lewisham,395272,0,888243,0
-Watford General,38574,0,38574,0
-West Middlesex,512850,1342289,0,0
-Wexham Park,22,0,22,0
+West Middlesex,512930,1342289,0,0
 Whipps Cross,418919,0,818817,0
 Whittington Hospital,311365,0,900384,0

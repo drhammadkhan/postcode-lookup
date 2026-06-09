@@ -15,8 +15,10 @@ import pandas as pd
 import numpy as np
 from shapely.geometry import Polygon, Point
 
+from hospital_profiles import load_hospitals_for_profile
+
 # ── Inputs ─────────────────────────────────────────────────────────────────────
-ALL_CSV       = "output/All_Postcodes.csv"
+ALL_CSV       = "output/analysis/All_Postcodes.csv"
 EQUALISED_CSV = "output/All_Postcodes_Equalised.csv"
 SUMMARY_CSV   = "output/Equalised_Summary.csv"
 HOSPITALS_CSV = "hospitals_refined.csv"
@@ -65,7 +67,7 @@ print("Loading data …")
 base = pd.read_csv(ALL_CSV)
 eq   = pd.read_csv(EQUALISED_CSV)
 summ = pd.read_csv(SUMMARY_CSV)
-hosp_df = pd.read_csv(HOSPITALS_CSV)
+hosp_df = load_hospitals_for_profile(HOSPITALS_CSV, profile="analysis")
 hosp_df["Hospital Name"] = hosp_df["Hospital Name"].str.strip()
 
 hosp_info = hosp_df.groupby("Hospital Name", as_index=False).first().set_index("Hospital Name")

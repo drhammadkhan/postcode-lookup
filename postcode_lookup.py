@@ -1,10 +1,37 @@
 import pandas as pd
 import numpy as np
 from scipy.spatial import cKDTree
+import argparse
+import os
+import re
 
-# 1. LOAD DATA
-hospitals = pd.read_csv('hospitals_refined.csv')
-postcodes = pd.read_csv('postcodes_master.csv')
+from hospital_profiles import load_hospitals_for_profile
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Generate postcode-to-hospital nearest lookup tables.")
+    parser.add_argument(
+        "--profile",
+        choices=["lookup", "analysis"],
+        default="lookup",
+        help="Hospital profile filter to use.",
+    )
+    parser.add_argument(
+        "--hospitals-csv",
+        default="hospitals_refined.csv",
+        help="Path to hospitals reference CSV.",
+    )
+    parser.add_argument(
+        "--postcodes-csv",
+        default="postcodes_master.csv",
+        help="Path to master postcodes CSV.",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=None,
+        help="Output directory (defaults to output/<profile>).",
+    )
+    return parser.parse_args()
 
 # 2. HAVERSINE DISTANCE (vectorised, returns km)
 def haversine(lat1, lon1, lat2, lon2):
@@ -101,30 +128,44 @@ def find_nearest(pc_group, hosp_subset):
 
     return names, dists
 
-# 5. EXECUTION
-postcodes['Side'] = postcodes['Postcode'].apply(get_side)
-results = postcodes[['Postcode', 'Latitude', 'Longitude', 'Side']].copy()
+def main():
+    args = parse_args()
 
-for side in ['North', 'South']:
-    pc_group = postcodes[postcodes['Side'] == side]
-    hosp_side = hospitals[hospitals['Side'].isin([side, 'Both'])]
+    output_dir = args.output_dir or os.path.join("output", args.profile)
+    os.makedirs(output_dir, exist_ok=True)
 
-    for label, level in [('Any', None), ('L1', 1), ('L2', 2), ('L3', 3)]:
-        hosp_subset = hosp_side if level is None else hosp_side[hosp_side['Level'] == level]
-        names, dists = find_nearest(pc_group, hosp_subset.reset_index(drop=True))
-        results.loc[pc_group.index, f'Closest_{label}'] = names
-        results.loc[pc_group.index, f'Distance_{label}_km'] = dists
+    # 1. LOAD DATA
+    hospitals = load_hospitals_for_profile(args.hospitals_csv, profile=args.profile)
+    postcodes = pd.read_csv(args.postcodes_csv)
+    print(f"Loaded {len(postcodes):,} postcodes and {len(hospitals)} hospitals for profile '{args.profile}'.")
 
-# 6. SAVE SEPARATE FILE PER HOSPITAL (based on Closest_Any)
-import os, re
-os.makedirs('output', exist_ok=True)
+    # 5. EXECUTION
+    postcodes['Side'] = postcodes['Postcode'].apply(get_side)
+    results = postcodes[['Postcode', 'Latitude', 'Longitude', 'Side']].copy()
 
-for hospital, group in results.groupby('Closest_Any'):
-    safe_name = re.sub(r'[^\w\s-]', '', hospital).strip().replace(' ', '_')
-    group.to_csv(f'output/{safe_name}.csv', index=False)
-    print(f"  → output/{safe_name}.csv ({len(group)} rows)")
+    for side in ['North', 'South']:
+        pc_group = postcodes[postcodes['Side'] == side]
+        hosp_side = hospitals[hospitals['Side'].isin([side, 'Both'])]
 
-# 7. SAVE COMBINED FILE
-results.to_csv('output/All_Postcodes.csv', index=False)
-print(f"\n  → output/All_Postcodes.csv ({len(results)} rows)")
-print(f"\nDone! {len(results)} postcodes across {results['Closest_Any'].nunique()} hospital files + 1 combined file.")
+        for label, level in [('Any', None), ('L1', 1), ('L2', 2), ('L3', 3)]:
+            hosp_subset = hosp_side if level is None else hosp_side[hosp_side['Level'] == level]
+            names, dists = find_nearest(pc_group, hosp_subset.reset_index(drop=True))
+            results.loc[pc_group.index, f'Closest_{label}'] = names
+            results.loc[pc_group.index, f'Distance_{label}_km'] = dists
+
+    # 6. SAVE SEPARATE FILE PER HOSPITAL (based on Closest_Any)
+    for hospital, group in results.groupby('Closest_Any'):
+        safe_name = re.sub(r'[^\w\s-]', '', hospital).strip().replace(' ', '_')
+        out_file = os.path.join(output_dir, f"{safe_name}.csv")
+        group.to_csv(out_file, index=False)
+        print(f"  → {out_file} ({len(group)} rows)")
+
+    # 7. SAVE COMBINED FILE
+    combined_file = os.path.join(output_dir, "All_Postcodes.csv")
+    results.to_csv(combined_file, index=False)
+    print(f"\n  → {combined_file} ({len(results)} rows)")
+    print(f"\nDone! {len(results)} postcodes across {results['Closest_Any'].nunique()} hospital files + 1 combined file.")
+
+
+if __name__ == '__main__':
+    main()
