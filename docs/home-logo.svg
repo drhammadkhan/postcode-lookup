@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 220" role="img" aria-labelledby="title desc">
+  <title id="title">HO.ME logo</title>
+  <desc id="desc">HO.ME wordmark with a medical map pin</desc>
+  <rect width="760" height="220" rx="28" fill="#f7fbfa"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 64v100M56 112h92M148 64v100" stroke="#58b89f" stroke-width="31"/>
+    <circle cx="268" cy="114" r="61" stroke="#58b89f" stroke-width="31"/>
+    <path d="M420 164V64l58 74 58-74v100" stroke="#173f45" stroke-width="31"/>
+    <path d="M625 64h86M625 114h72M625 164h86M625 64v100" stroke="#173f45" stroke-width="31"/>
+  </g>
+  <circle cx="366" cy="155" r="8" fill="#173f45"/>
+  <path d="M361 143c0-28 42-28 42 0 0 23-21 45-21 45s-21-22-21-45z" fill="none" stroke="#173f45" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M376 140h12M382 134v12" stroke="#173f45" stroke-width="9" stroke-linecap="round"/>
+</svg>

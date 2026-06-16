@@ -51,6 +51,16 @@ def hospitals_json():
     return send_from_directory(DOCS_DIR, 'hospitals.json')
 
 
+@app.route('/favicon.svg')
+def favicon():
+    return send_from_directory(DOCS_DIR, 'favicon.svg')
+
+
+@app.route('/home-logo.svg')
+def home_logo():
+    return send_from_directory(DOCS_DIR, 'home-logo.svg')
+
+
 @app.route('/outcode_population.html')
 def outcode_population_page():
     return send_from_directory(DOCS_DIR, 'outcode_population.html')
