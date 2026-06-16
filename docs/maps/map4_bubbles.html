@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_ab0998d23f1b16e85f6836835e9a19b7 {
+                #map_a5803c7149b96428232850176b914ef4 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -79,14 +79,14 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
     <div style="position:fixed;bottom:20px;left:20px;z-index:9999;background:white;padding:12px 16px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.25);font-size:12px;max-width:250px;line-height:1.6;"><b style="font-size:13px">Bubble Size</b><br>Each bubble is one hospital. Area is proportional to the number of postcodes for which it is the nearest unit at the selected care level.<br><br><i>Use the layer control (top right) to switch between levels.</i></div>
     
-            <div class="folium-map" id="map_ab0998d23f1b16e85f6836835e9a19b7" ></div>
+            <div class="folium-map" id="map_a5803c7149b96428232850176b914ef4" ></div>
         
 </body>
 <script>
     
     
-            var map_ab0998d23f1b16e85f6836835e9a19b7 = L.map(
-                "map_ab0998d23f1b16e85f6836835e9a19b7",
+            var map_a5803c7149b96428232850176b914ef4 = L.map(
+                "map_a5803c7149b96428232850176b914ef4",
                 {
                     center: [51.5, -0.1],
                     crs: L.CRS.EPSG3857,
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         
     
-            var tile_layer_393210039022f6ce5e4c99724c3c89cd = L.tileLayer(
+            var tile_layer_01428154615ee87d60c94eedd92f7780 = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
                 {
   "minZoom": 0,
@@ -120,39 +120,39 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            tile_layer_393210039022f6ce5e4c99724c3c89cd.addTo(map_ab0998d23f1b16e85f6836835e9a19b7);
+            tile_layer_01428154615ee87d60c94eedd92f7780.addTo(map_a5803c7149b96428232850176b914ef4);
         
     
-            var feature_group_f5647f5ed386d90342cb7daa058139ac = L.featureGroup(
+            var feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a = L.featureGroup(
                 {
 }
             );
         
     
-            var circle_marker_7333b5e3016d51daca2f8dc713390c8f = L.circleMarker(
+            var circle_marker_83423a3ac170ecb33190d6176a6ecd5c = L.circleMarker(
                 [51.5248, -0.1352],
                 {"bubblingMouseEvents": true, "color": "#8b1cc8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8b1cc8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45.0, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_9eb9a73882266297706b7ac11bc18fe3 = L.popup({
+        var popup_b458be86243eddf7738ff895a52fa1d8 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_76cd769d975e4709442e1e3e1e3a8842 = $(`<div id="html_76cd769d975e4709442e1e3e1e3a8842" style="width: 100.0%; height: 100.0%;"><b>UCH (University College)</b><br>Level 3 | North<br>Any Level: <b>39,043</b> postcodes</div>`)[0];
-                popup_9eb9a73882266297706b7ac11bc18fe3.setContent(html_76cd769d975e4709442e1e3e1e3a8842);
+                var html_d0db27fa90cf1e25e10953adda104a40 = $(`<div id="html_d0db27fa90cf1e25e10953adda104a40" style="width: 100.0%; height: 100.0%;"><b>UCH (University College)</b><br>Level 3 | North<br>Any Level: <b>39,043</b> postcodes</div>`)[0];
+                popup_b458be86243eddf7738ff895a52fa1d8.setContent(html_d0db27fa90cf1e25e10953adda104a40);
             
         
 
-        circle_marker_7333b5e3016d51daca2f8dc713390c8f.bindPopup(popup_9eb9a73882266297706b7ac11bc18fe3)
+        circle_marker_83423a3ac170ecb33190d6176a6ecd5c.bindPopup(popup_b458be86243eddf7738ff895a52fa1d8)
         ;
 
         
     
     
-            circle_marker_7333b5e3016d51daca2f8dc713390c8f.bindTooltip(
+            circle_marker_83423a3ac170ecb33190d6176a6ecd5c.bindTooltip(
                 `<div>
                      UCH (University College): 39,043 postcodes (Any Level)
                  </div>`,
@@ -162,30 +162,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_34a405fb58d8444b95cbf92c05da855b = L.circleMarker(
+            var circle_marker_a22e762760ac340330a81fd715c95831 = L.circleMarker(
                 [51.5185, -0.0594],
                 {"bubblingMouseEvents": true, "color": "#6a1cc8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#6a1cc8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 29.703378250751378, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_6567d062eb3b780368106780de24cb43 = L.popup({
+        var popup_ad50777e8ae1735fe2b66b6b251785a3 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_ee1bb76df5e3d493b13414a94e1c6e4d = $(`<div id="html_ee1bb76df5e3d493b13414a94e1c6e4d" style="width: 100.0%; height: 100.0%;"><b>The Royal London</b><br>Level 3 | North<br>Any Level: <b>17,011</b> postcodes</div>`)[0];
-                popup_6567d062eb3b780368106780de24cb43.setContent(html_ee1bb76df5e3d493b13414a94e1c6e4d);
+                var html_d0c06b5a65253f5edfb7981d69724b5b = $(`<div id="html_d0c06b5a65253f5edfb7981d69724b5b" style="width: 100.0%; height: 100.0%;"><b>The Royal London</b><br>Level 3 | North<br>Any Level: <b>17,011</b> postcodes</div>`)[0];
+                popup_ad50777e8ae1735fe2b66b6b251785a3.setContent(html_d0c06b5a65253f5edfb7981d69724b5b);
             
         
 
-        circle_marker_34a405fb58d8444b95cbf92c05da855b.bindPopup(popup_6567d062eb3b780368106780de24cb43)
+        circle_marker_a22e762760ac340330a81fd715c95831.bindPopup(popup_ad50777e8ae1735fe2b66b6b251785a3)
         ;
 
         
     
     
-            circle_marker_34a405fb58d8444b95cbf92c05da855b.bindTooltip(
+            circle_marker_a22e762760ac340330a81fd715c95831.bindTooltip(
                 `<div>
                      The Royal London: 17,011 postcodes (Any Level)
                  </div>`,
@@ -195,30 +195,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_e6722212daf4c0100321f3bbc1bace88 = L.circleMarker(
+            var circle_marker_9fb53c20f74d6a3a37e8157c547e1725 = L.circleMarker(
                 [51.5508, -0.0462],
                 {"bubblingMouseEvents": true, "color": "#6ac81c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#6ac81c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18.642782480805874, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_7d1ba1f68e93ee707b5783b1304b31d8 = L.popup({
+        var popup_874bb94aacbe1358c1915f0acc5c675f = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_1128c60e46a0b1b04f1eac7dbad31612 = $(`<div id="html_1128c60e46a0b1b04f1eac7dbad31612" style="width: 100.0%; height: 100.0%;"><b>Homerton University</b><br>Level 3 | North<br>Any Level: <b>6,701</b> postcodes</div>`)[0];
-                popup_7d1ba1f68e93ee707b5783b1304b31d8.setContent(html_1128c60e46a0b1b04f1eac7dbad31612);
+                var html_5319ccf2c630acd5178a74d35305be6c = $(`<div id="html_5319ccf2c630acd5178a74d35305be6c" style="width: 100.0%; height: 100.0%;"><b>Homerton University</b><br>Level 3 | North<br>Any Level: <b>6,701</b> postcodes</div>`)[0];
+                popup_874bb94aacbe1358c1915f0acc5c675f.setContent(html_5319ccf2c630acd5178a74d35305be6c);
             
         
 
-        circle_marker_e6722212daf4c0100321f3bbc1bace88.bindPopup(popup_7d1ba1f68e93ee707b5783b1304b31d8)
+        circle_marker_9fb53c20f74d6a3a37e8157c547e1725.bindPopup(popup_874bb94aacbe1358c1915f0acc5c675f)
         ;
 
         
     
     
-            circle_marker_e6722212daf4c0100321f3bbc1bace88.bindTooltip(
+            circle_marker_9fb53c20f74d6a3a37e8157c547e1725.bindTooltip(
                 `<div>
                      Homerton University: 6,701 postcodes (Any Level)
                  </div>`,
@@ -228,30 +228,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_c476535fb2aa3593f5a08ea28a49776a = L.circleMarker(
+            var circle_marker_a2843d85d05ea33e3750373836e3d518 = L.circleMarker(
                 [51.4849, -0.1824],
                 {"bubblingMouseEvents": true, "color": "#c83e1c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c83e1c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 25.875409035741814, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_ea7588d216948e1166ebe9ece4360801 = L.popup({
+        var popup_b9611f6daa08d38056aa1a252a69b07e = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_602be318d34d52490cd8bed558fbd157 = $(`<div id="html_602be318d34d52490cd8bed558fbd157" style="width: 100.0%; height: 100.0%;"><b>Chelsea & Westminster</b><br>Level 3 | North<br>Any Level: <b>12,909</b> postcodes</div>`)[0];
-                popup_ea7588d216948e1166ebe9ece4360801.setContent(html_602be318d34d52490cd8bed558fbd157);
+                var html_0056192cabff171af72c21f6854096ad = $(`<div id="html_0056192cabff171af72c21f6854096ad" style="width: 100.0%; height: 100.0%;"><b>Chelsea & Westminster</b><br>Level 3 | North<br>Any Level: <b>12,909</b> postcodes</div>`)[0];
+                popup_b9611f6daa08d38056aa1a252a69b07e.setContent(html_0056192cabff171af72c21f6854096ad);
             
         
 
-        circle_marker_c476535fb2aa3593f5a08ea28a49776a.bindPopup(popup_ea7588d216948e1166ebe9ece4360801)
+        circle_marker_a2843d85d05ea33e3750373836e3d518.bindPopup(popup_b9611f6daa08d38056aa1a252a69b07e)
         ;
 
         
     
     
-            circle_marker_c476535fb2aa3593f5a08ea28a49776a.bindTooltip(
+            circle_marker_a2843d85d05ea33e3750373836e3d518.bindTooltip(
                 `<div>
                      Chelsea & Westminster: 12,909 postcodes (Any Level)
                  </div>`,
@@ -261,30 +261,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_7e45fc3fc6ebe4415f9774c8df2d078f = L.circleMarker(
+            var circle_marker_4a06626f3772cc957a2907c586ff9f2c = L.circleMarker(
                 [51.517, -0.23632],
                 {"bubblingMouseEvents": true, "color": "#1cc8b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cc8b8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 26.15452623110946, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_498d0102f3591ef7c68edeb7bff05adf = L.popup({
+        var popup_b0e643190f747ed27ca905fe05d3ed95 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_e1421f2f4e2825dc9ad5595fcfef23f6 = $(`<div id="html_e1421f2f4e2825dc9ad5595fcfef23f6" style="width: 100.0%; height: 100.0%;"><b>Queen Charlottes'</b><br>Level 3 | North<br>Any Level: <b>13,189</b> postcodes</div>`)[0];
-                popup_498d0102f3591ef7c68edeb7bff05adf.setContent(html_e1421f2f4e2825dc9ad5595fcfef23f6);
+                var html_70e9c25f66e401b70c8d46b9aaa869af = $(`<div id="html_70e9c25f66e401b70c8d46b9aaa869af" style="width: 100.0%; height: 100.0%;"><b>Queen Charlottes'</b><br>Level 3 | North<br>Any Level: <b>13,189</b> postcodes</div>`)[0];
+                popup_b0e643190f747ed27ca905fe05d3ed95.setContent(html_70e9c25f66e401b70c8d46b9aaa869af);
             
         
 
-        circle_marker_7e45fc3fc6ebe4415f9774c8df2d078f.bindPopup(popup_498d0102f3591ef7c68edeb7bff05adf)
+        circle_marker_4a06626f3772cc957a2907c586ff9f2c.bindPopup(popup_b0e643190f747ed27ca905fe05d3ed95)
         ;
 
         
     
     
-            circle_marker_7e45fc3fc6ebe4415f9774c8df2d078f.bindTooltip(
+            circle_marker_4a06626f3772cc957a2907c586ff9f2c.bindTooltip(
                 `<div>
                      Queen Charlottes': 13,189 postcodes (Any Level)
                  </div>`,
@@ -294,30 +294,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_9650915d8254bacbc570a66b8ca29561 = L.circleMarker(
+            var circle_marker_48e5efd35ba06be721b3cfc2cbbd7c35 = L.circleMarker(
                 [51.5003, -0.1189],
                 {"bubblingMouseEvents": true, "color": "#adc81c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#adc81c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 20.267655520751916, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_4f7f6ab6cb999fdb03665bdcdc643ab9 = L.popup({
+        var popup_95ec558ad484f9f30ef7cfb9a8bd73e5 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_ea7881a0418f366616bfe1aff94c6e9f = $(`<div id="html_ea7881a0418f366616bfe1aff94c6e9f" style="width: 100.0%; height: 100.0%;"><b>Evelina (St Thomas')</b><br>Level 3 | South<br>Any Level: <b>7,920</b> postcodes</div>`)[0];
-                popup_4f7f6ab6cb999fdb03665bdcdc643ab9.setContent(html_ea7881a0418f366616bfe1aff94c6e9f);
+                var html_4006a9aaafce8b92070ecf4793ad62fa = $(`<div id="html_4006a9aaafce8b92070ecf4793ad62fa" style="width: 100.0%; height: 100.0%;"><b>Evelina (St Thomas')</b><br>Level 3 | South<br>Any Level: <b>7,920</b> postcodes</div>`)[0];
+                popup_95ec558ad484f9f30ef7cfb9a8bd73e5.setContent(html_4006a9aaafce8b92070ecf4793ad62fa);
             
         
 
-        circle_marker_9650915d8254bacbc570a66b8ca29561.bindPopup(popup_4f7f6ab6cb999fdb03665bdcdc643ab9)
+        circle_marker_48e5efd35ba06be721b3cfc2cbbd7c35.bindPopup(popup_95ec558ad484f9f30ef7cfb9a8bd73e5)
         ;
 
         
     
     
-            circle_marker_9650915d8254bacbc570a66b8ca29561.bindTooltip(
+            circle_marker_48e5efd35ba06be721b3cfc2cbbd7c35.bindTooltip(
                 `<div>
                      Evelina (St Thomas'): 7,920 postcodes (Any Level)
                  </div>`,
@@ -327,30 +327,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_e5cd90f9bae7761f17eb047b7e345f00 = L.circleMarker(
+            var circle_marker_c7d6db8e6d5ddc65b3ce803d2cb10799 = L.circleMarker(
                 [51.4273, -0.1748],
                 {"bubblingMouseEvents": true, "color": "#491cc8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#491cc8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 26.98704963094731, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_5b90f46c8ef7f21ba3c0d6522bbd72a5 = L.popup({
+        var popup_5d9556654508661ce100100465942eed = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_d36ffda8e1c5e3aa8fe6e1738bbb3017 = $(`<div id="html_d36ffda8e1c5e3aa8fe6e1738bbb3017" style="width: 100.0%; height: 100.0%;"><b>St. Georges Hospital</b><br>Level 3 | South<br>Any Level: <b>14,042</b> postcodes</div>`)[0];
-                popup_5b90f46c8ef7f21ba3c0d6522bbd72a5.setContent(html_d36ffda8e1c5e3aa8fe6e1738bbb3017);
+                var html_304d23bdcdf9888b4275c425d45d1e68 = $(`<div id="html_304d23bdcdf9888b4275c425d45d1e68" style="width: 100.0%; height: 100.0%;"><b>St. Georges Hospital</b><br>Level 3 | South<br>Any Level: <b>14,042</b> postcodes</div>`)[0];
+                popup_5d9556654508661ce100100465942eed.setContent(html_304d23bdcdf9888b4275c425d45d1e68);
             
         
 
-        circle_marker_e5cd90f9bae7761f17eb047b7e345f00.bindPopup(popup_5b90f46c8ef7f21ba3c0d6522bbd72a5)
+        circle_marker_c7d6db8e6d5ddc65b3ce803d2cb10799.bindPopup(popup_5d9556654508661ce100100465942eed)
         ;
 
         
     
     
-            circle_marker_e5cd90f9bae7761f17eb047b7e345f00.bindTooltip(
+            circle_marker_c7d6db8e6d5ddc65b3ce803d2cb10799.bindTooltip(
                 `<div>
                      St. Georges Hospital: 14,042 postcodes (Any Level)
                  </div>`,
@@ -360,30 +360,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_cf6c2ddaf98bc6865ace2924beb3b48e = L.circleMarker(
+            var circle_marker_e5c551dda67af681f3203099a9e9d14e = L.circleMarker(
                 [51.4683, -0.0919],
                 {"bubblingMouseEvents": true, "color": "#49c81c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#49c81c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 26.943772613868084, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_8e3e77f88b8ea898c94e36626820fa65 = L.popup({
+        var popup_dc9771b2885e40f42ecccdab0f072027 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_c01f2ac7d401a6b17d4a1b99a6b089d5 = $(`<div id="html_c01f2ac7d401a6b17d4a1b99a6b089d5" style="width: 100.0%; height: 100.0%;"><b>Kings College Hospital</b><br>Level 3 | South<br>Any Level: <b>13,997</b> postcodes</div>`)[0];
-                popup_8e3e77f88b8ea898c94e36626820fa65.setContent(html_c01f2ac7d401a6b17d4a1b99a6b089d5);
+                var html_d2e9fbfa34861c70de031c5db9a3e753 = $(`<div id="html_d2e9fbfa34861c70de031c5db9a3e753" style="width: 100.0%; height: 100.0%;"><b>Kings College Hospital</b><br>Level 3 | South<br>Any Level: <b>13,997</b> postcodes</div>`)[0];
+                popup_dc9771b2885e40f42ecccdab0f072027.setContent(html_d2e9fbfa34861c70de031c5db9a3e753);
             
         
 
-        circle_marker_cf6c2ddaf98bc6865ace2924beb3b48e.bindPopup(popup_8e3e77f88b8ea898c94e36626820fa65)
+        circle_marker_e5c551dda67af681f3203099a9e9d14e.bindPopup(popup_dc9771b2885e40f42ecccdab0f072027)
         ;
 
         
     
     
-            circle_marker_cf6c2ddaf98bc6865ace2924beb3b48e.bindTooltip(
+            circle_marker_e5c551dda67af681f3203099a9e9d14e.bindTooltip(
                 `<div>
                      Kings College Hospital: 13,997 postcodes (Any Level)
                  </div>`,
@@ -393,30 +393,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_de43c18a9998890107f330fbc7aab729 = L.circleMarker(
+            var circle_marker_862b9f83a1090ff9a9e5eacd54d92fd6 = L.circleMarker(
                 [51.3773, -0.526],
                 {"bubblingMouseEvents": true, "color": "#271cc8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#271cc8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 1.0681992379543683, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_1ebc215ae6b2d7de14a6e9badf082385 = L.popup({
+        var popup_8b0fa05dfbe1bf9e8037e536acd53220 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_452c6c5b4e833aa81ac28891724abc26 = $(`<div id="html_452c6c5b4e833aa81ac28891724abc26" style="width: 100.0%; height: 100.0%;"><b>St Peters Hospital</b><br>Level 3 | Both<br>Any Level: <b>22</b> postcodes</div>`)[0];
-                popup_1ebc215ae6b2d7de14a6e9badf082385.setContent(html_452c6c5b4e833aa81ac28891724abc26);
+                var html_2dd372fbd161781c11e30cba71f8f884 = $(`<div id="html_2dd372fbd161781c11e30cba71f8f884" style="width: 100.0%; height: 100.0%;"><b>St Peters Hospital</b><br>Level 3 | Both<br>Any Level: <b>22</b> postcodes</div>`)[0];
+                popup_8b0fa05dfbe1bf9e8037e536acd53220.setContent(html_2dd372fbd161781c11e30cba71f8f884);
             
         
 
-        circle_marker_de43c18a9998890107f330fbc7aab729.bindPopup(popup_1ebc215ae6b2d7de14a6e9badf082385)
+        circle_marker_862b9f83a1090ff9a9e5eacd54d92fd6.bindPopup(popup_8b0fa05dfbe1bf9e8037e536acd53220)
         ;
 
         
     
     
-            circle_marker_de43c18a9998890107f330fbc7aab729.bindTooltip(
+            circle_marker_862b9f83a1090ff9a9e5eacd54d92fd6.bindTooltip(
                 `<div>
                      St Peters Hospital: 22 postcodes (Any Level)
                  </div>`,
@@ -426,30 +426,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_4a251bfc34090401d0b557d52540788e = L.circleMarker(
+            var circle_marker_6d476bb3d1e034c5b48d39dc1e8907bd = L.circleMarker(
                 [51.6507, -0.2152],
                 {"bubblingMouseEvents": true, "color": "#c81c1c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81c1c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 19.208694692683753, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_d1181801cc38e4c680092cf2123642ea = L.popup({
+        var popup_9279b8b9e16e3f64237766401a567556 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_ba3241e111f4e6b8b7beda9362b8bbeb = $(`<div id="html_ba3241e111f4e6b8b7beda9362b8bbeb" style="width: 100.0%; height: 100.0%;"><b>Barnet Hospital</b><br>Level 2 | North<br>Any Level: <b>7,114</b> postcodes</div>`)[0];
-                popup_d1181801cc38e4c680092cf2123642ea.setContent(html_ba3241e111f4e6b8b7beda9362b8bbeb);
+                var html_061dd17f708aa9834c8257eadb152915 = $(`<div id="html_061dd17f708aa9834c8257eadb152915" style="width: 100.0%; height: 100.0%;"><b>Barnet Hospital</b><br>Level 2 | North<br>Any Level: <b>7,114</b> postcodes</div>`)[0];
+                popup_9279b8b9e16e3f64237766401a567556.setContent(html_061dd17f708aa9834c8257eadb152915);
             
         
 
-        circle_marker_4a251bfc34090401d0b557d52540788e.bindPopup(popup_d1181801cc38e4c680092cf2123642ea)
+        circle_marker_6d476bb3d1e034c5b48d39dc1e8907bd.bindPopup(popup_9279b8b9e16e3f64237766401a567556)
         ;
 
         
     
     
-            circle_marker_4a251bfc34090401d0b557d52540788e.bindTooltip(
+            circle_marker_6d476bb3d1e034c5b48d39dc1e8907bd.bindTooltip(
                 `<div>
                      Barnet Hospital: 7,114 postcodes (Any Level)
                  </div>`,
@@ -459,30 +459,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_b13fabf7a5bdd55d2b03376a09f32da7 = L.circleMarker(
+            var circle_marker_99035311b5ab16cb2407d26e42f60658 = L.circleMarker(
                 [51.5665, -0.1403],
                 {"bubblingMouseEvents": true, "color": "#c81c3e", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81c3e", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 23.715685250830866, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_b9b773ef243e3aaa3155976ac879d3c5 = L.popup({
+        var popup_7399ba9d32da1f5bd34b72b977c962f6 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_aed9ad23b79045b1139bf1c0278ea88b = $(`<div id="html_aed9ad23b79045b1139bf1c0278ea88b" style="width: 100.0%; height: 100.0%;"><b>Whittington Hospital</b><br>Level 2 | North<br>Any Level: <b>10,844</b> postcodes</div>`)[0];
-                popup_b9b773ef243e3aaa3155976ac879d3c5.setContent(html_aed9ad23b79045b1139bf1c0278ea88b);
+                var html_6a33ca87d40b4617d446853542748d79 = $(`<div id="html_6a33ca87d40b4617d446853542748d79" style="width: 100.0%; height: 100.0%;"><b>Whittington Hospital</b><br>Level 2 | North<br>Any Level: <b>10,844</b> postcodes</div>`)[0];
+                popup_7399ba9d32da1f5bd34b72b977c962f6.setContent(html_6a33ca87d40b4617d446853542748d79);
             
         
 
-        circle_marker_b13fabf7a5bdd55d2b03376a09f32da7.bindPopup(popup_b9b773ef243e3aaa3155976ac879d3c5)
+        circle_marker_99035311b5ab16cb2407d26e42f60658.bindPopup(popup_7399ba9d32da1f5bd34b72b977c962f6)
         ;
 
         
     
     
-            circle_marker_b13fabf7a5bdd55d2b03376a09f32da7.bindTooltip(
+            circle_marker_99035311b5ab16cb2407d26e42f60658.bindTooltip(
                 `<div>
                      Whittington Hospital: 10,844 postcodes (Any Level)
                  </div>`,
@@ -492,30 +492,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_49034f9d83f7f87161d7c9fac3f99ba2 = L.circleMarker(
+            var circle_marker_c066f790b52315ea35c3d35bb389871a = L.circleMarker(
                 [51.5223, 0.035],
                 {"bubblingMouseEvents": true, "color": "#1cc832", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cc832", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 24.152343181812423, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_9530573e33599c206c17ae2deef33752 = L.popup({
+        var popup_9dcb87453c33b44f12a3e5940f7142b6 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_ee6f0813d7e1642324dfb94a661ede63 = $(`<div id="html_ee6f0813d7e1642324dfb94a661ede63" style="width: 100.0%; height: 100.0%;"><b>Newham General</b><br>Level 2 | North<br>Any Level: <b>11,247</b> postcodes</div>`)[0];
-                popup_9530573e33599c206c17ae2deef33752.setContent(html_ee6f0813d7e1642324dfb94a661ede63);
+                var html_ccc87756984ecb4d5df873929c8087b1 = $(`<div id="html_ccc87756984ecb4d5df873929c8087b1" style="width: 100.0%; height: 100.0%;"><b>Newham General</b><br>Level 2 | North<br>Any Level: <b>11,247</b> postcodes</div>`)[0];
+                popup_9dcb87453c33b44f12a3e5940f7142b6.setContent(html_ccc87756984ecb4d5df873929c8087b1);
             
         
 
-        circle_marker_49034f9d83f7f87161d7c9fac3f99ba2.bindPopup(popup_9530573e33599c206c17ae2deef33752)
+        circle_marker_c066f790b52315ea35c3d35bb389871a.bindPopup(popup_9dcb87453c33b44f12a3e5940f7142b6)
         ;
 
         
     
     
-            circle_marker_49034f9d83f7f87161d7c9fac3f99ba2.bindTooltip(
+            circle_marker_c066f790b52315ea35c3d35bb389871a.bindTooltip(
                 `<div>
                      Newham General: 11,247 postcodes (Any Level)
                  </div>`,
@@ -525,30 +525,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_6d456b374dffb1fcf6bf432419f91fcd = L.circleMarker(
+            var circle_marker_571aa2e46ab0682294ab9c763a5b79ff = L.circleMarker(
                 [51.5785, 0.002],
                 {"bubblingMouseEvents": true, "color": "#c81c5f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81c5f", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 22.46106689726605, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_07c2de2929db8e0a94ba5bd70a7321c7 = L.popup({
+        var popup_0db69d5a9360ec37a76f444fe1dc9b1e = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_b3ef68de45ebb81981ffcbe85077cab8 = $(`<div id="html_b3ef68de45ebb81981ffcbe85077cab8" style="width: 100.0%; height: 100.0%;"><b>Whipps Cross</b><br>Level 2 | North<br>Any Level: <b>9,727</b> postcodes</div>`)[0];
-                popup_07c2de2929db8e0a94ba5bd70a7321c7.setContent(html_b3ef68de45ebb81981ffcbe85077cab8);
+                var html_882b0b7dccc24401c6de6221f1a35ad5 = $(`<div id="html_882b0b7dccc24401c6de6221f1a35ad5" style="width: 100.0%; height: 100.0%;"><b>Whipps Cross</b><br>Level 2 | North<br>Any Level: <b>9,727</b> postcodes</div>`)[0];
+                popup_0db69d5a9360ec37a76f444fe1dc9b1e.setContent(html_882b0b7dccc24401c6de6221f1a35ad5);
             
         
 
-        circle_marker_6d456b374dffb1fcf6bf432419f91fcd.bindPopup(popup_07c2de2929db8e0a94ba5bd70a7321c7)
+        circle_marker_571aa2e46ab0682294ab9c763a5b79ff.bindPopup(popup_0db69d5a9360ec37a76f444fe1dc9b1e)
         ;
 
         
     
     
-            circle_marker_6d456b374dffb1fcf6bf432419f91fcd.bindTooltip(
+            circle_marker_571aa2e46ab0682294ab9c763a5b79ff.bindTooltip(
                 `<div>
                      Whipps Cross: 9,727 postcodes (Any Level)
                  </div>`,
@@ -558,30 +558,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_4f561880706e04221e63864c4e1b50e6 = L.circleMarker(
+            var circle_marker_1d6c5a812d8fb529e2fcff5ebacb4e6d = L.circleMarker(
                 [51.5694, 0.1779],
                 {"bubblingMouseEvents": true, "color": "#1c96c8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1c96c8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 25.30486703934448, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_2583caf63082a1599d59982b949bfc8d = L.popup({
+        var popup_f6938f1c411f61c9dcdab578a7791a26 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_fb13d49870f32a7055e5e144997faa25 = $(`<div id="html_fb13d49870f32a7055e5e144997faa25" style="width: 100.0%; height: 100.0%;"><b>Queens Hospital</b><br>Level 2 | North<br>Any Level: <b>12,346</b> postcodes</div>`)[0];
-                popup_2583caf63082a1599d59982b949bfc8d.setContent(html_fb13d49870f32a7055e5e144997faa25);
+                var html_8f18a1623a0fe81bc88902cc2c770ab9 = $(`<div id="html_8f18a1623a0fe81bc88902cc2c770ab9" style="width: 100.0%; height: 100.0%;"><b>Queens Hospital</b><br>Level 2 | North<br>Any Level: <b>12,346</b> postcodes</div>`)[0];
+                popup_f6938f1c411f61c9dcdab578a7791a26.setContent(html_8f18a1623a0fe81bc88902cc2c770ab9);
             
         
 
-        circle_marker_4f561880706e04221e63864c4e1b50e6.bindPopup(popup_2583caf63082a1599d59982b949bfc8d)
+        circle_marker_1d6c5a812d8fb529e2fcff5ebacb4e6d.bindPopup(popup_f6938f1c411f61c9dcdab578a7791a26)
         ;
 
         
     
     
-            circle_marker_4f561880706e04221e63864c4e1b50e6.bindTooltip(
+            circle_marker_1d6c5a812d8fb529e2fcff5ebacb4e6d.bindTooltip(
                 `<div>
                      Queens Hospital: 12,346 postcodes (Any Level)
                  </div>`,
@@ -591,30 +591,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_66452916717a16d2a535360e06021a00 = L.circleMarker(
+            var circle_marker_fbbaefd71e3c11a501e2c32fd06a119e = L.circleMarker(
                 [51.5173, -0.1738],
                 {"bubblingMouseEvents": true, "color": "#1c32c8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1c32c8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 25.172318047439813, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_8f88937f7874887957f511462a4cfe0d = L.popup({
+        var popup_ca5b837efea72f5b722930bc6f03eb18 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_eb09692416725d7ebf855a8efef15cbe = $(`<div id="html_eb09692416725d7ebf855a8efef15cbe" style="width: 100.0%; height: 100.0%;"><b>St Marys Hospital</b><br>Level 2 | North<br>Any Level: <b>12,217</b> postcodes</div>`)[0];
-                popup_8f88937f7874887957f511462a4cfe0d.setContent(html_eb09692416725d7ebf855a8efef15cbe);
+                var html_dbaa4833e93a30f59b3b7948e0241f56 = $(`<div id="html_dbaa4833e93a30f59b3b7948e0241f56" style="width: 100.0%; height: 100.0%;"><b>St Marys Hospital</b><br>Level 2 | North<br>Any Level: <b>12,217</b> postcodes</div>`)[0];
+                popup_ca5b837efea72f5b722930bc6f03eb18.setContent(html_dbaa4833e93a30f59b3b7948e0241f56);
             
         
 
-        circle_marker_66452916717a16d2a535360e06021a00.bindPopup(popup_8f88937f7874887957f511462a4cfe0d)
+        circle_marker_fbbaefd71e3c11a501e2c32fd06a119e.bindPopup(popup_ca5b837efea72f5b722930bc6f03eb18)
         ;
 
         
     
     
-            circle_marker_66452916717a16d2a535360e06021a00.bindTooltip(
+            circle_marker_fbbaefd71e3c11a501e2c32fd06a119e.bindTooltip(
                 `<div>
                      St Marys Hospital: 12,217 postcodes (Any Level)
                  </div>`,
@@ -624,30 +624,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_bc4651b4e07d8eca07f53e32fb16928c = L.circleMarker(
+            var circle_marker_735aaf354184e006059a5d573d0caa28 = L.circleMarker(
                 [51.5767, -0.3222],
                 {"bubblingMouseEvents": true, "color": "#1cc875", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cc875", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 31.58216203069226, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_c6cfa99d945e74daa4b07aac3d7810f1 = L.popup({
+        var popup_642c2796ade800ec5aa554325261df39 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_fecfb3e1bc876f5cb1bc7531025be95a = $(`<div id="html_fecfb3e1bc876f5cb1bc7531025be95a" style="width: 100.0%; height: 100.0%;"><b>Northwick Park</b><br>Level 2 | North<br>Any Level: <b>19,231</b> postcodes</div>`)[0];
-                popup_c6cfa99d945e74daa4b07aac3d7810f1.setContent(html_fecfb3e1bc876f5cb1bc7531025be95a);
+                var html_469d4af77c8eb867747fce10cef70461 = $(`<div id="html_469d4af77c8eb867747fce10cef70461" style="width: 100.0%; height: 100.0%;"><b>Northwick Park</b><br>Level 2 | North<br>Any Level: <b>19,231</b> postcodes</div>`)[0];
+                popup_642c2796ade800ec5aa554325261df39.setContent(html_469d4af77c8eb867747fce10cef70461);
             
         
 
-        circle_marker_bc4651b4e07d8eca07f53e32fb16928c.bindPopup(popup_c6cfa99d945e74daa4b07aac3d7810f1)
+        circle_marker_735aaf354184e006059a5d573d0caa28.bindPopup(popup_642c2796ade800ec5aa554325261df39)
         ;
 
         
     
     
-            circle_marker_bc4651b4e07d8eca07f53e32fb16928c.bindTooltip(
+            circle_marker_735aaf354184e006059a5d573d0caa28.bindTooltip(
                 `<div>
                      Northwick Park: 19,231 postcodes (Any Level)
                  </div>`,
@@ -657,30 +657,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_d9a265acc2317e4abfcbaf337f2fc175 = L.circleMarker(
+            var circle_marker_0dd24b98ce3f381edfec59b3ae9cd371 = L.circleMarker(
                 [51.5259, -0.4597],
                 {"bubblingMouseEvents": true, "color": "#8bc81c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8bc81c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 21.620991643909612, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_838bd316169e0e032226caa5a536f74f = L.popup({
+        var popup_50305ebabdc5e4e31a4aed939165903c = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_32525765e18cf3044baf1ec44708d160 = $(`<div id="html_32525765e18cf3044baf1ec44708d160" style="width: 100.0%; height: 100.0%;"><b>Hillingdon Hospital</b><br>Level 2 | North<br>Any Level: <b>9,013</b> postcodes</div>`)[0];
-                popup_838bd316169e0e032226caa5a536f74f.setContent(html_32525765e18cf3044baf1ec44708d160);
+                var html_8a4a4fa3908569608e2fe4b70eb29a5e = $(`<div id="html_8a4a4fa3908569608e2fe4b70eb29a5e" style="width: 100.0%; height: 100.0%;"><b>Hillingdon Hospital</b><br>Level 2 | North<br>Any Level: <b>9,013</b> postcodes</div>`)[0];
+                popup_50305ebabdc5e4e31a4aed939165903c.setContent(html_8a4a4fa3908569608e2fe4b70eb29a5e);
             
         
 
-        circle_marker_d9a265acc2317e4abfcbaf337f2fc175.bindPopup(popup_838bd316169e0e032226caa5a536f74f)
+        circle_marker_0dd24b98ce3f381edfec59b3ae9cd371.bindPopup(popup_50305ebabdc5e4e31a4aed939165903c)
         ;
 
         
     
     
-            circle_marker_d9a265acc2317e4abfcbaf337f2fc175.bindTooltip(
+            circle_marker_0dd24b98ce3f381edfec59b3ae9cd371.bindTooltip(
                 `<div>
                      Hillingdon Hospital: 9,013 postcodes (Any Level)
                  </div>`,
@@ -690,30 +690,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_0ba37e54e7f991cbdb91e2acf883492b = L.circleMarker(
+            var circle_marker_ba26406f26855a67bca5a0c806ce995b = L.circleMarker(
                 [51.3806, -0.1831],
                 {"bubblingMouseEvents": true, "color": "#1c54c8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1c54c8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 20.399020739425854, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_5738cc8efe0fa3ab4ba5f8a2518858da = L.popup({
+        var popup_5b0598ef1df708612d13fa0e98c8888c = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_747329b11745682d77341b2074d2986e = $(`<div id="html_747329b11745682d77341b2074d2986e" style="width: 100.0%; height: 100.0%;"><b>St Heliers Hospital</b><br>Level 2 | South<br>Any Level: <b>8,023</b> postcodes</div>`)[0];
-                popup_5738cc8efe0fa3ab4ba5f8a2518858da.setContent(html_747329b11745682d77341b2074d2986e);
+                var html_adc4a4e773e30c72b5e9e0b51d43aad4 = $(`<div id="html_adc4a4e773e30c72b5e9e0b51d43aad4" style="width: 100.0%; height: 100.0%;"><b>St Heliers Hospital</b><br>Level 2 | South<br>Any Level: <b>8,023</b> postcodes</div>`)[0];
+                popup_5b0598ef1df708612d13fa0e98c8888c.setContent(html_adc4a4e773e30c72b5e9e0b51d43aad4);
             
         
 
-        circle_marker_0ba37e54e7f991cbdb91e2acf883492b.bindPopup(popup_5738cc8efe0fa3ab4ba5f8a2518858da)
+        circle_marker_ba26406f26855a67bca5a0c806ce995b.bindPopup(popup_5b0598ef1df708612d13fa0e98c8888c)
         ;
 
         
     
     
-            circle_marker_0ba37e54e7f991cbdb91e2acf883492b.bindTooltip(
+            circle_marker_ba26406f26855a67bca5a0c806ce995b.bindTooltip(
                 `<div>
                      St Heliers Hospital: 8,023 postcodes (Any Level)
                  </div>`,
@@ -723,30 +723,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_59d920043ca58653d3edcc4cc53c94b8 = L.circleMarker(
+            var circle_marker_8811500c33cc5eff87fddc5c873c0561 = L.circleMarker(
                 [51.415, -0.2813],
                 {"bubblingMouseEvents": true, "color": "#27c81c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#27c81c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 22.114327720065624, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_be5b63971a7bfd1cd766897c21f89d57 = L.popup({
+        var popup_844edfc0475b282a7d26214e568c5496 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_687938b84d52ee65e6c4a11bdfe2273b = $(`<div id="html_687938b84d52ee65e6c4a11bdfe2273b" style="width: 100.0%; height: 100.0%;"><b>Kingston Hospital</b><br>Level 2 | South<br>Any Level: <b>9,429</b> postcodes</div>`)[0];
-                popup_be5b63971a7bfd1cd766897c21f89d57.setContent(html_687938b84d52ee65e6c4a11bdfe2273b);
+                var html_d0e9976c6e3f5e635ebc3757638a21c9 = $(`<div id="html_d0e9976c6e3f5e635ebc3757638a21c9" style="width: 100.0%; height: 100.0%;"><b>Kingston Hospital</b><br>Level 2 | South<br>Any Level: <b>9,429</b> postcodes</div>`)[0];
+                popup_844edfc0475b282a7d26214e568c5496.setContent(html_d0e9976c6e3f5e635ebc3757638a21c9);
             
         
 
-        circle_marker_59d920043ca58653d3edcc4cc53c94b8.bindPopup(popup_be5b63971a7bfd1cd766897c21f89d57)
+        circle_marker_8811500c33cc5eff87fddc5c873c0561.bindPopup(popup_844edfc0475b282a7d26214e568c5496)
         ;
 
         
     
     
-            circle_marker_59d920043ca58653d3edcc4cc53c94b8.bindTooltip(
+            circle_marker_8811500c33cc5eff87fddc5c873c0561.bindTooltip(
                 `<div>
                      Kingston Hospital: 9,429 postcodes (Any Level)
                  </div>`,
@@ -756,30 +756,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_6a2300bac29f70b330bc56129807afe3 = L.circleMarker(
+            var circle_marker_2dd2a5f340d826060226472458c30c24 = L.circleMarker(
                 [51.3908, -0.1104],
                 {"bubblingMouseEvents": true, "color": "#c85f1c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c85f1c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 27.383883191170437, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_1413d4b8fc825530781f337b7a20eb29 = L.popup({
+        var popup_f0f1bf88372e7587a7536a9e904a73d9 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_fceb6b1c70ff506dd6036dd1d814631a = $(`<div id="html_fceb6b1c70ff506dd6036dd1d814631a" style="width: 100.0%; height: 100.0%;"><b>Croydon University</b><br>Level 2 | South<br>Any Level: <b>14,458</b> postcodes</div>`)[0];
-                popup_1413d4b8fc825530781f337b7a20eb29.setContent(html_fceb6b1c70ff506dd6036dd1d814631a);
+                var html_e5792d5cd938481dce4c2efcf168a4e5 = $(`<div id="html_e5792d5cd938481dce4c2efcf168a4e5" style="width: 100.0%; height: 100.0%;"><b>Croydon University</b><br>Level 2 | South<br>Any Level: <b>14,458</b> postcodes</div>`)[0];
+                popup_f0f1bf88372e7587a7536a9e904a73d9.setContent(html_e5792d5cd938481dce4c2efcf168a4e5);
             
         
 
-        circle_marker_6a2300bac29f70b330bc56129807afe3.bindPopup(popup_1413d4b8fc825530781f337b7a20eb29)
+        circle_marker_2dd2a5f340d826060226472458c30c24.bindPopup(popup_f0f1bf88372e7587a7536a9e904a73d9)
         ;
 
         
     
     
-            circle_marker_6a2300bac29f70b330bc56129807afe3.bindTooltip(
+            circle_marker_2dd2a5f340d826060226472458c30c24.bindTooltip(
                 `<div>
                      Croydon University: 14,458 postcodes (Any Level)
                  </div>`,
@@ -789,30 +789,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_224df18289501c7e9fc629ea4498cd05 = L.circleMarker(
+            var circle_marker_8b0614c4af4cb60382023310a40c92b6 = L.circleMarker(
                 [51.4528, -0.0186],
                 {"bubblingMouseEvents": true, "color": "#ad1cc8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ad1cc8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 25.206292275926135, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_a11cce58a8148fa6f322c20851c94eef = L.popup({
+        var popup_bcea3e041146bc3305ecff027d9d136f = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_675b4cd7e5e1842b78b8fe079f1037b6 = $(`<div id="html_675b4cd7e5e1842b78b8fe079f1037b6" style="width: 100.0%; height: 100.0%;"><b>University Lewisham</b><br>Level 2 | South<br>Any Level: <b>12,250</b> postcodes</div>`)[0];
-                popup_a11cce58a8148fa6f322c20851c94eef.setContent(html_675b4cd7e5e1842b78b8fe079f1037b6);
+                var html_77d6384c5b253150b7f9de4dcec566b3 = $(`<div id="html_77d6384c5b253150b7f9de4dcec566b3" style="width: 100.0%; height: 100.0%;"><b>University Lewisham</b><br>Level 2 | South<br>Any Level: <b>12,250</b> postcodes</div>`)[0];
+                popup_bcea3e041146bc3305ecff027d9d136f.setContent(html_77d6384c5b253150b7f9de4dcec566b3);
             
         
 
-        circle_marker_224df18289501c7e9fc629ea4498cd05.bindPopup(popup_a11cce58a8148fa6f322c20851c94eef)
+        circle_marker_8b0614c4af4cb60382023310a40c92b6.bindPopup(popup_bcea3e041146bc3305ecff027d9d136f)
         ;
 
         
     
     
-            circle_marker_224df18289501c7e9fc629ea4498cd05.bindTooltip(
+            circle_marker_8b0614c4af4cb60382023310a40c92b6.bindTooltip(
                 `<div>
                      University Lewisham: 12,250 postcodes (Any Level)
                  </div>`,
@@ -822,30 +822,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_4f10a197adf2c2f7b8cbdb0ca1cf1db7 = L.circleMarker(
+            var circle_marker_2acca5945aa7b524321c061dbab2bf69 = L.circleMarker(
                 [51.4788, 0.0514],
                 {"bubblingMouseEvents": true, "color": "#1cb8c8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cb8c8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 24.703321210642002, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_73aae2ce464a02a2e7b4711f080c52f0 = L.popup({
+        var popup_e7d6603ac36e0a990ef7e8ae4f3b9531 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_9077019d4aa2cccd962b4636d5dea30e = $(`<div id="html_9077019d4aa2cccd962b4636d5dea30e" style="width: 100.0%; height: 100.0%;"><b>Queen Elizabeth Woolwich</b><br>Level 2 | South<br>Any Level: <b>11,766</b> postcodes</div>`)[0];
-                popup_73aae2ce464a02a2e7b4711f080c52f0.setContent(html_9077019d4aa2cccd962b4636d5dea30e);
+                var html_d8410713a449be80391c5c8502d22539 = $(`<div id="html_d8410713a449be80391c5c8502d22539" style="width: 100.0%; height: 100.0%;"><b>Queen Elizabeth Woolwich</b><br>Level 2 | South<br>Any Level: <b>11,766</b> postcodes</div>`)[0];
+                popup_e7d6603ac36e0a990ef7e8ae4f3b9531.setContent(html_d8410713a449be80391c5c8502d22539);
             
         
 
-        circle_marker_4f10a197adf2c2f7b8cbdb0ca1cf1db7.bindPopup(popup_73aae2ce464a02a2e7b4711f080c52f0)
+        circle_marker_2acca5945aa7b524321c061dbab2bf69.bindPopup(popup_e7d6603ac36e0a990ef7e8ae4f3b9531)
         ;
 
         
     
     
-            circle_marker_4f10a197adf2c2f7b8cbdb0ca1cf1db7.bindTooltip(
+            circle_marker_2acca5945aa7b524321c061dbab2bf69.bindTooltip(
                 `<div>
                      Queen Elizabeth Woolwich: 11,766 postcodes (Any Level)
                  </div>`,
@@ -855,30 +855,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_91393334f54290fddda2ffdf2a84388b = L.circleMarker(
+            var circle_marker_a99830bec439e1b2867959d587e82601 = L.circleMarker(
                 [51.3656, 0.06],
                 {"bubblingMouseEvents": true, "color": "#1cc896", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cc896", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 19.180322418463764, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_69d63c90a78732236bbac4717aa5b34f = L.popup({
+        var popup_96f403cce16f089ec2e6ea5b723127bd = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_a8456188d4e06c299ffd588a26563cb1 = $(`<div id="html_a8456188d4e06c299ffd588a26563cb1" style="width: 100.0%; height: 100.0%;"><b>Princess Royal (PRUH)</b><br>Level 2 | South<br>Any Level: <b>7,093</b> postcodes</div>`)[0];
-                popup_69d63c90a78732236bbac4717aa5b34f.setContent(html_a8456188d4e06c299ffd588a26563cb1);
+                var html_1a1e41ae2eab363ccb6c7f17a44ef6b4 = $(`<div id="html_1a1e41ae2eab363ccb6c7f17a44ef6b4" style="width: 100.0%; height: 100.0%;"><b>Princess Royal (PRUH)</b><br>Level 2 | South<br>Any Level: <b>7,093</b> postcodes</div>`)[0];
+                popup_96f403cce16f089ec2e6ea5b723127bd.setContent(html_1a1e41ae2eab363ccb6c7f17a44ef6b4);
             
         
 
-        circle_marker_91393334f54290fddda2ffdf2a84388b.bindPopup(popup_69d63c90a78732236bbac4717aa5b34f)
+        circle_marker_a99830bec439e1b2867959d587e82601.bindPopup(popup_96f403cce16f089ec2e6ea5b723127bd)
         ;
 
         
     
     
-            circle_marker_91393334f54290fddda2ffdf2a84388b.bindTooltip(
+            circle_marker_a99830bec439e1b2867959d587e82601.bindTooltip(
                 `<div>
                      Princess Royal (PRUH): 7,093 postcodes (Any Level)
                  </div>`,
@@ -888,30 +888,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_08d91c85cf535260b9f0e19b93566d54 = L.circleMarker(
+            var circle_marker_2a3c3a851bb2382c3c0ed24253e48f32 = L.circleMarker(
                 [51.6485, -0.4046],
                 {"bubblingMouseEvents": true, "color": "#c81cc3", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81cc3", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.814482707261611, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_fb6b3f0f62f822e3deba273205a4ce44 = L.popup({
+        var popup_f9db8e7d965a8968d1eccd18f862d355 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_bc8d369d5bb3fd3d9daa5879bc4c3e98 = $(`<div id="html_bc8d369d5bb3fd3d9daa5879bc4c3e98" style="width: 100.0%; height: 100.0%;"><b>Watford General</b><br>Level 2 | Both<br>Any Level: <b>1,498</b> postcodes</div>`)[0];
-                popup_fb6b3f0f62f822e3deba273205a4ce44.setContent(html_bc8d369d5bb3fd3d9daa5879bc4c3e98);
+                var html_f1ad7b6c190252af681fa519519f3b18 = $(`<div id="html_f1ad7b6c190252af681fa519519f3b18" style="width: 100.0%; height: 100.0%;"><b>Watford General</b><br>Level 2 | Both<br>Any Level: <b>1,498</b> postcodes</div>`)[0];
+                popup_f9db8e7d965a8968d1eccd18f862d355.setContent(html_f1ad7b6c190252af681fa519519f3b18);
             
         
 
-        circle_marker_08d91c85cf535260b9f0e19b93566d54.bindPopup(popup_fb6b3f0f62f822e3deba273205a4ce44)
+        circle_marker_2a3c3a851bb2382c3c0ed24253e48f32.bindPopup(popup_f9db8e7d965a8968d1eccd18f862d355)
         ;
 
         
     
     
-            circle_marker_08d91c85cf535260b9f0e19b93566d54.bindTooltip(
+            circle_marker_2a3c3a851bb2382c3c0ed24253e48f32.bindTooltip(
                 `<div>
                      Watford General: 1,498 postcodes (Any Level)
                  </div>`,
@@ -921,30 +921,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_53164292fa56258b2690870f0b9ae042 = L.circleMarker(
+            var circle_marker_0445002caea8736b9c21d8d3f075c592 = L.circleMarker(
                 [51.2185, -0.162],
                 {"bubblingMouseEvents": true, "color": "#c8a11c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c8a11c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2.2197431581235403, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_8781355ee63afad74f4c072ffd198cf9 = L.popup({
+        var popup_2cbe463b5cad0b3187ccde4dff2f16f1 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_25326482ee52168c544a28a2c07bca42 = $(`<div id="html_25326482ee52168c544a28a2c07bca42" style="width: 100.0%; height: 100.0%;"><b>East Surrey</b><br>Level 2 | Both<br>Any Level: <b>95</b> postcodes</div>`)[0];
-                popup_8781355ee63afad74f4c072ffd198cf9.setContent(html_25326482ee52168c544a28a2c07bca42);
+                var html_154cc148ab5574348c80ab5ae5e8fde1 = $(`<div id="html_154cc148ab5574348c80ab5ae5e8fde1" style="width: 100.0%; height: 100.0%;"><b>East Surrey</b><br>Level 2 | Both<br>Any Level: <b>95</b> postcodes</div>`)[0];
+                popup_2cbe463b5cad0b3187ccde4dff2f16f1.setContent(html_154cc148ab5574348c80ab5ae5e8fde1);
             
         
 
-        circle_marker_53164292fa56258b2690870f0b9ae042.bindPopup(popup_8781355ee63afad74f4c072ffd198cf9)
+        circle_marker_0445002caea8736b9c21d8d3f075c592.bindPopup(popup_2cbe463b5cad0b3187ccde4dff2f16f1)
         ;
 
         
     
     
-            circle_marker_53164292fa56258b2690870f0b9ae042.bindTooltip(
+            circle_marker_0445002caea8736b9c21d8d3f075c592.bindTooltip(
                 `<div>
                      East Surrey: 95 postcodes (Any Level)
                  </div>`,
@@ -954,30 +954,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_bb8b133106d749432ccaa398d389fe88 = L.circleMarker(
+            var circle_marker_99e9c0fe47985f990960fcc6c5f26dc5 = L.circleMarker(
                 [51.532, -0.5878],
                 {"bubblingMouseEvents": true, "color": "#c81c80", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81c80", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.3220741885125641, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_60e7d8d7221a6383e01c3d000c891b31 = L.popup({
+        var popup_4a09fd94e783dbd41bcf4b0adbb700ea = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_cc719c6e6af6d36bb1012ce840864619 = $(`<div id="html_cc719c6e6af6d36bb1012ce840864619" style="width: 100.0%; height: 100.0%;"><b>Wexham Park</b><br>Level 2 | Both<br>Any Level: <b>2</b> postcodes</div>`)[0];
-                popup_60e7d8d7221a6383e01c3d000c891b31.setContent(html_cc719c6e6af6d36bb1012ce840864619);
+                var html_cd03c8584803dfa185a08faa0c9a0132 = $(`<div id="html_cd03c8584803dfa185a08faa0c9a0132" style="width: 100.0%; height: 100.0%;"><b>Wexham Park</b><br>Level 2 | Both<br>Any Level: <b>2</b> postcodes</div>`)[0];
+                popup_4a09fd94e783dbd41bcf4b0adbb700ea.setContent(html_cd03c8584803dfa185a08faa0c9a0132);
             
         
 
-        circle_marker_bb8b133106d749432ccaa398d389fe88.bindPopup(popup_60e7d8d7221a6383e01c3d000c891b31)
+        circle_marker_99e9c0fe47985f990960fcc6c5f26dc5.bindPopup(popup_4a09fd94e783dbd41bcf4b0adbb700ea)
         ;
 
         
     
     
-            circle_marker_bb8b133106d749432ccaa398d389fe88.bindTooltip(
+            circle_marker_99e9c0fe47985f990960fcc6c5f26dc5.bindTooltip(
                 `<div>
                      Wexham Park: 2 postcodes (Any Level)
                  </div>`,
@@ -987,30 +987,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_6ea3ae812396e9eca12d7f7b215f0d44 = L.circleMarker(
+            var circle_marker_97cf743410292c84a8b89c31024c3074 = L.circleMarker(
                 [51.5532, -0.1654],
                 {"bubblingMouseEvents": true, "color": "#1c75c8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1c75c8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 23.761567590491648, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_c22b03f0b34a77a81098b4a9f774fdcb = L.popup({
+        var popup_f1e2fa6e5114a9acf40dcbf6cc1c1faa = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_48a9e8fbf00e387f2eae83956057151e = $(`<div id="html_48a9e8fbf00e387f2eae83956057151e" style="width: 100.0%; height: 100.0%;"><b>Royal Free Hospital</b><br>Level 1 | North<br>Any Level: <b>10,886</b> postcodes</div>`)[0];
-                popup_c22b03f0b34a77a81098b4a9f774fdcb.setContent(html_48a9e8fbf00e387f2eae83956057151e);
+                var html_86e8cb842d200a2e12449588a1e92b51 = $(`<div id="html_86e8cb842d200a2e12449588a1e92b51" style="width: 100.0%; height: 100.0%;"><b>Royal Free Hospital</b><br>Level 1 | North<br>Any Level: <b>10,886</b> postcodes</div>`)[0];
+                popup_f1e2fa6e5114a9acf40dcbf6cc1c1faa.setContent(html_86e8cb842d200a2e12449588a1e92b51);
             
         
 
-        circle_marker_6ea3ae812396e9eca12d7f7b215f0d44.bindPopup(popup_c22b03f0b34a77a81098b4a9f774fdcb)
+        circle_marker_97cf743410292c84a8b89c31024c3074.bindPopup(popup_f1e2fa6e5114a9acf40dcbf6cc1c1faa)
         ;
 
         
     
     
-            circle_marker_6ea3ae812396e9eca12d7f7b215f0d44.bindTooltip(
+            circle_marker_97cf743410292c84a8b89c31024c3074.bindTooltip(
                 `<div>
                      Royal Free Hospital: 10,886 postcodes (Any Level)
                  </div>`,
@@ -1020,30 +1020,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_c750aef1d56e199c4860af31309b8766 = L.circleMarker(
+            var circle_marker_236995d3082353e1c783fd65bc138c52 = L.circleMarker(
                 [51.6133, -0.073],
                 {"bubblingMouseEvents": true, "color": "#1cc854", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cc854", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 27.818895851029247, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_e755954cf3331ba0c94d7d1d7852aa69 = L.popup({
+        var popup_bc556107eef307f78652a7e9bbece530 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_42d9e3ad32b7ca9bc1098340edba93cc = $(`<div id="html_42d9e3ad32b7ca9bc1098340edba93cc" style="width: 100.0%; height: 100.0%;"><b>North Middlesex</b><br>Level 1 | North<br>Any Level: <b>14,921</b> postcodes</div>`)[0];
-                popup_e755954cf3331ba0c94d7d1d7852aa69.setContent(html_42d9e3ad32b7ca9bc1098340edba93cc);
+                var html_30bb2294871b73da2a6f6f2089b6e0fe = $(`<div id="html_30bb2294871b73da2a6f6f2089b6e0fe" style="width: 100.0%; height: 100.0%;"><b>North Middlesex</b><br>Level 2 | North<br>Any Level: <b>14,921</b> postcodes</div>`)[0];
+                popup_bc556107eef307f78652a7e9bbece530.setContent(html_30bb2294871b73da2a6f6f2089b6e0fe);
             
         
 
-        circle_marker_c750aef1d56e199c4860af31309b8766.bindPopup(popup_e755954cf3331ba0c94d7d1d7852aa69)
+        circle_marker_236995d3082353e1c783fd65bc138c52.bindPopup(popup_bc556107eef307f78652a7e9bbece530)
         ;
 
         
     
     
-            circle_marker_c750aef1d56e199c4860af31309b8766.bindTooltip(
+            circle_marker_236995d3082353e1c783fd65bc138c52.bindTooltip(
                 `<div>
                      North Middlesex: 14,921 postcodes (Any Level)
                  </div>`,
@@ -1053,30 +1053,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_b3c94665b79220e1023bc725cd50f696 = L.circleMarker(
+            var circle_marker_5bd533cfd89bf3b10f3bff1f00ffba59 = L.circleMarker(
                 [51.4733, -0.3249],
                 {"bubblingMouseEvents": true, "color": "#c81ca1", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81ca1", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 29.7740124389526, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_39cd92baa41b700fe7367e8eaf9f9d11 = L.popup({
+        var popup_57e92f7031cf5ee43186ed710f96fbaf = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_02930fdc1f3302e1c5dfdf04f015cb99 = $(`<div id="html_02930fdc1f3302e1c5dfdf04f015cb99" style="width: 100.0%; height: 100.0%;"><b>West Middlesex</b><br>Level 1 | North<br>Any Level: <b>17,092</b> postcodes</div>`)[0];
-                popup_39cd92baa41b700fe7367e8eaf9f9d11.setContent(html_02930fdc1f3302e1c5dfdf04f015cb99);
+                var html_64967e56240e3ef1a22e293e49d9d4ca = $(`<div id="html_64967e56240e3ef1a22e293e49d9d4ca" style="width: 100.0%; height: 100.0%;"><b>West Middlesex</b><br>Level 1 | North<br>Any Level: <b>17,092</b> postcodes</div>`)[0];
+                popup_57e92f7031cf5ee43186ed710f96fbaf.setContent(html_64967e56240e3ef1a22e293e49d9d4ca);
             
         
 
-        circle_marker_b3c94665b79220e1023bc725cd50f696.bindPopup(popup_39cd92baa41b700fe7367e8eaf9f9d11)
+        circle_marker_5bd533cfd89bf3b10f3bff1f00ffba59.bindPopup(popup_57e92f7031cf5ee43186ed710f96fbaf)
         ;
 
         
     
     
-            circle_marker_b3c94665b79220e1023bc725cd50f696.bindTooltip(
+            circle_marker_5bd533cfd89bf3b10f3bff1f00ffba59.bindTooltip(
                 `<div>
                      West Middlesex: 17,092 postcodes (Any Level)
                  </div>`,
@@ -1086,30 +1086,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_6003471c8e074a05436857b4d9d2377c = L.circleMarker(
+            var circle_marker_2dd51aac8a07e2d132bd84162063ca0f = L.circleMarker(
                 [51.4353, 0.2586],
                 {"bubblingMouseEvents": true, "color": "#c8801c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c8801c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.890647815226535, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_4b264e91287a6883143e07b720752958 = L.popup({
+        var popup_b47dc3349a3d39f77ab31b39c370312b = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_a5673c75434a4c088b9c1b7d1d774875 = $(`<div id="html_a5673c75434a4c088b9c1b7d1d774875" style="width: 100.0%; height: 100.0%;"><b>Darent Valley</b><br>Level 1 | South<br>Any Level: <b>1,524</b> postcodes</div>`)[0];
-                popup_4b264e91287a6883143e07b720752958.setContent(html_a5673c75434a4c088b9c1b7d1d774875);
+                var html_93c5bd5d885349a73304ed405ad0df68 = $(`<div id="html_93c5bd5d885349a73304ed405ad0df68" style="width: 100.0%; height: 100.0%;"><b>Darent Valley</b><br>Level 1 | South<br>Any Level: <b>1,524</b> postcodes</div>`)[0];
+                popup_b47dc3349a3d39f77ab31b39c370312b.setContent(html_93c5bd5d885349a73304ed405ad0df68);
             
         
 
-        circle_marker_6003471c8e074a05436857b4d9d2377c.bindPopup(popup_4b264e91287a6883143e07b720752958)
+        circle_marker_2dd51aac8a07e2d132bd84162063ca0f.bindPopup(popup_b47dc3349a3d39f77ab31b39c370312b)
         ;
 
         
     
     
-            circle_marker_6003471c8e074a05436857b4d9d2377c.bindTooltip(
+            circle_marker_2dd51aac8a07e2d132bd84162063ca0f.bindTooltip(
                 `<div>
                      Darent Valley: 1,524 postcodes (Any Level)
                  </div>`,
@@ -1119,30 +1119,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_083be9629ca1bb8b5509c905cca499fb = L.circleMarker(
+            var circle_marker_b89e4624cb66e0d2a969a125582fdc91 = L.circleMarker(
                 [51.3259, -0.2726],
                 {"bubblingMouseEvents": true, "color": "#c8c31c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c8c31c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.597052656320115, "stroke": true, "weight": 2}
-            ).addTo(feature_group_f5647f5ed386d90342cb7daa058139ac);
+            ).addTo(feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a);
         
     
-        var popup_24626f99830ba5dfbafe013f2d3a256c = L.popup({
+        var popup_3af8fe3bc84c1e84a34dd1b7b538a2c9 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_6b0436e2b79b71b535c21c73401d3974 = $(`<div id="html_6b0436e2b79b71b535c21c73401d3974" style="width: 100.0%; height: 100.0%;"><b>Epsom Hospital</b><br>Level 1 | South<br>Any Level: <b>604</b> postcodes</div>`)[0];
-                popup_24626f99830ba5dfbafe013f2d3a256c.setContent(html_6b0436e2b79b71b535c21c73401d3974);
+                var html_aa12b30de4ffd1f7ed19a8c8ed225b1d = $(`<div id="html_aa12b30de4ffd1f7ed19a8c8ed225b1d" style="width: 100.0%; height: 100.0%;"><b>Epsom Hospital</b><br>Level 1 | South<br>Any Level: <b>604</b> postcodes</div>`)[0];
+                popup_3af8fe3bc84c1e84a34dd1b7b538a2c9.setContent(html_aa12b30de4ffd1f7ed19a8c8ed225b1d);
             
         
 
-        circle_marker_083be9629ca1bb8b5509c905cca499fb.bindPopup(popup_24626f99830ba5dfbafe013f2d3a256c)
+        circle_marker_b89e4624cb66e0d2a969a125582fdc91.bindPopup(popup_3af8fe3bc84c1e84a34dd1b7b538a2c9)
         ;
 
         
     
     
-            circle_marker_083be9629ca1bb8b5509c905cca499fb.bindTooltip(
+            circle_marker_b89e4624cb66e0d2a969a125582fdc91.bindTooltip(
                 `<div>
                      Epsom Hospital: 604 postcodes (Any Level)
                  </div>`,
@@ -1152,41 +1152,41 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            feature_group_f5647f5ed386d90342cb7daa058139ac.addTo(map_ab0998d23f1b16e85f6836835e9a19b7);
+            feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a.addTo(map_a5803c7149b96428232850176b914ef4);
         
     
-            var feature_group_a81648ce800fcb36e5f507780f43d498 = L.featureGroup(
+            var feature_group_e4777e14eb14c96f7191ec0abe5cefc9 = L.featureGroup(
                 {
 }
             );
         
     
-            var circle_marker_dc0ce2322aaa3e044007d60526f9ac8f = L.circleMarker(
+            var circle_marker_bd7de0bc4e9bbe7b0d9658e61b808187 = L.circleMarker(
                 [51.5532, -0.1654],
                 {"bubblingMouseEvents": true, "color": "#1c75c8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1c75c8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45.0, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a81648ce800fcb36e5f507780f43d498);
+            ).addTo(feature_group_e4777e14eb14c96f7191ec0abe5cefc9);
         
     
-        var popup_1d75a31e7d225ea1ee21cd83c8ae9e34 = L.popup({
+        var popup_059ff4019cf437cb6fea66ea3a7c55f6 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_606bd819af4c782e899566f46c204b41 = $(`<div id="html_606bd819af4c782e899566f46c204b41" style="width: 100.0%; height: 100.0%;"><b>Royal Free Hospital</b><br>Level 1 | North<br>Level 1 — Special Care: <b>121,966</b> postcodes</div>`)[0];
-                popup_1d75a31e7d225ea1ee21cd83c8ae9e34.setContent(html_606bd819af4c782e899566f46c204b41);
+                var html_5bd2cbb1d3cab2656130b6744a157252 = $(`<div id="html_5bd2cbb1d3cab2656130b6744a157252" style="width: 100.0%; height: 100.0%;"><b>Royal Free Hospital</b><br>Level 1 | North<br>Level 1 — Special Care: <b>180,929</b> postcodes</div>`)[0];
+                popup_059ff4019cf437cb6fea66ea3a7c55f6.setContent(html_5bd2cbb1d3cab2656130b6744a157252);
             
         
 
-        circle_marker_dc0ce2322aaa3e044007d60526f9ac8f.bindPopup(popup_1d75a31e7d225ea1ee21cd83c8ae9e34)
+        circle_marker_bd7de0bc4e9bbe7b0d9658e61b808187.bindPopup(popup_059ff4019cf437cb6fea66ea3a7c55f6)
         ;
 
         
     
     
-            circle_marker_dc0ce2322aaa3e044007d60526f9ac8f.bindTooltip(
+            circle_marker_bd7de0bc4e9bbe7b0d9658e61b808187.bindTooltip(
                 `<div>
-                     Royal Free Hospital: 121,966 postcodes (Level 1 — Special Care)
+                     Royal Free Hospital: 180,929 postcodes (Level 1 — Special Care)
                  </div>`,
                 {
   "sticky": true,
@@ -1194,63 +1194,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_6ff8a81b50dce230531bb27436557b94 = L.circleMarker(
-                [51.6133, -0.073],
-                {"bubblingMouseEvents": true, "color": "#1cc854", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cc854", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 31.28836788344616, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a81648ce800fcb36e5f507780f43d498);
-        
-    
-        var popup_818b3041855bf2d63b42a990fa36f16b = L.popup({
-  "maxWidth": "100%",
-});
-
-        
-            
-                var html_34bf990bf164a876b9b5998ef4a23d8a = $(`<div id="html_34bf990bf164a876b9b5998ef4a23d8a" style="width: 100.0%; height: 100.0%;"><b>North Middlesex</b><br>Level 1 | North<br>Level 1 — Special Care: <b>58,963</b> postcodes</div>`)[0];
-                popup_818b3041855bf2d63b42a990fa36f16b.setContent(html_34bf990bf164a876b9b5998ef4a23d8a);
-            
-        
-
-        circle_marker_6ff8a81b50dce230531bb27436557b94.bindPopup(popup_818b3041855bf2d63b42a990fa36f16b)
-        ;
-
-        
-    
-    
-            circle_marker_6ff8a81b50dce230531bb27436557b94.bindTooltip(
-                `<div>
-                     North Middlesex: 58,963 postcodes (Level 1 — Special Care)
-                 </div>`,
-                {
-  "sticky": true,
-}
-            );
-        
-    
-            var circle_marker_10adc2e2f52a4282e1ac7c334aa4f10d = L.circleMarker(
+            var circle_marker_3d27d6260858de4973e736f580c717af = L.circleMarker(
                 [51.4733, -0.3249],
-                {"bubblingMouseEvents": true, "color": "#c81ca1", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81ca1", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 27.049529861711687, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a81648ce800fcb36e5f507780f43d498);
+                {"bubblingMouseEvents": true, "color": "#c81ca1", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81ca1", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 22.208796273218706, "stroke": true, "weight": 2}
+            ).addTo(feature_group_e4777e14eb14c96f7191ec0abe5cefc9);
         
     
-        var popup_1f905f47b6a77b0a9ed0f92af45b4c66 = L.popup({
+        var popup_b4d9f7f9b2e40824f25b3cdf7c443314 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_d8499a9576311d86c3772a79ce2bb2bd = $(`<div id="html_d8499a9576311d86c3772a79ce2bb2bd" style="width: 100.0%; height: 100.0%;"><b>West Middlesex</b><br>Level 1 | North<br>Level 1 — Special Care: <b>44,069</b> postcodes</div>`)[0];
-                popup_1f905f47b6a77b0a9ed0f92af45b4c66.setContent(html_d8499a9576311d86c3772a79ce2bb2bd);
+                var html_0d66cf4a101650c44967534e1c58b9bf = $(`<div id="html_0d66cf4a101650c44967534e1c58b9bf" style="width: 100.0%; height: 100.0%;"><b>West Middlesex</b><br>Level 1 | North<br>Level 1 — Special Care: <b>44,069</b> postcodes</div>`)[0];
+                popup_b4d9f7f9b2e40824f25b3cdf7c443314.setContent(html_0d66cf4a101650c44967534e1c58b9bf);
             
         
 
-        circle_marker_10adc2e2f52a4282e1ac7c334aa4f10d.bindPopup(popup_1f905f47b6a77b0a9ed0f92af45b4c66)
+        circle_marker_3d27d6260858de4973e736f580c717af.bindPopup(popup_b4d9f7f9b2e40824f25b3cdf7c443314)
         ;
 
         
     
     
-            circle_marker_10adc2e2f52a4282e1ac7c334aa4f10d.bindTooltip(
+            circle_marker_3d27d6260858de4973e736f580c717af.bindTooltip(
                 `<div>
                      West Middlesex: 44,069 postcodes (Level 1 — Special Care)
                  </div>`,
@@ -1260,30 +1227,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_c8887add2be7f5c433c571193fa5be4e = L.circleMarker(
+            var circle_marker_c1a968d390c12510049c02651d8bb0fa = L.circleMarker(
                 [51.4353, 0.2586],
-                {"bubblingMouseEvents": true, "color": "#c8801c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c8801c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 22.7270532164536, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a81648ce800fcb36e5f507780f43d498);
+                {"bubblingMouseEvents": true, "color": "#c8801c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c8801c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18.65986201443274, "stroke": true, "weight": 2}
+            ).addTo(feature_group_e4777e14eb14c96f7191ec0abe5cefc9);
         
     
-        var popup_b7439badf30df60dec0f5da438f4b469 = L.popup({
+        var popup_c95d45e69c21afcf6701637261e6a326 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_800a5924ee5700f8684178a1dcb87ffa = $(`<div id="html_800a5924ee5700f8684178a1dcb87ffa" style="width: 100.0%; height: 100.0%;"><b>Darent Valley</b><br>Level 1 | South<br>Level 1 — Special Care: <b>31,110</b> postcodes</div>`)[0];
-                popup_b7439badf30df60dec0f5da438f4b469.setContent(html_800a5924ee5700f8684178a1dcb87ffa);
+                var html_8671b811aabde80f83691f2dc412a3f9 = $(`<div id="html_8671b811aabde80f83691f2dc412a3f9" style="width: 100.0%; height: 100.0%;"><b>Darent Valley</b><br>Level 1 | South<br>Level 1 — Special Care: <b>31,110</b> postcodes</div>`)[0];
+                popup_c95d45e69c21afcf6701637261e6a326.setContent(html_8671b811aabde80f83691f2dc412a3f9);
             
         
 
-        circle_marker_c8887add2be7f5c433c571193fa5be4e.bindPopup(popup_b7439badf30df60dec0f5da438f4b469)
+        circle_marker_c1a968d390c12510049c02651d8bb0fa.bindPopup(popup_c95d45e69c21afcf6701637261e6a326)
         ;
 
         
     
     
-            circle_marker_c8887add2be7f5c433c571193fa5be4e.bindTooltip(
+            circle_marker_c1a968d390c12510049c02651d8bb0fa.bindTooltip(
                 `<div>
                      Darent Valley: 31,110 postcodes (Level 1 — Special Care)
                  </div>`,
@@ -1293,30 +1260,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_667904d9b69fc5de6f6b0a3aac520f80 = L.circleMarker(
+            var circle_marker_2a35e4f80ae22118b2f62d87273586fc = L.circleMarker(
                 [51.3259, -0.2726],
-                {"bubblingMouseEvents": true, "color": "#c8c31c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c8c31c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 34.1169907370257, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a81648ce800fcb36e5f507780f43d498);
+                {"bubblingMouseEvents": true, "color": "#c8c31c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c8c31c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 28.011477486209685, "stroke": true, "weight": 2}
+            ).addTo(feature_group_e4777e14eb14c96f7191ec0abe5cefc9);
         
     
-        var popup_98bd526cad962788a95908214f1fdc24 = L.popup({
+        var popup_e26d68de9a9c1a48a4b706cd9dd7483a = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_2b9e280c67e337c309d93dc927ea94fe = $(`<div id="html_2b9e280c67e337c309d93dc927ea94fe" style="width: 100.0%; height: 100.0%;"><b>Epsom Hospital</b><br>Level 1 | South<br>Level 1 — Special Care: <b>70,106</b> postcodes</div>`)[0];
-                popup_98bd526cad962788a95908214f1fdc24.setContent(html_2b9e280c67e337c309d93dc927ea94fe);
+                var html_00b831c2a15e873e8941e948a87150d3 = $(`<div id="html_00b831c2a15e873e8941e948a87150d3" style="width: 100.0%; height: 100.0%;"><b>Epsom Hospital</b><br>Level 1 | South<br>Level 1 — Special Care: <b>70,106</b> postcodes</div>`)[0];
+                popup_e26d68de9a9c1a48a4b706cd9dd7483a.setContent(html_00b831c2a15e873e8941e948a87150d3);
             
         
 
-        circle_marker_667904d9b69fc5de6f6b0a3aac520f80.bindPopup(popup_98bd526cad962788a95908214f1fdc24)
+        circle_marker_2a35e4f80ae22118b2f62d87273586fc.bindPopup(popup_e26d68de9a9c1a48a4b706cd9dd7483a)
         ;
 
         
     
     
-            circle_marker_667904d9b69fc5de6f6b0a3aac520f80.bindTooltip(
+            circle_marker_2a35e4f80ae22118b2f62d87273586fc.bindTooltip(
                 `<div>
                      Epsom Hospital: 70,106 postcodes (Level 1 — Special Care)
                  </div>`,
@@ -1326,38 +1293,38 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var feature_group_a33bf587aabf9e961c323ffecbe4cbb2 = L.featureGroup(
+            var feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0 = L.featureGroup(
                 {
 }
             );
         
     
-            var circle_marker_763606ca557431b4171b468aee1f53bc = L.circleMarker(
+            var circle_marker_9976d0b05a040e12ac68da2b3a9fe5c8 = L.circleMarker(
                 [51.6507, -0.2152],
-                {"bubblingMouseEvents": true, "color": "#c81c1c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81c1c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 16.327795868587007, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+                {"bubblingMouseEvents": true, "color": "#c81c1c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81c1c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.372036433439524, "stroke": true, "weight": 2}
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_656de9acc686546bb4e9bda50a1e66d5 = L.popup({
+        var popup_28e355d116146038467c940324a65d17 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_618803f9816c286f7918f0c7e4b808bf = $(`<div id="html_618803f9816c286f7918f0c7e4b808bf" style="width: 100.0%; height: 100.0%;"><b>Barnet Hospital</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>10,696</b> postcodes</div>`)[0];
-                popup_656de9acc686546bb4e9bda50a1e66d5.setContent(html_618803f9816c286f7918f0c7e4b808bf);
+                var html_4b6c2529b3d0670246fd7b9ea4b49083 = $(`<div id="html_4b6c2529b3d0670246fd7b9ea4b49083" style="width: 100.0%; height: 100.0%;"><b>Barnet Hospital</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>7,174</b> postcodes</div>`)[0];
+                popup_28e355d116146038467c940324a65d17.setContent(html_4b6c2529b3d0670246fd7b9ea4b49083);
             
         
 
-        circle_marker_763606ca557431b4171b468aee1f53bc.bindPopup(popup_656de9acc686546bb4e9bda50a1e66d5)
+        circle_marker_9976d0b05a040e12ac68da2b3a9fe5c8.bindPopup(popup_28e355d116146038467c940324a65d17)
         ;
 
         
     
     
-            circle_marker_763606ca557431b4171b468aee1f53bc.bindTooltip(
+            circle_marker_9976d0b05a040e12ac68da2b3a9fe5c8.bindTooltip(
                 `<div>
-                     Barnet Hospital: 10,696 postcodes (Level 2 — High Dependency)
+                     Barnet Hospital: 7,174 postcodes (Level 2 — High Dependency)
                  </div>`,
                 {
   "sticky": true,
@@ -1365,32 +1332,32 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_221603a60d73d1caed97717f1a5ee1bd = L.circleMarker(
+            var circle_marker_f82eadd1bdef3067f45908d84ac7d380 = L.circleMarker(
                 [51.5665, -0.1403],
-                {"bubblingMouseEvents": true, "color": "#c81c3e", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81c3e", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 28.955128233810058, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+                {"bubblingMouseEvents": true, "color": "#c81c3e", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81c3e", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 26.66660640573829, "stroke": true, "weight": 2}
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_a4ad25b7dd6ea7fe6bbe18abe3c93495 = L.popup({
+        var popup_eb444ad5f3835f811e531bf7b17c9fea = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_00dc7e4b7386fad690d8a2d45a67e583 = $(`<div id="html_00dc7e4b7386fad690d8a2d45a67e583" style="width: 100.0%; height: 100.0%;"><b>Whittington Hospital</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>33,637</b> postcodes</div>`)[0];
-                popup_a4ad25b7dd6ea7fe6bbe18abe3c93495.setContent(html_00dc7e4b7386fad690d8a2d45a67e583);
+                var html_eee09579f40412fa9929331020c079b5 = $(`<div id="html_eee09579f40412fa9929331020c079b5" style="width: 100.0%; height: 100.0%;"><b>Whittington Hospital</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>28,530</b> postcodes</div>`)[0];
+                popup_eb444ad5f3835f811e531bf7b17c9fea.setContent(html_eee09579f40412fa9929331020c079b5);
             
         
 
-        circle_marker_221603a60d73d1caed97717f1a5ee1bd.bindPopup(popup_a4ad25b7dd6ea7fe6bbe18abe3c93495)
+        circle_marker_f82eadd1bdef3067f45908d84ac7d380.bindPopup(popup_eb444ad5f3835f811e531bf7b17c9fea)
         ;
 
         
     
     
-            circle_marker_221603a60d73d1caed97717f1a5ee1bd.bindTooltip(
+            circle_marker_f82eadd1bdef3067f45908d84ac7d380.bindTooltip(
                 `<div>
-                     Whittington Hospital: 33,637 postcodes (Level 2 — High Dependency)
+                     Whittington Hospital: 28,530 postcodes (Level 2 — High Dependency)
                  </div>`,
                 {
   "sticky": true,
@@ -1398,30 +1365,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_f8b2c6dde5d38c31c8176cc985005b7a = L.circleMarker(
+            var circle_marker_71529eace72a2f1da81940a5d28c99d1 = L.circleMarker(
                 [51.5223, 0.035],
                 {"bubblingMouseEvents": true, "color": "#1cc832", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cc832", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 21.784637472686015, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_655a2058d3684f8c7aaf87eeb0a8ac60 = L.popup({
+        var popup_86d1b5a9a2c6bcd8a82e49df645fabef = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_219ad19d93e2ce545a21ae26f9181bd3 = $(`<div id="html_219ad19d93e2ce545a21ae26f9181bd3" style="width: 100.0%; height: 100.0%;"><b>Newham General</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>19,040</b> postcodes</div>`)[0];
-                popup_655a2058d3684f8c7aaf87eeb0a8ac60.setContent(html_219ad19d93e2ce545a21ae26f9181bd3);
+                var html_59269c0f6267d2c9ed11d6d70567be49 = $(`<div id="html_59269c0f6267d2c9ed11d6d70567be49" style="width: 100.0%; height: 100.0%;"><b>Newham General</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>19,040</b> postcodes</div>`)[0];
+                popup_86d1b5a9a2c6bcd8a82e49df645fabef.setContent(html_59269c0f6267d2c9ed11d6d70567be49);
             
         
 
-        circle_marker_f8b2c6dde5d38c31c8176cc985005b7a.bindPopup(popup_655a2058d3684f8c7aaf87eeb0a8ac60)
+        circle_marker_71529eace72a2f1da81940a5d28c99d1.bindPopup(popup_86d1b5a9a2c6bcd8a82e49df645fabef)
         ;
 
         
     
     
-            circle_marker_f8b2c6dde5d38c31c8176cc985005b7a.bindTooltip(
+            circle_marker_71529eace72a2f1da81940a5d28c99d1.bindTooltip(
                 `<div>
                      Newham General: 19,040 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1431,32 +1398,32 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_0f2f448b3e10dd89b46e3ef7641f8f34 = L.circleMarker(
+            var circle_marker_25550caee7071d2150cdaa19ab02b5d3 = L.circleMarker(
                 [51.5785, 0.002],
-                {"bubblingMouseEvents": true, "color": "#c81c5f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81c5f", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 22.374471359960307, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+                {"bubblingMouseEvents": true, "color": "#c81c5f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81c5f", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18.308202833029068, "stroke": true, "weight": 2}
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_522700f214cc9d2d012920c972ce2dcb = L.popup({
+        var popup_3fa8dd0609bafdd3babb40b868df9206 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_8248f5d1b8a68798bd239dd9dac4413e = $(`<div id="html_8248f5d1b8a68798bd239dd9dac4413e" style="width: 100.0%; height: 100.0%;"><b>Whipps Cross</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>20,085</b> postcodes</div>`)[0];
-                popup_522700f214cc9d2d012920c972ce2dcb.setContent(html_8248f5d1b8a68798bd239dd9dac4413e);
+                var html_811062820821b6912c39c2b1b6b007e5 = $(`<div id="html_811062820821b6912c39c2b1b6b007e5" style="width: 100.0%; height: 100.0%;"><b>Whipps Cross</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>13,448</b> postcodes</div>`)[0];
+                popup_3fa8dd0609bafdd3babb40b868df9206.setContent(html_811062820821b6912c39c2b1b6b007e5);
             
         
 
-        circle_marker_0f2f448b3e10dd89b46e3ef7641f8f34.bindPopup(popup_522700f214cc9d2d012920c972ce2dcb)
+        circle_marker_25550caee7071d2150cdaa19ab02b5d3.bindPopup(popup_3fa8dd0609bafdd3babb40b868df9206)
         ;
 
         
     
     
-            circle_marker_0f2f448b3e10dd89b46e3ef7641f8f34.bindTooltip(
+            circle_marker_25550caee7071d2150cdaa19ab02b5d3.bindTooltip(
                 `<div>
-                     Whipps Cross: 20,085 postcodes (Level 2 — High Dependency)
+                     Whipps Cross: 13,448 postcodes (Level 2 — High Dependency)
                  </div>`,
                 {
   "sticky": true,
@@ -1464,30 +1431,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_366f82a44179a648f909e5cf241abd73 = L.circleMarker(
+            var circle_marker_af1c560033b35f173308335c1a48ffdf = L.circleMarker(
                 [51.5694, 0.1779],
                 {"bubblingMouseEvents": true, "color": "#1c96c8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1c96c8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.542036137651184, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_29a5cdf200296de03aba816fbb5e23e9 = L.popup({
+        var popup_75bfe8b749eef2a92264a9d2b4424c2c = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_64b0c38208748bb44c40c52525cabcb1 = $(`<div id="html_64b0c38208748bb44c40c52525cabcb1" style="width: 100.0%; height: 100.0%;"><b>Queens Hospital</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>12,346</b> postcodes</div>`)[0];
-                popup_29a5cdf200296de03aba816fbb5e23e9.setContent(html_64b0c38208748bb44c40c52525cabcb1);
+                var html_08f831402ba71824831888fbe8738fda = $(`<div id="html_08f831402ba71824831888fbe8738fda" style="width: 100.0%; height: 100.0%;"><b>Queens Hospital</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>12,346</b> postcodes</div>`)[0];
+                popup_75bfe8b749eef2a92264a9d2b4424c2c.setContent(html_08f831402ba71824831888fbe8738fda);
             
         
 
-        circle_marker_366f82a44179a648f909e5cf241abd73.bindPopup(popup_29a5cdf200296de03aba816fbb5e23e9)
+        circle_marker_af1c560033b35f173308335c1a48ffdf.bindPopup(popup_75bfe8b749eef2a92264a9d2b4424c2c)
         ;
 
         
     
     
-            circle_marker_366f82a44179a648f909e5cf241abd73.bindTooltip(
+            circle_marker_af1c560033b35f173308335c1a48ffdf.bindTooltip(
                 `<div>
                      Queens Hospital: 12,346 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1497,30 +1464,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_7156284eb97368630c1cc8139842f42d = L.circleMarker(
+            var circle_marker_5c3c8a2a04db060b30f5541c83ade057 = L.circleMarker(
                 [51.5173, -0.1738],
                 {"bubblingMouseEvents": true, "color": "#1c32c8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1c32c8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45.0, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_e8ac54f16ed4ae5d7b61e1e960da5372 = L.popup({
+        var popup_7994747735e911b021595700dcc23f05 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_79ee14286238e6845e2f796bbd4b8773 = $(`<div id="html_79ee14286238e6845e2f796bbd4b8773" style="width: 100.0%; height: 100.0%;"><b>St Marys Hospital</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>81,244</b> postcodes</div>`)[0];
-                popup_e8ac54f16ed4ae5d7b61e1e960da5372.setContent(html_79ee14286238e6845e2f796bbd4b8773);
+                var html_2dfda177d644533003611f54a2d1c864 = $(`<div id="html_2dfda177d644533003611f54a2d1c864" style="width: 100.0%; height: 100.0%;"><b>St Marys Hospital</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>81,244</b> postcodes</div>`)[0];
+                popup_7994747735e911b021595700dcc23f05.setContent(html_2dfda177d644533003611f54a2d1c864);
             
         
 
-        circle_marker_7156284eb97368630c1cc8139842f42d.bindPopup(popup_e8ac54f16ed4ae5d7b61e1e960da5372)
+        circle_marker_5c3c8a2a04db060b30f5541c83ade057.bindPopup(popup_7994747735e911b021595700dcc23f05)
         ;
 
         
     
     
-            circle_marker_7156284eb97368630c1cc8139842f42d.bindTooltip(
+            circle_marker_5c3c8a2a04db060b30f5541c83ade057.bindTooltip(
                 `<div>
                      St Marys Hospital: 81,244 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1530,30 +1497,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_d9ee6143d7a567e448c8233225bee9f7 = L.circleMarker(
+            var circle_marker_8ca216783c1a2ee53072bbd77d29e226 = L.circleMarker(
                 [51.5767, -0.3222],
                 {"bubblingMouseEvents": true, "color": "#1cc875", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cc875", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 25.5715703753557, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_bdd39f5c82c3c8b3502b2c5698fe7728 = L.popup({
+        var popup_d086a023d8aa127d9aae5ff0fdba8a17 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_42cf84114ae773f121f1ea6ddc3dab7e = $(`<div id="html_42cf84114ae773f121f1ea6ddc3dab7e" style="width: 100.0%; height: 100.0%;"><b>Northwick Park</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>26,235</b> postcodes</div>`)[0];
-                popup_bdd39f5c82c3c8b3502b2c5698fe7728.setContent(html_42cf84114ae773f121f1ea6ddc3dab7e);
+                var html_a583e8b219d47c45f0a1ec069bdef113 = $(`<div id="html_a583e8b219d47c45f0a1ec069bdef113" style="width: 100.0%; height: 100.0%;"><b>Northwick Park</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>26,235</b> postcodes</div>`)[0];
+                popup_d086a023d8aa127d9aae5ff0fdba8a17.setContent(html_a583e8b219d47c45f0a1ec069bdef113);
             
         
 
-        circle_marker_d9ee6143d7a567e448c8233225bee9f7.bindPopup(popup_bdd39f5c82c3c8b3502b2c5698fe7728)
+        circle_marker_8ca216783c1a2ee53072bbd77d29e226.bindPopup(popup_d086a023d8aa127d9aae5ff0fdba8a17)
         ;
 
         
     
     
-            circle_marker_d9ee6143d7a567e448c8233225bee9f7.bindTooltip(
+            circle_marker_8ca216783c1a2ee53072bbd77d29e226.bindTooltip(
                 `<div>
                      Northwick Park: 26,235 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1563,30 +1530,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_707b08079d503ed7a94ba84ad1035294 = L.circleMarker(
+            var circle_marker_729f0c98ff26956fe3d9bae3ecec21fc = L.circleMarker(
                 [51.5259, -0.4597],
                 {"bubblingMouseEvents": true, "color": "#8bc81c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8bc81c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 22.447874236817103, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_d3ac9e4c3f082319ddcf539d8c13e55d = L.popup({
+        var popup_1a84f4d2bd73d3742da077527921caac = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_f9a5732de0db367d65d2d599ab47cf17 = $(`<div id="html_f9a5732de0db367d65d2d599ab47cf17" style="width: 100.0%; height: 100.0%;"><b>Hillingdon Hospital</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>20,217</b> postcodes</div>`)[0];
-                popup_d3ac9e4c3f082319ddcf539d8c13e55d.setContent(html_f9a5732de0db367d65d2d599ab47cf17);
+                var html_eb283969eae5375a008589f04726c934 = $(`<div id="html_eb283969eae5375a008589f04726c934" style="width: 100.0%; height: 100.0%;"><b>Hillingdon Hospital</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>20,217</b> postcodes</div>`)[0];
+                popup_1a84f4d2bd73d3742da077527921caac.setContent(html_eb283969eae5375a008589f04726c934);
             
         
 
-        circle_marker_707b08079d503ed7a94ba84ad1035294.bindPopup(popup_d3ac9e4c3f082319ddcf539d8c13e55d)
+        circle_marker_729f0c98ff26956fe3d9bae3ecec21fc.bindPopup(popup_1a84f4d2bd73d3742da077527921caac)
         ;
 
         
     
     
-            circle_marker_707b08079d503ed7a94ba84ad1035294.bindTooltip(
+            circle_marker_729f0c98ff26956fe3d9bae3ecec21fc.bindTooltip(
                 `<div>
                      Hillingdon Hospital: 20,217 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1596,30 +1563,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_4222e065db4bcc58a80e9f966f48347a = L.circleMarker(
+            var circle_marker_83f4fea85830d29d08049e1a43bd05f1 = L.circleMarker(
                 [51.3806, -0.1831],
                 {"bubblingMouseEvents": true, "color": "#1c54c8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1c54c8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.713126824406075, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_d4db14b1c450288c43f635f54878e2bc = L.popup({
+        var popup_81b8601605f116aaa0a1bc1b6909842e = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_f61b358d537a15076d0f23356847fb5b = $(`<div id="html_f61b358d537a15076d0f23356847fb5b" style="width: 100.0%; height: 100.0%;"><b>St Heliers Hospital</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>12,588</b> postcodes</div>`)[0];
-                popup_d4db14b1c450288c43f635f54878e2bc.setContent(html_f61b358d537a15076d0f23356847fb5b);
+                var html_5477168ec94d3f8c0c2e3eb268d97071 = $(`<div id="html_5477168ec94d3f8c0c2e3eb268d97071" style="width: 100.0%; height: 100.0%;"><b>St Heliers Hospital</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>12,588</b> postcodes</div>`)[0];
+                popup_81b8601605f116aaa0a1bc1b6909842e.setContent(html_5477168ec94d3f8c0c2e3eb268d97071);
             
         
 
-        circle_marker_4222e065db4bcc58a80e9f966f48347a.bindPopup(popup_d4db14b1c450288c43f635f54878e2bc)
+        circle_marker_83f4fea85830d29d08049e1a43bd05f1.bindPopup(popup_81b8601605f116aaa0a1bc1b6909842e)
         ;
 
         
     
     
-            circle_marker_4222e065db4bcc58a80e9f966f48347a.bindTooltip(
+            circle_marker_83f4fea85830d29d08049e1a43bd05f1.bindTooltip(
                 `<div>
                      St Heliers Hospital: 12,588 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1629,30 +1596,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_1587d928663902f54cae29b38d5d8309 = L.circleMarker(
+            var circle_marker_3c5cb9805fe27b8b4c7f904a26cd8817 = L.circleMarker(
                 [51.415, -0.2813],
                 {"bubblingMouseEvents": true, "color": "#27c81c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#27c81c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 19.192846485368452, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_70c9b0f3b6c3f7df4c57edb7dbe55ef7 = L.popup({
+        var popup_1eb81be7abb2c4d5de06c4600aff578d = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_8f3a36bb2f9f063ec1efa07073b9d1fd = $(`<div id="html_8f3a36bb2f9f063ec1efa07073b9d1fd" style="width: 100.0%; height: 100.0%;"><b>Kingston Hospital</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>14,779</b> postcodes</div>`)[0];
-                popup_70c9b0f3b6c3f7df4c57edb7dbe55ef7.setContent(html_8f3a36bb2f9f063ec1efa07073b9d1fd);
+                var html_a40ce61f8f5d44fb879191d396444141 = $(`<div id="html_a40ce61f8f5d44fb879191d396444141" style="width: 100.0%; height: 100.0%;"><b>Kingston Hospital</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>14,779</b> postcodes</div>`)[0];
+                popup_1eb81be7abb2c4d5de06c4600aff578d.setContent(html_a40ce61f8f5d44fb879191d396444141);
             
         
 
-        circle_marker_1587d928663902f54cae29b38d5d8309.bindPopup(popup_70c9b0f3b6c3f7df4c57edb7dbe55ef7)
+        circle_marker_3c5cb9805fe27b8b4c7f904a26cd8817.bindPopup(popup_1eb81be7abb2c4d5de06c4600aff578d)
         ;
 
         
     
     
-            circle_marker_1587d928663902f54cae29b38d5d8309.bindTooltip(
+            circle_marker_3c5cb9805fe27b8b4c7f904a26cd8817.bindTooltip(
                 `<div>
                      Kingston Hospital: 14,779 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1662,30 +1629,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_0f3ab079269a792b4a7f4fc2ce7a2fb4 = L.circleMarker(
+            var circle_marker_e431eebb3223218f6f000ca11588ee20 = L.circleMarker(
                 [51.3908, -0.1104],
                 {"bubblingMouseEvents": true, "color": "#c85f1c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c85f1c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 23.800600848680478, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_078d403e42886c60957cd9e85bdacab5 = L.popup({
+        var popup_25003b9c61b05f8cf04f7b233cff9a02 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_6d376e1a275162d34ce3f0f4bc9d295c = $(`<div id="html_6d376e1a275162d34ce3f0f4bc9d295c" style="width: 100.0%; height: 100.0%;"><b>Croydon University</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>22,727</b> postcodes</div>`)[0];
-                popup_078d403e42886c60957cd9e85bdacab5.setContent(html_6d376e1a275162d34ce3f0f4bc9d295c);
+                var html_eb6a4b3a69f9f4e50c2601734695ffbe = $(`<div id="html_eb6a4b3a69f9f4e50c2601734695ffbe" style="width: 100.0%; height: 100.0%;"><b>Croydon University</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>22,727</b> postcodes</div>`)[0];
+                popup_25003b9c61b05f8cf04f7b233cff9a02.setContent(html_eb6a4b3a69f9f4e50c2601734695ffbe);
             
         
 
-        circle_marker_0f3ab079269a792b4a7f4fc2ce7a2fb4.bindPopup(popup_078d403e42886c60957cd9e85bdacab5)
+        circle_marker_e431eebb3223218f6f000ca11588ee20.bindPopup(popup_25003b9c61b05f8cf04f7b233cff9a02)
         ;
 
         
     
     
-            circle_marker_0f3ab079269a792b4a7f4fc2ce7a2fb4.bindTooltip(
+            circle_marker_e431eebb3223218f6f000ca11588ee20.bindTooltip(
                 `<div>
                      Croydon University: 22,727 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1695,30 +1662,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_9169b659eb6d63d9af2ca92c1989093d = L.circleMarker(
+            var circle_marker_8d4d9879c8cc1bfa230301beb03aa913 = L.circleMarker(
                 [51.4528, -0.0186],
                 {"bubblingMouseEvents": true, "color": "#ad1cc8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ad1cc8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 27.63376012125873, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_2b9e99be03f7efe9aa79122e981af756 = L.popup({
+        var popup_c64d9ed4a4a6d1549d09448ba18712ff = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_5b4ff63196255269c999f3e4802ce2bc = $(`<div id="html_5b4ff63196255269c999f3e4802ce2bc" style="width: 100.0%; height: 100.0%;"><b>University Lewisham</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>30,637</b> postcodes</div>`)[0];
-                popup_2b9e99be03f7efe9aa79122e981af756.setContent(html_5b4ff63196255269c999f3e4802ce2bc);
+                var html_d53fe6adf5e753799242597670a1c9b7 = $(`<div id="html_d53fe6adf5e753799242597670a1c9b7" style="width: 100.0%; height: 100.0%;"><b>University Lewisham</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>30,637</b> postcodes</div>`)[0];
+                popup_c64d9ed4a4a6d1549d09448ba18712ff.setContent(html_d53fe6adf5e753799242597670a1c9b7);
             
         
 
-        circle_marker_9169b659eb6d63d9af2ca92c1989093d.bindPopup(popup_2b9e99be03f7efe9aa79122e981af756)
+        circle_marker_8d4d9879c8cc1bfa230301beb03aa913.bindPopup(popup_c64d9ed4a4a6d1549d09448ba18712ff)
         ;
 
         
     
     
-            circle_marker_9169b659eb6d63d9af2ca92c1989093d.bindTooltip(
+            circle_marker_8d4d9879c8cc1bfa230301beb03aa913.bindTooltip(
                 `<div>
                      University Lewisham: 30,637 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1728,30 +1695,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_2908eb2a3063e87e167d354833db141c = L.circleMarker(
+            var circle_marker_c12995c33f2164f487f3a70d451286dd = L.circleMarker(
                 [51.4788, 0.0514],
                 {"bubblingMouseEvents": true, "color": "#1cb8c8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cb8c8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18.199649147378818, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_bffd1cd9a1440760c9de0ee4a8850ffd = L.popup({
+        var popup_e4ac319b8b4774c3f3cd4fe6a1cc5b37 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_1d8d9819e539adb3d51c4781ea0ec632 = $(`<div id="html_1d8d9819e539adb3d51c4781ea0ec632" style="width: 100.0%; height: 100.0%;"><b>Queen Elizabeth Woolwich</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>13,289</b> postcodes</div>`)[0];
-                popup_bffd1cd9a1440760c9de0ee4a8850ffd.setContent(html_1d8d9819e539adb3d51c4781ea0ec632);
+                var html_d45bb9f754d928ac1163ab796b372f88 = $(`<div id="html_d45bb9f754d928ac1163ab796b372f88" style="width: 100.0%; height: 100.0%;"><b>Queen Elizabeth Woolwich</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>13,289</b> postcodes</div>`)[0];
+                popup_e4ac319b8b4774c3f3cd4fe6a1cc5b37.setContent(html_d45bb9f754d928ac1163ab796b372f88);
             
         
 
-        circle_marker_2908eb2a3063e87e167d354833db141c.bindPopup(popup_bffd1cd9a1440760c9de0ee4a8850ffd)
+        circle_marker_c12995c33f2164f487f3a70d451286dd.bindPopup(popup_e4ac319b8b4774c3f3cd4fe6a1cc5b37)
         ;
 
         
     
     
-            circle_marker_2908eb2a3063e87e167d354833db141c.bindTooltip(
+            circle_marker_c12995c33f2164f487f3a70d451286dd.bindTooltip(
                 `<div>
                      Queen Elizabeth Woolwich: 13,289 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1761,30 +1728,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_2b2fcdb64641bfdeac45e8146c868aba = L.circleMarker(
+            var circle_marker_b4208477bd30f9bd3d49eddef3501c34 = L.circleMarker(
                 [51.3656, 0.06],
                 {"bubblingMouseEvents": true, "color": "#1cc896", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cc896", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.297269079575862, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_7bad1fb2c0d56bcf0d9b64f0d0669e9d = L.popup({
+        var popup_99b335f610e336022042859ec436e745 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_e9706a39fcde861d46ac8c446f01a0e1 = $(`<div id="html_e9706a39fcde861d46ac8c446f01a0e1" style="width: 100.0%; height: 100.0%;"><b>Princess Royal (PRUH)</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>7,094</b> postcodes</div>`)[0];
-                popup_7bad1fb2c0d56bcf0d9b64f0d0669e9d.setContent(html_e9706a39fcde861d46ac8c446f01a0e1);
+                var html_f6fd739d1e73a33e442b96b21bc81eca = $(`<div id="html_f6fd739d1e73a33e442b96b21bc81eca" style="width: 100.0%; height: 100.0%;"><b>Princess Royal (PRUH)</b><br>Level 2 | South<br>Level 2 — High Dependency: <b>7,094</b> postcodes</div>`)[0];
+                popup_99b335f610e336022042859ec436e745.setContent(html_f6fd739d1e73a33e442b96b21bc81eca);
             
         
 
-        circle_marker_2b2fcdb64641bfdeac45e8146c868aba.bindPopup(popup_7bad1fb2c0d56bcf0d9b64f0d0669e9d)
+        circle_marker_b4208477bd30f9bd3d49eddef3501c34.bindPopup(popup_99b335f610e336022042859ec436e745)
         ;
 
         
     
     
-            circle_marker_2b2fcdb64641bfdeac45e8146c868aba.bindTooltip(
+            circle_marker_b4208477bd30f9bd3d49eddef3501c34.bindTooltip(
                 `<div>
                      Princess Royal (PRUH): 7,094 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1794,30 +1761,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_f9c54a87be7232af91c2839376b5b050 = L.circleMarker(
+            var circle_marker_9b1a524fa1e233a829fa249a1a467408 = L.circleMarker(
                 [51.6485, -0.4046],
                 {"bubblingMouseEvents": true, "color": "#c81cc3", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81cc3", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.110444047979876, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_692c8848ede77261ab0854ee23d4edf2 = L.popup({
+        var popup_7eef374c3689f8b437d2040e2765a025 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_90156835463ebcda93477617449ffe0c = $(`<div id="html_90156835463ebcda93477617449ffe0c" style="width: 100.0%; height: 100.0%;"><b>Watford General</b><br>Level 2 | Both<br>Level 2 — High Dependency: <b>1,498</b> postcodes</div>`)[0];
-                popup_692c8848ede77261ab0854ee23d4edf2.setContent(html_90156835463ebcda93477617449ffe0c);
+                var html_bd4235052a12255f3576d93eca81e6d7 = $(`<div id="html_bd4235052a12255f3576d93eca81e6d7" style="width: 100.0%; height: 100.0%;"><b>Watford General</b><br>Level 2 | Both<br>Level 2 — High Dependency: <b>1,498</b> postcodes</div>`)[0];
+                popup_7eef374c3689f8b437d2040e2765a025.setContent(html_bd4235052a12255f3576d93eca81e6d7);
             
         
 
-        circle_marker_f9c54a87be7232af91c2839376b5b050.bindPopup(popup_692c8848ede77261ab0854ee23d4edf2)
+        circle_marker_9b1a524fa1e233a829fa249a1a467408.bindPopup(popup_7eef374c3689f8b437d2040e2765a025)
         ;
 
         
     
     
-            circle_marker_f9c54a87be7232af91c2839376b5b050.bindTooltip(
+            circle_marker_9b1a524fa1e233a829fa249a1a467408.bindTooltip(
                 `<div>
                      Watford General: 1,498 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1827,30 +1794,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_6df404014e9631a4560bf6c7f9a849f9 = L.circleMarker(
+            var circle_marker_a40b71f474b4ee465940956e12598e2d = L.circleMarker(
                 [51.2185, -0.162],
                 {"bubblingMouseEvents": true, "color": "#c8a11c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c8a11c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 1.5387875634977377, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_c2fbb1db7ff17de2d115b3dbc942f7b0 = L.popup({
+        var popup_afb2b22d62fdb20a8c9807d121f48eff = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_16df4fd69866395e658be6ff52d1198c = $(`<div id="html_16df4fd69866395e658be6ff52d1198c" style="width: 100.0%; height: 100.0%;"><b>East Surrey</b><br>Level 2 | Both<br>Level 2 — High Dependency: <b>95</b> postcodes</div>`)[0];
-                popup_c2fbb1db7ff17de2d115b3dbc942f7b0.setContent(html_16df4fd69866395e658be6ff52d1198c);
+                var html_1318593e27116f3de99c1783d696c137 = $(`<div id="html_1318593e27116f3de99c1783d696c137" style="width: 100.0%; height: 100.0%;"><b>East Surrey</b><br>Level 2 | Both<br>Level 2 — High Dependency: <b>95</b> postcodes</div>`)[0];
+                popup_afb2b22d62fdb20a8c9807d121f48eff.setContent(html_1318593e27116f3de99c1783d696c137);
             
         
 
-        circle_marker_6df404014e9631a4560bf6c7f9a849f9.bindPopup(popup_c2fbb1db7ff17de2d115b3dbc942f7b0)
+        circle_marker_a40b71f474b4ee465940956e12598e2d.bindPopup(popup_afb2b22d62fdb20a8c9807d121f48eff)
         ;
 
         
     
     
-            circle_marker_6df404014e9631a4560bf6c7f9a849f9.bindTooltip(
+            circle_marker_a40b71f474b4ee465940956e12598e2d.bindTooltip(
                 `<div>
                      East Surrey: 95 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1860,30 +1827,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_93f13ed1038543638cd1c436e7204cf2 = L.circleMarker(
+            var circle_marker_58f97b242c1e79cd850e920443e5e974 = L.circleMarker(
                 [51.532, -0.5878],
                 {"bubblingMouseEvents": true, "color": "#c81c80", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c81c80", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.41770135590706586, "stroke": true, "weight": 2}
-            ).addTo(feature_group_a33bf587aabf9e961c323ffecbe4cbb2);
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-        var popup_6ad1327a58c946c84f17f80767e9c857 = L.popup({
+        var popup_22a6eefaddead6ad40c8a7c9ed990ce4 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_03ad69e8d3df173d576956b00db3d626 = $(`<div id="html_03ad69e8d3df173d576956b00db3d626" style="width: 100.0%; height: 100.0%;"><b>Wexham Park</b><br>Level 2 | Both<br>Level 2 — High Dependency: <b>7</b> postcodes</div>`)[0];
-                popup_6ad1327a58c946c84f17f80767e9c857.setContent(html_03ad69e8d3df173d576956b00db3d626);
+                var html_c1f82574f336de75f456ae65d8524abf = $(`<div id="html_c1f82574f336de75f456ae65d8524abf" style="width: 100.0%; height: 100.0%;"><b>Wexham Park</b><br>Level 2 | Both<br>Level 2 — High Dependency: <b>7</b> postcodes</div>`)[0];
+                popup_22a6eefaddead6ad40c8a7c9ed990ce4.setContent(html_c1f82574f336de75f456ae65d8524abf);
             
         
 
-        circle_marker_93f13ed1038543638cd1c436e7204cf2.bindPopup(popup_6ad1327a58c946c84f17f80767e9c857)
+        circle_marker_58f97b242c1e79cd850e920443e5e974.bindPopup(popup_22a6eefaddead6ad40c8a7c9ed990ce4)
         ;
 
         
     
     
-            circle_marker_93f13ed1038543638cd1c436e7204cf2.bindTooltip(
+            circle_marker_58f97b242c1e79cd850e920443e5e974.bindTooltip(
                 `<div>
                      Wexham Park: 7 postcodes (Level 2 — High Dependency)
                  </div>`,
@@ -1893,36 +1860,69 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var feature_group_543a205c22c78a4dc5449b68834d0d05 = L.featureGroup(
-                {
-}
-            );
+            var circle_marker_ef515b11bd991bf24677feac6870a445 = L.circleMarker(
+                [51.6133, -0.073],
+                {"bubblingMouseEvents": true, "color": "#1cc854", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cc854", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 19.506506377339466, "stroke": true, "weight": 2}
+            ).addTo(feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0);
         
     
-            var circle_marker_73967db4893a560b5f23fc4b11836935 = L.circleMarker(
-                [51.5248, -0.1352],
-                {"bubblingMouseEvents": true, "color": "#8b1cc8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8b1cc8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 43.80608776097533, "stroke": true, "weight": 2}
-            ).addTo(feature_group_543a205c22c78a4dc5449b68834d0d05);
-        
-    
-        var popup_c51e5d1950bcdeb4a79042324e80600e = L.popup({
+        var popup_fe8c9e7b8979af565060c81daa46a988 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_060f214dc806c9f1b4498ce9df95199e = $(`<div id="html_060f214dc806c9f1b4498ce9df95199e" style="width: 100.0%; height: 100.0%;"><b>UCH (University College)</b><br>Level 3 | North<br>Level 3 — NICU: <b>63,093</b> postcodes</div>`)[0];
-                popup_c51e5d1950bcdeb4a79042324e80600e.setContent(html_060f214dc806c9f1b4498ce9df95199e);
+                var html_4c091dba6123b80c9ce6bbfe46ec2c4e = $(`<div id="html_4c091dba6123b80c9ce6bbfe46ec2c4e" style="width: 100.0%; height: 100.0%;"><b>North Middlesex</b><br>Level 2 | North<br>Level 2 — High Dependency: <b>15,266</b> postcodes</div>`)[0];
+                popup_fe8c9e7b8979af565060c81daa46a988.setContent(html_4c091dba6123b80c9ce6bbfe46ec2c4e);
             
         
 
-        circle_marker_73967db4893a560b5f23fc4b11836935.bindPopup(popup_c51e5d1950bcdeb4a79042324e80600e)
+        circle_marker_ef515b11bd991bf24677feac6870a445.bindPopup(popup_fe8c9e7b8979af565060c81daa46a988)
         ;
 
         
     
     
-            circle_marker_73967db4893a560b5f23fc4b11836935.bindTooltip(
+            circle_marker_ef515b11bd991bf24677feac6870a445.bindTooltip(
+                `<div>
+                     North Middlesex: 15,266 postcodes (Level 2 — High Dependency)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var feature_group_7b584969c5db7aa0b76677143d0ed8ed = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_c682ed77cf3b3241d6d8358b793e11bb = L.circleMarker(
+                [51.5248, -0.1352],
+                {"bubblingMouseEvents": true, "color": "#8b1cc8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8b1cc8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 43.80608776097533, "stroke": true, "weight": 2}
+            ).addTo(feature_group_7b584969c5db7aa0b76677143d0ed8ed);
+        
+    
+        var popup_00fece4f3f143b3cad043dd25994987a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0ead6357c3d95aec375723680958aafa = $(`<div id="html_0ead6357c3d95aec375723680958aafa" style="width: 100.0%; height: 100.0%;"><b>UCH (University College)</b><br>Level 3 | North<br>Level 3 — NICU: <b>63,093</b> postcodes</div>`)[0];
+                popup_00fece4f3f143b3cad043dd25994987a.setContent(html_0ead6357c3d95aec375723680958aafa);
+            
+        
+
+        circle_marker_c682ed77cf3b3241d6d8358b793e11bb.bindPopup(popup_00fece4f3f143b3cad043dd25994987a)
+        ;
+
+        
+    
+    
+            circle_marker_c682ed77cf3b3241d6d8358b793e11bb.bindTooltip(
                 `<div>
                      UCH (University College): 63,093 postcodes (Level 3 — NICU)
                  </div>`,
@@ -1932,30 +1932,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_979c0cc44dfd948f4e4c956522766417 = L.circleMarker(
+            var circle_marker_661107316c0975d0b4684d2a88233862 = L.circleMarker(
                 [51.5185, -0.0594],
                 {"bubblingMouseEvents": true, "color": "#6a1cc8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#6a1cc8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 24.325997548221565, "stroke": true, "weight": 2}
-            ).addTo(feature_group_543a205c22c78a4dc5449b68834d0d05);
+            ).addTo(feature_group_7b584969c5db7aa0b76677143d0ed8ed);
         
     
-        var popup_7a039cb445f8d38ae1b52c464670e1d9 = L.popup({
+        var popup_5460d73d68df3b41e97425d220bc977a = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_4143f64e354fc05d1bab2e31f0ce26a4 = $(`<div id="html_4143f64e354fc05d1bab2e31f0ce26a4" style="width: 100.0%; height: 100.0%;"><b>The Royal London</b><br>Level 3 | North<br>Level 3 — NICU: <b>19,456</b> postcodes</div>`)[0];
-                popup_7a039cb445f8d38ae1b52c464670e1d9.setContent(html_4143f64e354fc05d1bab2e31f0ce26a4);
+                var html_095c361a90cc09b956a81ae4fab4412f = $(`<div id="html_095c361a90cc09b956a81ae4fab4412f" style="width: 100.0%; height: 100.0%;"><b>The Royal London</b><br>Level 3 | North<br>Level 3 — NICU: <b>19,456</b> postcodes</div>`)[0];
+                popup_5460d73d68df3b41e97425d220bc977a.setContent(html_095c361a90cc09b956a81ae4fab4412f);
             
         
 
-        circle_marker_979c0cc44dfd948f4e4c956522766417.bindPopup(popup_7a039cb445f8d38ae1b52c464670e1d9)
+        circle_marker_661107316c0975d0b4684d2a88233862.bindPopup(popup_5460d73d68df3b41e97425d220bc977a)
         ;
 
         
     
     
-            circle_marker_979c0cc44dfd948f4e4c956522766417.bindTooltip(
+            circle_marker_661107316c0975d0b4684d2a88233862.bindTooltip(
                 `<div>
                      The Royal London: 19,456 postcodes (Level 3 — NICU)
                  </div>`,
@@ -1965,30 +1965,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_e700d2d6ae84443ea1d698a5b134cc25 = L.circleMarker(
+            var circle_marker_7113e37df6bfe43a0cdb47ea60d26b67 = L.circleMarker(
                 [51.5508, -0.0462],
                 {"bubblingMouseEvents": true, "color": "#6ac81c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#6ac81c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 41.488994718332236, "stroke": true, "weight": 2}
-            ).addTo(feature_group_543a205c22c78a4dc5449b68834d0d05);
+            ).addTo(feature_group_7b584969c5db7aa0b76677143d0ed8ed);
         
     
-        var popup_89f4332392c0df141b8c8bbae67013a1 = L.popup({
+        var popup_93498b6b1e54114f1435eea12e6972b8 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_4bef4f69319b4e622f2be61dad20b889 = $(`<div id="html_4bef4f69319b4e622f2be61dad20b889" style="width: 100.0%; height: 100.0%;"><b>Homerton University</b><br>Level 3 | North<br>Level 3 — NICU: <b>56,595</b> postcodes</div>`)[0];
-                popup_89f4332392c0df141b8c8bbae67013a1.setContent(html_4bef4f69319b4e622f2be61dad20b889);
+                var html_7d0cd9cb090932ec285cb64a18d8d9fa = $(`<div id="html_7d0cd9cb090932ec285cb64a18d8d9fa" style="width: 100.0%; height: 100.0%;"><b>Homerton University</b><br>Level 3 | North<br>Level 3 — NICU: <b>56,595</b> postcodes</div>`)[0];
+                popup_93498b6b1e54114f1435eea12e6972b8.setContent(html_7d0cd9cb090932ec285cb64a18d8d9fa);
             
         
 
-        circle_marker_e700d2d6ae84443ea1d698a5b134cc25.bindPopup(popup_89f4332392c0df141b8c8bbae67013a1)
+        circle_marker_7113e37df6bfe43a0cdb47ea60d26b67.bindPopup(popup_93498b6b1e54114f1435eea12e6972b8)
         ;
 
         
     
     
-            circle_marker_e700d2d6ae84443ea1d698a5b134cc25.bindTooltip(
+            circle_marker_7113e37df6bfe43a0cdb47ea60d26b67.bindTooltip(
                 `<div>
                      Homerton University: 56,595 postcodes (Level 3 — NICU)
                  </div>`,
@@ -1998,30 +1998,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_ffad45e4aacfd1ea9c937e1f07cab3ee = L.circleMarker(
+            var circle_marker_3758c2c06ed133c6610c926c274414ff = L.circleMarker(
                 [51.4849, -0.1824],
                 {"bubblingMouseEvents": true, "color": "#c83e1c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c83e1c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 21.06981911455195, "stroke": true, "weight": 2}
-            ).addTo(feature_group_543a205c22c78a4dc5449b68834d0d05);
+            ).addTo(feature_group_7b584969c5db7aa0b76677143d0ed8ed);
         
     
-        var popup_8e8f6ed1841349c64598f7470c38fde6 = L.popup({
+        var popup_5e79061ced206f5127bf87b3770e7d79 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_71b3e31d2942634d1630c0c15740ebc2 = $(`<div id="html_71b3e31d2942634d1630c0c15740ebc2" style="width: 100.0%; height: 100.0%;"><b>Chelsea & Westminster</b><br>Level 3 | North<br>Level 3 — NICU: <b>14,596</b> postcodes</div>`)[0];
-                popup_8e8f6ed1841349c64598f7470c38fde6.setContent(html_71b3e31d2942634d1630c0c15740ebc2);
+                var html_802184359760de761f0610b6493a8182 = $(`<div id="html_802184359760de761f0610b6493a8182" style="width: 100.0%; height: 100.0%;"><b>Chelsea & Westminster</b><br>Level 3 | North<br>Level 3 — NICU: <b>14,596</b> postcodes</div>`)[0];
+                popup_5e79061ced206f5127bf87b3770e7d79.setContent(html_802184359760de761f0610b6493a8182);
             
         
 
-        circle_marker_ffad45e4aacfd1ea9c937e1f07cab3ee.bindPopup(popup_8e8f6ed1841349c64598f7470c38fde6)
+        circle_marker_3758c2c06ed133c6610c926c274414ff.bindPopup(popup_5e79061ced206f5127bf87b3770e7d79)
         ;
 
         
     
     
-            circle_marker_ffad45e4aacfd1ea9c937e1f07cab3ee.bindTooltip(
+            circle_marker_3758c2c06ed133c6610c926c274414ff.bindTooltip(
                 `<div>
                      Chelsea & Westminster: 14,596 postcodes (Level 3 — NICU)
                  </div>`,
@@ -2031,30 +2031,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_723de91265e09be801d6c03b633f748d = L.circleMarker(
+            var circle_marker_be5b16a13d9a02b4ddf66677adc77568 = L.circleMarker(
                 [51.517, -0.23632],
                 {"bubblingMouseEvents": true, "color": "#1cc8b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1cc8b8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45.0, "stroke": true, "weight": 2}
-            ).addTo(feature_group_543a205c22c78a4dc5449b68834d0d05);
+            ).addTo(feature_group_7b584969c5db7aa0b76677143d0ed8ed);
         
     
-        var popup_e174ee201427fed0519fbe952f7e9e83 = L.popup({
+        var popup_260ffc54f4ae28c824078c6a662fe609 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_f5d986413d36c48cb41c39a747d31cd5 = $(`<div id="html_f5d986413d36c48cb41c39a747d31cd5" style="width: 100.0%; height: 100.0%;"><b>Queen Charlottes'</b><br>Level 3 | North<br>Level 3 — NICU: <b>66,579</b> postcodes</div>`)[0];
-                popup_e174ee201427fed0519fbe952f7e9e83.setContent(html_f5d986413d36c48cb41c39a747d31cd5);
+                var html_7855dc6102e170e69f8b1f7f37e08afa = $(`<div id="html_7855dc6102e170e69f8b1f7f37e08afa" style="width: 100.0%; height: 100.0%;"><b>Queen Charlottes'</b><br>Level 3 | North<br>Level 3 — NICU: <b>66,579</b> postcodes</div>`)[0];
+                popup_260ffc54f4ae28c824078c6a662fe609.setContent(html_7855dc6102e170e69f8b1f7f37e08afa);
             
         
 
-        circle_marker_723de91265e09be801d6c03b633f748d.bindPopup(popup_e174ee201427fed0519fbe952f7e9e83)
+        circle_marker_be5b16a13d9a02b4ddf66677adc77568.bindPopup(popup_260ffc54f4ae28c824078c6a662fe609)
         ;
 
         
     
     
-            circle_marker_723de91265e09be801d6c03b633f748d.bindTooltip(
+            circle_marker_be5b16a13d9a02b4ddf66677adc77568.bindTooltip(
                 `<div>
                      Queen Charlottes': 66,579 postcodes (Level 3 — NICU)
                  </div>`,
@@ -2064,30 +2064,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_b2f0a574d09b2c2e4770876bbfbd02ae = L.circleMarker(
+            var circle_marker_7a388ed76b8432cc132dd0ebb18b041d = L.circleMarker(
                 [51.5003, -0.1189],
                 {"bubblingMouseEvents": true, "color": "#adc81c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#adc81c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.521507049675861, "stroke": true, "weight": 2}
-            ).addTo(feature_group_543a205c22c78a4dc5449b68834d0d05);
+            ).addTo(feature_group_7b584969c5db7aa0b76677143d0ed8ed);
         
     
-        var popup_b67685447bf66caa38bb73fc5c9e552a = L.popup({
+        var popup_3122d09bc979aee9fc8b21eaeaa67252 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_a4c7e77e83f9d328ad128d212e1d6a3d = $(`<div id="html_a4c7e77e83f9d328ad128d212e1d6a3d" style="width: 100.0%; height: 100.0%;"><b>Evelina (St Thomas')</b><br>Level 3 | South<br>Level 3 — NICU: <b>7,921</b> postcodes</div>`)[0];
-                popup_b67685447bf66caa38bb73fc5c9e552a.setContent(html_a4c7e77e83f9d328ad128d212e1d6a3d);
+                var html_911b59003421fd5776c59b49ed9352a3 = $(`<div id="html_911b59003421fd5776c59b49ed9352a3" style="width: 100.0%; height: 100.0%;"><b>Evelina (St Thomas')</b><br>Level 3 | South<br>Level 3 — NICU: <b>7,921</b> postcodes</div>`)[0];
+                popup_3122d09bc979aee9fc8b21eaeaa67252.setContent(html_911b59003421fd5776c59b49ed9352a3);
             
         
 
-        circle_marker_b2f0a574d09b2c2e4770876bbfbd02ae.bindPopup(popup_b67685447bf66caa38bb73fc5c9e552a)
+        circle_marker_7a388ed76b8432cc132dd0ebb18b041d.bindPopup(popup_3122d09bc979aee9fc8b21eaeaa67252)
         ;
 
         
     
     
-            circle_marker_b2f0a574d09b2c2e4770876bbfbd02ae.bindTooltip(
+            circle_marker_7a388ed76b8432cc132dd0ebb18b041d.bindTooltip(
                 `<div>
                      Evelina (St Thomas'): 7,921 postcodes (Level 3 — NICU)
                  </div>`,
@@ -2097,30 +2097,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_6261fcbc2d5c2e36692de099a9afa5d9 = L.circleMarker(
+            var circle_marker_767bacafee112f4907e13dd73f75cee1 = L.circleMarker(
                 [51.4273, -0.1748],
                 {"bubblingMouseEvents": true, "color": "#491cc8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#491cc8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 36.73986268381638, "stroke": true, "weight": 2}
-            ).addTo(feature_group_543a205c22c78a4dc5449b68834d0d05);
+            ).addTo(feature_group_7b584969c5db7aa0b76677143d0ed8ed);
         
     
-        var popup_9d186bf9a182718cdcafee191f455ba9 = L.popup({
+        var popup_74e18dbdeea779672e2c04afe72a039c = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_c86de3629c3d7cffb7398970dbe7d3be = $(`<div id="html_c86de3629c3d7cffb7398970dbe7d3be" style="width: 100.0%; height: 100.0%;"><b>St. Georges Hospital</b><br>Level 3 | South<br>Level 3 — NICU: <b>44,380</b> postcodes</div>`)[0];
-                popup_9d186bf9a182718cdcafee191f455ba9.setContent(html_c86de3629c3d7cffb7398970dbe7d3be);
+                var html_44789345f293d6ad372ccfcb951b4a9f = $(`<div id="html_44789345f293d6ad372ccfcb951b4a9f" style="width: 100.0%; height: 100.0%;"><b>St. Georges Hospital</b><br>Level 3 | South<br>Level 3 — NICU: <b>44,380</b> postcodes</div>`)[0];
+                popup_74e18dbdeea779672e2c04afe72a039c.setContent(html_44789345f293d6ad372ccfcb951b4a9f);
             
         
 
-        circle_marker_6261fcbc2d5c2e36692de099a9afa5d9.bindPopup(popup_9d186bf9a182718cdcafee191f455ba9)
+        circle_marker_767bacafee112f4907e13dd73f75cee1.bindPopup(popup_74e18dbdeea779672e2c04afe72a039c)
         ;
 
         
     
     
-            circle_marker_6261fcbc2d5c2e36692de099a9afa5d9.bindTooltip(
+            circle_marker_767bacafee112f4907e13dd73f75cee1.bindTooltip(
                 `<div>
                      St. Georges Hospital: 44,380 postcodes (Level 3 — NICU)
                  </div>`,
@@ -2130,30 +2130,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_811ba02a94c0c8daeea0163dcde048e1 = L.circleMarker(
+            var circle_marker_ac832e9f0c4f98e3ebb566b5a9f035c4 = L.circleMarker(
                 [51.4683, -0.0919],
                 {"bubblingMouseEvents": true, "color": "#49c81c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#49c81c", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 38.56504733150889, "stroke": true, "weight": 2}
-            ).addTo(feature_group_543a205c22c78a4dc5449b68834d0d05);
+            ).addTo(feature_group_7b584969c5db7aa0b76677143d0ed8ed);
         
     
-        var popup_256bd0ddfcd1ccfcfa4c746d17dd6802 = L.popup({
+        var popup_beeae1eae6ca7a60729429ba8acf1294 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_2465f0c1547fc83734c4af1873f592a8 = $(`<div id="html_2465f0c1547fc83734c4af1873f592a8" style="width: 100.0%; height: 100.0%;"><b>Kings College Hospital</b><br>Level 3 | South<br>Level 3 — NICU: <b>48,899</b> postcodes</div>`)[0];
-                popup_256bd0ddfcd1ccfcfa4c746d17dd6802.setContent(html_2465f0c1547fc83734c4af1873f592a8);
+                var html_2774ca40b3d76a0dc281593e79ab333e = $(`<div id="html_2774ca40b3d76a0dc281593e79ab333e" style="width: 100.0%; height: 100.0%;"><b>Kings College Hospital</b><br>Level 3 | South<br>Level 3 — NICU: <b>48,899</b> postcodes</div>`)[0];
+                popup_beeae1eae6ca7a60729429ba8acf1294.setContent(html_2774ca40b3d76a0dc281593e79ab333e);
             
         
 
-        circle_marker_811ba02a94c0c8daeea0163dcde048e1.bindPopup(popup_256bd0ddfcd1ccfcfa4c746d17dd6802)
+        circle_marker_ac832e9f0c4f98e3ebb566b5a9f035c4.bindPopup(popup_beeae1eae6ca7a60729429ba8acf1294)
         ;
 
         
     
     
-            circle_marker_811ba02a94c0c8daeea0163dcde048e1.bindTooltip(
+            circle_marker_ac832e9f0c4f98e3ebb566b5a9f035c4.bindTooltip(
                 `<div>
                      Kings College Hospital: 48,899 postcodes (Level 3 — NICU)
                  </div>`,
@@ -2163,30 +2163,30 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var circle_marker_bc97535f64c12b51c149f82b5bcf27f9 = L.circleMarker(
+            var circle_marker_ce3211ce47ed0b1ff444a4bef4cd7711 = L.circleMarker(
                 [51.3773, -0.526],
                 {"bubblingMouseEvents": true, "color": "#271cc8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#271cc8", "fillOpacity": 0.45, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.949828655777736, "stroke": true, "weight": 2}
-            ).addTo(feature_group_543a205c22c78a4dc5449b68834d0d05);
+            ).addTo(feature_group_7b584969c5db7aa0b76677143d0ed8ed);
         
     
-        var popup_cd7d71401b91d1c019e9751d7f081cb5 = L.popup({
+        var popup_60ce4eb6ac53f2cd1d2aa19ddaf5477f = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_45fe3e818f86b17f51fc24531a80daa5 = $(`<div id="html_45fe3e818f86b17f51fc24531a80daa5" style="width: 100.0%; height: 100.0%;"><b>St Peters Hospital</b><br>Level 3 | Both<br>Level 3 — NICU: <b>4,695</b> postcodes</div>`)[0];
-                popup_cd7d71401b91d1c019e9751d7f081cb5.setContent(html_45fe3e818f86b17f51fc24531a80daa5);
+                var html_fb594047b00f920ba3672b465f6b611e = $(`<div id="html_fb594047b00f920ba3672b465f6b611e" style="width: 100.0%; height: 100.0%;"><b>St Peters Hospital</b><br>Level 3 | Both<br>Level 3 — NICU: <b>4,695</b> postcodes</div>`)[0];
+                popup_60ce4eb6ac53f2cd1d2aa19ddaf5477f.setContent(html_fb594047b00f920ba3672b465f6b611e);
             
         
 
-        circle_marker_bc97535f64c12b51c149f82b5bcf27f9.bindPopup(popup_cd7d71401b91d1c019e9751d7f081cb5)
+        circle_marker_ce3211ce47ed0b1ff444a4bef4cd7711.bindPopup(popup_60ce4eb6ac53f2cd1d2aa19ddaf5477f)
         ;
 
         
     
     
-            circle_marker_bc97535f64c12b51c149f82b5bcf27f9.bindTooltip(
+            circle_marker_ce3211ce47ed0b1ff444a4bef4cd7711.bindTooltip(
                 `<div>
                      St Peters Hospital: 4,695 postcodes (Level 3 — NICU)
                  </div>`,
@@ -2196,26 +2196,26 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         
     
-            var layer_control_42ac998ce988482e241f90d57c5c55c4_layers = {
+            var layer_control_445c68430103f3c1af2569357af8a990_layers = {
                 base_layers : {
-                    "Base Map" : tile_layer_393210039022f6ce5e4c99724c3c89cd,
+                    "Base Map" : tile_layer_01428154615ee87d60c94eedd92f7780,
                 },
                 overlays :  {
-                    "Any Level" : feature_group_f5647f5ed386d90342cb7daa058139ac,
-                    "Level 1 \u2014 Special Care" : feature_group_a81648ce800fcb36e5f507780f43d498,
-                    "Level 2 \u2014 High Dependency" : feature_group_a33bf587aabf9e961c323ffecbe4cbb2,
-                    "Level 3 \u2014 NICU" : feature_group_543a205c22c78a4dc5449b68834d0d05,
+                    "Any Level" : feature_group_ba89c9f6b47ea7f2e57c865c809a4e6a,
+                    "Level 1 \u2014 Special Care" : feature_group_e4777e14eb14c96f7191ec0abe5cefc9,
+                    "Level 2 \u2014 High Dependency" : feature_group_0dc3a127e23a8fe3f0436d46ea2ceac0,
+                    "Level 3 \u2014 NICU" : feature_group_7b584969c5db7aa0b76677143d0ed8ed,
                 },
             };
-            let layer_control_42ac998ce988482e241f90d57c5c55c4 = L.control.layers(
-                layer_control_42ac998ce988482e241f90d57c5c55c4_layers.base_layers,
-                layer_control_42ac998ce988482e241f90d57c5c55c4_layers.overlays,
+            let layer_control_445c68430103f3c1af2569357af8a990 = L.control.layers(
+                layer_control_445c68430103f3c1af2569357af8a990_layers.base_layers,
+                layer_control_445c68430103f3c1af2569357af8a990_layers.overlays,
                 {
   "position": "topright",
   "collapsed": false,
   "autoZIndex": true,
 }
-            ).addTo(map_ab0998d23f1b16e85f6836835e9a19b7);
+            ).addTo(map_a5803c7149b96428232850176b914ef4);
 
         
 </script>
