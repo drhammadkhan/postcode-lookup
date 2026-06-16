@@ -281,9 +281,9 @@ The map plots every 5th postcode (1-in-5 sample) to keep the file size manageabl
 
 ---
 
-## Stage 5: Catchment Population & Births Analysis
+## Stage 5: Catchment Analysis
 
-Two scripts estimate how many people and births fall within each hospital's catchment area, using two independent methodologies.
+The public site includes outcode and equalised catchment analysis. The former full-postcode population/births page is preserved in the companion repository `postcode-lookup-catchments`.
 
 ### Methodology A — Full-postcode routing
 
@@ -302,10 +302,10 @@ pop = df.groupby('Postcode')['Count'].sum()   # sums Male + Female
 
 The workbook sheet named `"Table 4"` contains births by postcode *sector* (e.g. `TW7 6`). Column index 0 holds the sector string; column index 3 holds `"Total births"` (3-year combined 2016–2018). Sectors are matched to outward codes by normalising the sector string and checking if it begins with `{outcode} `.
 
-**Outputs**
+**Archived outputs in the companion repository**
 - `docs/populations.json` — `[{"hospital": "...", "population": 123456, "l1": ..., "l2": ..., "l3": ...}, ...]`
 - `docs/births.json` — same structure with `births` instead of `population`
-- Visualised at `/population.html` (Population + Births tabs, with L1/L2/L3 breakdowns)
+- `docs/population.html` — Population + Births tabs, with L1/L2/L3 breakdowns
 
 ---
 
@@ -395,9 +395,9 @@ hospitals_refined.csv ──→ profile=analysis ──→ Filter side/level ─
                               │                                         │
                   calculate_catchment_*.py         calculate_outcode_catchment.py
                               │                                         │
-                  docs/populations.json            docs/outcode_populations.json
-                  docs/births.json                 docs/outcode_births.json
-                  docs/population.html             docs/outcode_population.html
+                  companion repo                   docs/outcode_populations.json
+                                                   docs/outcode_births.json
+                                                   docs/outcode_population.html
 ```
 
 | Step | Method | Purpose |

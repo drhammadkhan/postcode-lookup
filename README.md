@@ -108,7 +108,7 @@ A Flask-based frontend (`app.py`) provides a local web interface at `http://127.
 - **Postcode search** — enter any London postcode to see the nearest neonatal unit at each level, with distances and an interactive map.
 - **Embedded catchment map** — the generated map is viewable directly within the app.
 - **Hospital API** — a `/hospitals` endpoint returning all hospitals as JSON.
-- **Catchment data pages** — links to population and births analysis pages (see below).
+- **Catchment data pages** — links to outcode and equalised catchment pages (see below).
 
 ### 6. Static site (GitHub Pages)
 
@@ -116,20 +116,11 @@ A fully client-side version lives in the `docs/` folder and is published via Git
 
 The script `build_static.py` compresses the output into two compact JSON files (`docs/postcodes.json` and `docs/hospitals.json`) which `docs/index.html` loads and searches entirely in the browser — no server required.
 
-### 7. Catchment population & births analysis
+### 7. Catchment analysis
 
-Two complementary analyses estimate how many people and births each hospital's catchment area covers, using two different routing methodologies.
+The public site keeps the postcode lookup, supplementary maps, outcode catchment view and equalised catchment view. The former full-postcode population/births page now lives in the companion repository: **https://github.com/drhammadkhan/postcode-lookup-catchments**.
 
-#### Methodology A — Full-postcode routing
-
-Each postcode is assigned to the nearest hospital (from `output/analysis/All_Postcodes.csv`). ONS Census 2021 residential population (`pcd_p001.csv`) and 2016–2018 birth registration data (`birthsbypcdfinal.xlsx`) are aggregated directly to each hospital.
-
-Scripts:
-- `calculate_catchment_populations.py` → `docs/populations.json`, `output/Catchment_Populations.csv`
-- `calculate_catchment_births.py` → `docs/births.json`, `output/Catchment_Births.csv`
-- Results visualised at `/population.html` (Population and Births tabs, with L1/L2/L3 breakdowns)
-
-#### Methodology B — Outcode routing
+#### Outcode routing
 
 Outward codes (e.g. `TW7`, `BR1`) are mapped to a set of candidate hospitals drawn from a clinical routing guide. Where an outcode maps to multiple hospitals, the postcode count from `output/analysis/All_Postcodes.csv` is used to weight the population/births split proportionally.
 
@@ -207,17 +198,7 @@ The lookup profile keeps all hospitals needed for the public postcode lookup. Th
 6. **Open the map directly (optional)**
    - Open `neonatal_catchment_map.html` in your browser
 
-7. **Generate full-postcode catchment data (population & births)**
-   ```
-   python3 calculate_catchment_populations.py
-   python3 calculate_catchment_births.py
-   ```
-   - Outputs:
-     - `docs/populations.json`, `docs/births.json`
-     - CSVs in `output/`
-   - View at `http://127.0.0.1:5001/population.html`
-
-8. **Generate outcode catchment data**
+7. **Generate outcode catchment data**
    ```
    python3 extract_outcode_json.py      # only needed if Outcode approach.html changes
    python3 calculate_outcode_catchment.py

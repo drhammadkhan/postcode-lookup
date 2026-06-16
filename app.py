@@ -51,21 +51,6 @@ def hospitals_json():
     return send_from_directory(DOCS_DIR, 'hospitals.json')
 
 
-@app.route('/population.html')
-def population_page():
-    return send_from_directory(DOCS_DIR, 'population.html')
-
-
-@app.route('/populations.json')
-def populations_json():
-    return send_from_directory(DOCS_DIR, 'populations.json')
-
-
-@app.route('/births.json')
-def births_json():
-    return send_from_directory(DOCS_DIR, 'births.json')
-
-
 @app.route('/outcode_population.html')
 def outcode_population_page():
     return send_from_directory(DOCS_DIR, 'outcode_population.html')
