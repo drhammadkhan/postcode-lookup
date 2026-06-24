@@ -55,9 +55,11 @@
         .search-row { display: flex; gap: 10px; align-items: stretch; }
         .search-input-wrap { flex: 1; position: relative; }
         .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-soft); pointer-events: none; }
-        .search-input-wrap input { width: 100%; font-size: 1.05rem; font-family: 'Fredoka', sans-serif; font-weight: 400; padding: 11px 14px 11px 42px; border: 2px solid var(--border); border-radius: 10px; outline: none; color: var(--text); background: white; transition: border-color 0.18s, box-shadow 0.18s; }
+        .search-input-wrap input { width: 100%; font-size: 1.05rem; font-family: 'Fredoka', sans-serif; font-weight: 400; padding: 11px 38px 11px 42px; border: 2px solid var(--border); border-radius: 10px; outline: none; color: var(--text); background: white; transition: border-color 0.18s, box-shadow 0.18s; }
         .search-input-wrap input::placeholder { color: var(--text-soft); }
         .search-input-wrap input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(102,188,162,0.15); }
+        .clear-btn { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-soft); display: none; padding: 3px; line-height: 0; border-radius: 50%; transition: color 0.15s, background 0.15s; }
+        .clear-btn:hover { color: var(--text); background: var(--bg); }
         .search-btn { background: var(--orange); color: white; border: none; padding: 11px 22px; border-radius: 10px; font-size: 1rem; font-weight: 600; font-family: 'Fredoka', sans-serif; cursor: pointer; transition: background 0.18s, transform 0.12s; display: flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(210,113,42,0.3); }
         .search-btn:hover { background: #b85e20; }
         .search-btn:active { transform: scale(0.98); }
@@ -309,6 +311,9 @@
                 <div class="search-input-wrap">
                     <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     <input type="text" id="postcodeInput" placeholder="e.g. SW1A 2AA or TW7 6QT" />
+                    <button type="button" class="clear-btn" id="clearBtn" aria-label="Clear postcode" tabindex="-1">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
                 </div>
                 <button type="submit" class="search-btn" id="searchBtn">
                     Find hospitals
@@ -554,6 +559,19 @@
         setTimeout(() => { document.getElementById('catchment-loading').style.display = 'none'; }, 400);
         catchmentLoaded = true;
     }
+
+    const postcodeInput = document.getElementById('postcodeInput');
+    const clearBtn = document.getElementById('clearBtn');
+    postcodeInput.addEventListener('input', () => {
+        clearBtn.style.display = postcodeInput.value ? 'block' : 'none';
+    });
+    clearBtn.addEventListener('click', () => {
+        postcodeInput.value = '';
+        clearBtn.style.display = 'none';
+        document.getElementById('error').style.display = 'none';
+        document.getElementById('results').style.display = 'none';
+        postcodeInput.focus();
+    });
 
     document.getElementById('searchForm').addEventListener('submit', (e) => {
         e.preventDefault();
