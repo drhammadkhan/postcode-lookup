@@ -3,475 +3,479 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neonatal Unit Lookup</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>HO.ME &#8211; Hospital Near Me (Neonatal)</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f0f4f8;
-            color: #1a202c;
-            min-height: 100vh;
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --blue:        #1855A3;
+            --blue-dark:   #0F3D7A;
+            --blue-light:  #EBF3FF;
+            --blue-mid:    #2D74CC;
+            --pink:        #D9197A;
+            --bg:          #F4F7FC;
+            --surface:     #FFFFFF;
+            --border:      #E2E8F2;
+            --text:        #1A2340;
+            --text-mid:    #4A5577;
+            --text-soft:   #8A95B0;
+            --green:       #16A34A;
+            --green-light: #F0FDF4;
+            --amber:       #D97706;
+            --amber-light: #FFFBEB;
+            --red:         #DC2626;
+            --red-light:   #FFF5F5;
+            --radius:      14px;
+            --shadow:      0 2px 16px rgba(24,85,163,0.08);
+            --shadow-lg:   0 8px 32px rgba(24,85,163,0.14);
         }
-
-        header {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2d6a9f 100%);
-            color: white;
-            padding: 2rem;
-            text-align: center;
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: var(--surface); border-bottom: 1px solid var(--border); }
+        .header-inner { max-width: 1040px; margin: 0 auto; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+        .header-brand { display: flex; flex-direction: column; gap: 0.15rem; }
+        .header-title-row { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+        .brand-home { font-size: 2rem; font-weight: 900; color: var(--blue); letter-spacing: -0.04em; line-height: 1; }
+        .brand-sep { font-size: 1.5rem; font-weight: 300; color: var(--text-soft); }
+        .brand-full { font-size: 1.25rem; font-weight: 700; color: var(--blue); letter-spacing: -0.02em; }
+        .brand-tagline { font-size: 0.875rem; color: var(--text-mid); font-weight: 400; margin-top: 0.1rem; }
+        .header-logo { display: flex; align-items: center; flex-shrink: 0; }
+        main { flex: 1; }
+        .container { max-width: 1040px; margin: 0 auto; padding: 2rem 1.5rem; }
+        .tabs { display: flex; gap: 4px; margin-bottom: 1.5rem; background: var(--surface); border-radius: var(--radius); padding: 5px; box-shadow: var(--shadow); width: fit-content; }
+        .tab { padding: 0.6rem 1.25rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--text-mid); border-radius: 10px; transition: all 0.18s ease; font-family: inherit; display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+        .tab:hover { color: var(--blue); background: var(--blue-light); }
+        .tab.active { background: var(--blue); color: #fff; box-shadow: 0 2px 8px rgba(24,85,163,0.3); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .search-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.75rem 2rem; margin-bottom: 1.25rem; }
+        .search-label { font-size: 0.8rem; font-weight: 600; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.75rem; }
+        .search-row { display: flex; gap: 0.75rem; align-items: stretch; }
+        .search-input-wrap { flex: 1; position: relative; }
+        .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-soft); pointer-events: none; }
+        .search-input-wrap input { width: 100%; font-size: 1.1rem; font-family: inherit; font-weight: 500; padding: 0.85rem 1rem 0.85rem 2.85rem; border: 2px solid var(--border); border-radius: 10px; outline: none; color: var(--text); background: var(--bg); transition: border-color 0.18s, box-shadow 0.18s; }
+        .search-input-wrap input::placeholder { color: var(--text-soft); font-weight: 400; }
+        .search-input-wrap input:focus { border-color: var(--blue); background: #fff; box-shadow: 0 0 0 3px rgba(24,85,163,0.12); }
+        .search-btn { background: var(--blue); color: white; border: none; padding: 0.85rem 1.75rem; border-radius: 10px; font-size: 1rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: background 0.18s, transform 0.12s, box-shadow 0.18s; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; box-shadow: 0 2px 8px rgba(24,85,163,0.25); }
+        .search-btn:hover { background: var(--blue-dark); box-shadow: 0 4px 14px rgba(24,85,163,0.35); }
+        .search-btn:active { transform: scale(0.98); }
+        .search-btn:disabled { background: #a0aec0; box-shadow: none; cursor: not-allowed; }
+        .loading-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.75rem 2rem; color: var(--text-mid); font-size: 0.95rem; font-weight: 500; }
+        .loading-msg { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.85rem; }
+        .loading-spinner { width: 18px; height: 18px; border: 2.5px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.65s linear infinite; flex-shrink: 0; }
+        .progress-track { height: 5px; background: var(--bg); border-radius: 99px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue-mid), var(--blue)); border-radius: 99px; width: 0%; transition: width 0.35s ease; }
+        .error-bar { background: #FFF0F0; color: #B91C1C; border: 1px solid #FECACA; border-radius: 10px; padding: 0.85rem 1.25rem; margin-top: 1rem; font-size: 0.9rem; font-weight: 500; display: none; align-items: center; gap: 0.5rem; }
+        #results { display: none; }
+        .result-meta { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.25rem 1.75rem; display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .result-meta-left { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+        .result-postcode { font-size: 1.5rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+        .side-pill { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.3rem 0.85rem; border-radius: 99px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; }
+        .side-north { background: var(--blue-light); color: var(--blue); }
+        .side-south { background: #FFFBE6; color: #92400E; }
+        .result-hint { font-size: 0.82rem; color: var(--text-soft); }
+        .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.85rem; margin-bottom: 1rem; }
+        .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.25rem 1.25rem 1.1rem; border-top: 4px solid var(--blue); transition: transform 0.15s, box-shadow 0.15s; }
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .card.level-any { border-top-color: var(--blue); }
+        .card.level-l1  { border-top-color: var(--green); }
+        .card.level-l2  { border-top-color: var(--amber); }
+        .card.level-l3  { border-top-color: var(--red); }
+        .card-level-badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; padding: 0.25rem 0.6rem; border-radius: 99px; margin-bottom: 0.85rem; }
+        .card.level-any .card-level-badge { background: var(--blue-light); color: var(--blue); }
+        .card.level-l1  .card-level-badge { background: var(--green-light); color: var(--green); }
+        .card.level-l2  .card-level-badge { background: var(--amber-light); color: var(--amber); }
+        .card.level-l3  .card-level-badge { background: var(--red-light); color: var(--red); }
+        .card-hospital { font-size: 0.975rem; font-weight: 700; color: var(--text); line-height: 1.3; margin-bottom: 0.45rem; }
+        .card-distance { font-size: 0.85rem; color: var(--text-mid); font-weight: 500; display: flex; align-items: center; gap: 0.3rem; }
+        .card-tags { margin-top: 0.65rem; display: flex; flex-wrap: wrap; gap: 4px; }
+        .tag { display: inline-block; background: #FEE2E2; color: #991B1B; font-size: 0.67rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; letter-spacing: 0.03em; }
+        #map-container { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 0.5rem; }
+        #map { height: 380px; width: 100%; }
+        #catchment-map { height: calc(100vh - 145px); width: 100%; border: none; border-radius: 0; }
+        #catchment-map .leaflet-control-layers { max-height: calc(100vh - 200px); overflow-y: auto; }
+        .spinner { display: none; width: 20px; height: 20px; border: 2.5px solid rgba(255,255,255,0.35); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        footer { background: var(--surface); border-top: 1px solid var(--border); padding: 1.1rem 1.5rem; text-align: center; color: var(--text-soft); font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+        footer a { color: var(--blue); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.3rem; transition: color 0.15s; }
+        footer a:hover { color: var(--blue-dark); }
+        footer .footer-sep { color: var(--border); }
+        @media (max-width: 800px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) {
+            .header-inner { flex-wrap: wrap; gap: 0.75rem; }
+            .brand-home { font-size: 1.6rem; } .brand-full { font-size: 1rem; }
+            .search-row { flex-direction: column; }
+            .tabs { width: 100%; } .tab { flex: 1; justify-content: center; }
         }
-
-        header h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.3rem;
-        }
-
-        header p {
-            font-size: 0.95rem;
-            opacity: 0.85;
-        }
-
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 0;
-            margin-bottom: 1.5rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 1rem;
-            text-align: center;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            background: white;
-            color: #718096;
-            transition: all 0.2s;
-            border-bottom: 3px solid transparent;
-        }
-
-        .tab:hover {
-            color: #2d6a9f;
-            background: #f7fafc;
-        }
-
-        .tab.active {
-            color: #2d6a9f;
-            border-bottom-color: #2d6a9f;
-            background: #ebf8ff;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Catchment iframe */
-        #catchment-iframe {
-            width: 100vw;
-            height: calc(100vh - 180px);
-            border: none;
-            margin-left: calc(-50vw + 50%);
-        }
-
-        /* Search */
-        .search-box {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            padding: 1.5rem 2rem;
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        .search-box input {
-            flex: 1;
-            font-size: 1.1rem;
-            padding: 0.75rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .search-box input:focus {
-            border-color: #2d6a9f;
-        }
-
-        .search-box button {
-            background: #2d6a9f;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-
-        .search-box button:hover {
-            background: #1e3a5f;
-        }
-
-        /* Error */
-        .error {
-            background: #fff5f5;
-            color: #c53030;
-            border: 1px solid #feb2b2;
-            border-radius: 8px;
-            padding: 1rem 1.25rem;
-            margin-top: 1.5rem;
-            display: none;
-        }
-
-        /* Results */
-        #results {
-            display: none;
-            margin-top: 1.5rem;
-        }
-
-        .result-header {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            padding: 1.25rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .result-header h2 {
-            font-size: 1.4rem;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .badge-north {
-            background: #ebf8ff;
-            color: #2b6cb0;
-        }
-
-        .badge-south {
-            background: #fefcbf;
-            color: #975a16;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            padding: 1.25rem;
-            border-left: 4px solid #2d6a9f;
-            transition: transform 0.15s;
-            cursor: default;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-        }
-
-        .card.level-any  { border-left-color: #2d6a9f; }
-        .card.level-l1   { border-left-color: #38a169; }
-        .card.level-l2   { border-left-color: #d69e2e; }
-        .card.level-l3   { border-left-color: #e53e3e; }
-
-        .card-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #718096;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-hospital {
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-        }
-
-        .card-distance {
-            font-size: 0.9rem;
-            color: #4a5568;
-        }
-
-        .card-tags {
-            margin-top: 0.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-
-        .tag {
-            display: inline-block;
-            background: #fee2e2;
-            color: #991b1b;
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 999px;
-            letter-spacing: 0.02em;
-        }
-
-        /* Map */
-        #map-container {
-            margin-top: 1rem;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-        }
-
-        #map {
-            height: 400px;
-            width: 100%;
-        }
-
-        /* Loading spinner */
-        .spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #e2e8f0;
-            border-top-color: #2d6a9f;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-            margin-left: 0.5rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: #a0aec0;
-            font-size: 0.85rem;
-        }
-
-        @media (max-width: 600px) {
-            .search-box { flex-direction: column; }
-            .search-box button { width: 100%; }
-            .cards { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 400px) { .cards { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>🏥 Neonatal Unit Postcode Lookup</h1>
-    <p>Find the nearest neonatal hospitals for any London postcode</p>
+    <div class="header-inner">
+        <div class="header-brand">
+            <div class="header-title-row">
+                <span class="brand-home">HO.ME V2</span>
+                <span class="brand-sep">&#8211;</span>
+                <span class="brand-full">Hospital Near Me (Neonatal)</span>
+            </div>
+            <div class="brand-tagline">Identify the local neonatal unit for a baby based on postcode</div>
+        </div>
+    </div>
 </header>
 
+<main>
 <div class="container">
+
     <div class="tabs">
-        <button class="tab active" data-tab="lookup" onclick="switchTab('lookup')">🔍 Postcode Lookup</button>
-        <button class="tab" data-tab="catchment" onclick="switchTab('catchment')">🗺️ Catchment Map</button>
+        <button class="tab active" data-tab="lookup" onclick="switchTab('lookup')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Postcode Lookup
+        </button>
+        <button class="tab" data-tab="catchment" onclick="switchTab('catchment')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+            Catchment Map
+        </button>
     </div>
 
     <div class="tab-content active" id="tab-lookup">
-        <form class="search-box" id="searchForm">
-            <input type="text" id="postcodeInput" placeholder="Enter a postcode, e.g. SW1A 2AA" autocomplete="off" />
-            <button type="submit">Search</button>
-            <div class="spinner" id="spinner"></div>
+
+        <div id="loading-state" class="loading-card">
+            <div class="loading-msg">
+                <div class="loading-spinner"></div>
+                <span>Loading 326,000 postcodes&#8230;</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <form class="search-card" id="searchForm" style="display:none;" autocomplete="off">
+            <div class="search-label">Enter a postcode</div>
+            <div class="search-row">
+                <div class="search-input-wrap">
+                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="postcodeInput" placeholder="e.g. SW1A 2AA or TW7 6QT" />
+                </div>
+                <button type="submit" class="search-btn" id="searchBtn">
+                    Find hospitals
+                    <div class="spinner" id="spinner"></div>
+                </button>
+            </div>
         </form>
 
-        <div class="error" id="error"></div>
+        <div class="error-bar" id="error">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="error-text"></span>
+        </div>
 
         <div id="results">
-            <div class="result-header">
-                <h2 id="resultPostcode"></h2>
-                <span class="badge" id="resultSide"></span>
+            <div class="result-meta">
+                <div class="result-meta-left">
+                    <div class="result-postcode" id="resultPostcode"></div>
+                    <span class="side-pill" id="resultSide"></span>
+                </div>
+                <div class="result-hint">Nearest hospital at each care level</div>
             </div>
-
             <div class="cards" id="cards"></div>
-
             <div id="map-container">
                 <div id="map"></div>
             </div>
         </div>
+
     </div>
 
-    <div class="tab-content" id="tab-catchment">
-        <iframe id="catchment-iframe" src=""></iframe>
+</div>
+</main>
+
+<div class="tab-content" id="tab-catchment">
+    <div id="catchment-loading" class="loading-card" style="margin:1.5rem;padding:1.25rem 1.75rem;">
+        <div class="loading-msg">
+            <div class="loading-spinner"></div>
+            <span id="catchment-loading-text">Loading catchment map&#8230;</span>
+        </div>
+        <div class="progress-track" style="margin-top:0.5rem;">
+            <div class="progress-fill" id="barFill" style="width:0%"></div>
+        </div>
     </div>
+    <div id="catchment-map" style="display:none;"></div>
 </div>
 
 <footer>
-    Neonatal Unit Postcode Lookup &middot; Data covers ~326,000 London-area postcodes
-    &nbsp;&middot;&nbsp;
-    <a href="/extra-maps" style="color:#2d6a9f;text-decoration:none;font-weight:600;">🗺️ Extra Maps</a>
-    &nbsp;&middot;&nbsp;
-    <a href="/outcode_population.html" style="color:#2d6a9f;text-decoration:none;font-weight:600;">🗺️ Outcode Catchment</a>
-    &nbsp;&middot;&nbsp;
-    <a href="/equalised_catchment.html" style="color:#2d6a9f;text-decoration:none;font-weight:600;">⚖️ Equalised Catchments</a>
+    <span>HO.ME V2 &nbsp;&middot;&nbsp; ~326,000 London-area postcodes</span>
+    <span class="footer-sep">|</span>
+    <a href="extra_maps.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        Extra Maps
+    </a>
+    <span class="footer-sep">|</span>
+    <span>This application is the work of Erin Coupland and Hammad Khan</span>
 </footer>
 
 <script>
+    let postcodeData = null;
+    let hospitalData = null;
+    let map = null;
+    let markers = [];
     let catchmentLoaded = false;
+    let catchmentMap = null;
+
+    const levelClasses = ['level-any', 'level-l1', 'level-l2', 'level-l3'];
+    const levelColours = ['#1855A3', '#16A34A', '#D97706', '#DC2626'];
+    const levelLabels = ['Any Level', 'Level 1 \u2014 Special Care', 'Level 2 \u2014 High Dependency', 'Level 3 \u2014 NICU'];
+
+    async function loadData() {
+        const fill = document.getElementById('progressFill');
+        fill.style.width = '20%';
+        const [pcRes, hospRes] = await Promise.all([fetch('postcodes.json'), fetch('hospitals.json')]);
+        fill.style.width = '60%';
+        postcodeData = await pcRes.json();
+        fill.style.width = '85%';
+        hospitalData = hospRes.json ? await hospRes.json() : hospRes;
+        fill.style.width = '100%';
+        window.hospCoords = {};
+        hospitalData.forEach(h => {
+            window.hospCoords[h.name] = { lat: h.lat, lon: h.lon, level: h.level, side: h.side, tags: h.tags || '' };
+        });
+        setTimeout(() => {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('searchForm').style.display = 'block';
+        }, 300);
+    }
+
+    loadData();
 
     function switchTab(tabName) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-        document.getElementById(`tab-${tabName}`).classList.add('active');
-
-        if (tabName === 'catchment' && !catchmentLoaded) {
-            document.getElementById('catchment-iframe').src = '/catchment-map-content';
-            catchmentLoaded = true;
-        }
+        document.querySelector('[data-tab="' + tabName + '"]').classList.add('active');
+        document.getElementById('tab-' + tabName).classList.add('active');
+        if (tabName === 'catchment' && !catchmentLoaded) buildCatchmentMap();
     }
 
-    let map = null;
-    let markers = [];
-
-    const levelClasses = ['level-any', 'level-l1', 'level-l2', 'level-l3'];
-    const levelColours = ['#2d6a9f', '#38a169', '#d69e2e', '#e53e3e'];
-
-    document.getElementById('searchForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const pc = document.getElementById('postcodeInput').value.trim();
-        if (!pc) return;
-
-        document.getElementById('error').style.display = 'none';
-        document.getElementById('results').style.display = 'none';
-        document.getElementById('spinner').style.display = 'inline-block';
-
-        try {
-            const res = await fetch(`/search?postcode=${encodeURIComponent(pc)}`);
-            const data = await res.json();
-
-            document.getElementById('spinner').style.display = 'none';
-
-            if (data.error) {
-                document.getElementById('error').textContent = data.error;
-                document.getElementById('error').style.display = 'block';
-                return;
-            }
-
-            // Header
-            document.getElementById('resultPostcode').textContent = data.postcode;
-            const badge = document.getElementById('resultSide');
-            badge.textContent = data.side + ' London';
-            badge.className = 'badge ' + (data.side === 'North' ? 'badge-north' : 'badge-south');
-
-            // Cards
-            const cardsEl = document.getElementById('cards');
-            cardsEl.innerHTML = '';
-            data.levels.forEach((lvl, i) => {
-                const card = document.createElement('div');
-                card.className = `card ${levelClasses[i]}`;
-                let tagsHtml = '';
-                if (lvl.specialty_tags) {
-                    tagsHtml = '<div class="card-tags">' +
-                        lvl.specialty_tags.split(',').map(t =>
-                            `<span class="tag">${t.trim()}</span>`
-                        ).join(' ') + '</div>';
-                }
-                card.innerHTML = `
-                    <div class="card-label">${lvl.label}</div>
-                    <div class="card-hospital">${lvl.hospital}</div>
-                    <div class="card-distance">${lvl.distance_km} km away</div>
-                    ${tagsHtml}
-                `;
-                cardsEl.appendChild(card);
-            });
-
-            // Map
-            document.getElementById('results').style.display = 'block';
-
-            if (map) {
-                map.remove();
-            }
-
-            map = L.map('map').setView([data.lat, data.lon], 12);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-                maxZoom: 19,
-            }).addTo(map);
-
-            // Clear old markers
-            markers = [];
-
-            // Postcode marker
-            const pcMarker = L.circleMarker([data.lat, data.lon], {
-                radius: 8,
-                color: '#1a202c',
-                weight: 2,
-                fillColor: '#fff',
-                fillOpacity: 1,
-            }).addTo(map).bindPopup(`<b>${data.postcode}</b><br>${data.side} London`);
-            markers.push(pcMarker);
-
-            // Hospital markers (deduplicated)
-            const seen = new Set();
-            data.levels.forEach((lvl, i) => {
-                if (!lvl.lat || seen.has(lvl.hospital)) return;
-                seen.add(lvl.hospital);
-
-                const hospMarker = L.circleMarker([lvl.lat, lvl.lon], {
-                    radius: 9,
-                    color: '#1a202c',
-                    weight: 2,
-                    fillColor: levelColours[i],
-                    fillOpacity: 0.9,
-                }).addTo(map).bindPopup(`<b>${lvl.hospital}</b><br>${lvl.distance_km} km`);
-                markers.push(hospMarker);
-
-                // Draw line from postcode to hospital
-                L.polyline([[data.lat, data.lon], [lvl.lat, lvl.lon]], {
-                    color: levelColours[i],
-                    weight: 2,
-                    dashArray: '6,6',
-                    opacity: 0.6,
-                }).addTo(map);
-            });
-
-            // Fit bounds to show all markers
-            const group = L.featureGroup(markers);
-            map.fitBounds(group.getBounds().pad(0.15));
-
-        } catch (err) {
-            document.getElementById('spinner').style.display = 'none';
-            document.getElementById('error').textContent = 'Something went wrong. Please try again.';
-            document.getElementById('error').style.display = 'block';
+    async function buildCatchmentMap() {
+        document.getElementById('catchment-loading').style.display = 'block';
+        while (!postcodeData || !hospitalData) { await new Promise(r => setTimeout(r, 100)); }
+        const mapDiv = document.getElementById('catchment-map');
+        mapDiv.style.display = 'block';
+        catchmentMap = L.map(mapDiv).setView([51.5, -0.1], 10);
+        setTimeout(() => catchmentMap.invalidateSize(), 50);
+        const baseLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '\u00a9 OpenStreetMap contributors \u00a9 CARTO', maxZoom: 19,
+        }).addTo(catchmentMap);
+        const SECTOR_RANGES = {
+            'NC':     { h: [210, 235], s: [80, 90], l: [22, 72] },
+            'NE':     { h: [108, 145], s: [72, 88], l: [20, 68] },
+            'NW':     { h: [268, 308], s: [68, 85], l: [22, 70] },
+            'SE':     { h: [18,  44],  s: [82, 95], l: [28, 70] },
+            'SW':     { h: [328, 354], s: [68, 88], l: [32, 74] },
+            'Border': { h: [22,  40],  s: [45, 60], l: [22, 62] },
+        };
+        const SECTOR_ORDER = ['NC', 'NE', 'NW', 'SE', 'SW', 'Border'];
+        const SECTOR_LABELS = { 'NC': 'North Central', 'NE': 'North East', 'NW': 'North West', 'SE': 'South East', 'SW': 'South West', 'Border': 'Border' };
+        const SECTOR_NORMALISATION = { 'South East': 'SE', 'South West': 'SW' };
+        function normaliseSector(raw) {
+            if (!raw) return 'Border';
+            const norm = SECTOR_NORMALISATION[String(raw).trim()] || String(raw).trim();
+            return SECTOR_RANGES[norm] ? norm : 'Border';
         }
+        function interleavedOrder(n) {
+            const order = []; let lo = 0; let hi = n - 1;
+            while (lo <= hi) { order.push(lo++); if (lo <= hi) order.push(hi--); }
+            return order;
+        }
+        function interpolate(start, end, t) { return Math.round(start + t * (end - start)); }
+        const names = postcodeData.names;
+        const catchmentMeta = postcodeData.catchment || {};
+        const precomputedPoints = Array.isArray(catchmentMeta.points) ? catchmentMeta.points : null;
+        const sampleRate = Number.isInteger(catchmentMeta.sample_rate) ? catchmentMeta.sample_rate : 10;
+        const hospitalSectorMap = {};
+        hospitalData.forEach(h => { hospitalSectorMap[h.name] = normaliseSector(h.sector); });
+        const sectorHosps = {};
+        SECTOR_ORDER.forEach(s => { sectorHosps[s] = []; });
+        names.forEach(name => { const sec = hospitalSectorMap[name] || 'Border'; sectorHosps[sec].push(name); });
+        SECTOR_ORDER.forEach(sec => sectorHosps[sec].sort());
+        const colours = {};
+        SECTOR_ORDER.forEach(sec => {
+            const hosps = sectorHosps[sec]; const n = hosps.length;
+            if (!n) return;
+            const { h, s, l } = SECTOR_RANGES[sec];
+            const order = interleavedOrder(n);
+            hosps.forEach((name, i) => {
+                const t = n === 1 ? 0.5 : order[i] / (n - 1);
+                const hue = interpolate(h[0], h[1], t);
+                const sat = interpolate(s[0], s[1], t);
+                let lit = interpolate(l[0], l[1], t);
+                if (name === "Evelina (St Thomas')" || name === 'Chelsea & Westminster') lit = Math.min(lit + 12, 100);
+                colours[name] = 'hsl(' + hue + ',' + sat + '%,' + lit + '%)';
+            });
+        });
+        const countsByName = {};
+        if (Array.isArray(catchmentMeta.counts_any) && catchmentMeta.counts_any.length === names.length) {
+            names.forEach((name, idx) => { countsByName[name] = catchmentMeta.counts_any[idx] || 0; });
+        } else {
+            Object.keys(postcodeData.data).forEach(key => {
+                const r = postcodeData.data[key];
+                const hospName = names[r[4]];
+                countsByName[hospName] = (countsByName[hospName] || 0) + 1;
+            });
+        }
+        const hospLayers = {};
+        names.forEach(name => { hospLayers[name] = L.layerGroup().addTo(catchmentMap); });
+        const points = precomputedPoints || (() => {
+            const keys = Object.keys(postcodeData.data);
+            return keys.filter((_, i) => i % sampleRate === 0).map(key => {
+                const r = postcodeData.data[key]; return [r[0], r[1], r[2], r[4]];
+            });
+        })();
+        const suppressedTotal = Number.isInteger(catchmentMeta.suppressed_total) ? catchmentMeta.suppressed_total : 0;
+        const displaySampleRate = precomputedPoints ? (catchmentMeta.sample_rate || 5) : sampleRate;
+        document.getElementById('catchment-loading-text').textContent =
+            'Rendering ' + points.length.toLocaleString() + ' sampled points (1/' + displaySampleRate +
+            (suppressedTotal ? ', ' + suppressedTotal.toLocaleString() + ' suppressed' : '') + ')\u2026';
+        document.getElementById('barFill').style.width = '50%';
+        const batchSize = 2000;
+        for (let i = 0; i < points.length; i += batchSize) {
+            const batch = points.slice(i, i + batchSize);
+            batch.forEach(pt => {
+                const hospName = names[pt[3]];
+                if (!hospName || !hospLayers[hospName]) return;
+                const col = colours[hospName] || '#888';
+                L.circleMarker([pt[1], pt[2]], { radius: 3, color: col, fillColor: col, fillOpacity: 0.6, weight: 0 })
+                 .bindTooltip(pt[0], { sticky: true }).addTo(hospLayers[hospName]);
+            });
+            await new Promise(r => setTimeout(r, 0));
+        }
+        const hospMarkerLayer = L.layerGroup().addTo(catchmentMap);
+        hospitalData.forEach(h => {
+            L.circleMarker([h.lat, h.lon], { radius: 8, color: '#1a202c', weight: 2, fillColor: colours[h.name] || '#333', fillOpacity: 1 })
+             .bindPopup('<b>' + h.name + '</b><br>Level ' + h.level + ' | ' + h.side)
+             .bindTooltip(h.name).addTo(hospMarkerLayer);
+        });
+        const overlays = { 'Hospitals': hospMarkerLayer };
+        SECTOR_ORDER.forEach(sec => {
+            sectorHosps[sec].forEach(name => {
+                const c = colours[name];
+                overlays['<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:' + c + ';margin-right:5px;vertical-align:middle;"></span>' + name] = hospLayers[name];
+            });
+        });
+        L.control.layers({ 'Base Map': baseLayer }, overlays, { collapsed: true }).addTo(catchmentMap);
+        setTimeout(() => {
+            const ctrl = document.querySelector('#catchment-map .leaflet-control-layers-overlays');
+            if (!ctrl) return;
+            const btn = document.createElement('div');
+            btn.style.cssText = 'padding:6px 0 2px 0;text-align:center;border-top:1px solid #ccc;margin-top:4px;';
+            const a = document.createElement('a');
+            a.href = '#';
+            a.style.cssText = 'cursor:pointer;font-size:12px;color:#1855A3;text-decoration:none;font-weight:600;';
+            a.textContent = 'Deselect All';
+            let allOn = true;
+            a.onclick = function(e) {
+                e.preventDefault(); allOn = !allOn;
+                ctrl.querySelectorAll('input[type=checkbox]').forEach(cb => { if (cb.checked !== allOn) cb.click(); });
+                a.textContent = allOn ? 'Deselect All' : 'Select All';
+            };
+            btn.appendChild(a); ctrl.appendChild(btn);
+        }, 500);
+        const legend = L.control({ position: 'bottomleft' });
+        legend.onAdd = function() {
+            const div = L.DomUtil.create('div');
+            div.style.cssText = 'background:white;padding:12px 16px;border-radius:10px;box-shadow:0 4px 16px rgba(24,85,163,0.15);font-size:12px;max-height:40vh;overflow-y:auto;line-height:1.7;min-width:190px;font-family:Inter,sans-serif;';
+            let html = '<b style="font-size:13px;color:#1A2340;">Neonatal Catchment Areas</b>';
+            SECTOR_ORDER.forEach(sec => {
+                const hosps = sectorHosps[sec];
+                if (!hosps.length) return;
+                html += '<div style="margin-top:8px;margin-bottom:2px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#8A95B0;font-weight:700;">' + SECTOR_LABELS[sec] + '</div>';
+                hosps.forEach(name => {
+                    const c = colours[name]; const count = countsByName[name] || 0;
+                    html += '<div><span style="background:' + c + ';width:12px;height:12px;display:inline-block;border-radius:2px;margin-right:6px;vertical-align:middle;"></span>' + name + ' (' + count.toLocaleString() + ')</div>';
+                });
+            });
+            div.innerHTML = html; return div;
+        };
+        legend.addTo(catchmentMap);
+        document.getElementById('barFill').style.width = '100%';
+        setTimeout(() => { document.getElementById('catchment-loading').style.display = 'none'; }, 400);
+        catchmentLoaded = true;
+    }
+
+    document.getElementById('searchForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const raw = document.getElementById('postcodeInput').value.trim();
+        const key = raw.replace(/\s/g, '').toUpperCase();
+        const errBar = document.getElementById('error');
+        errBar.style.display = 'none';
+        document.getElementById('results').style.display = 'none';
+        if (!key) return;
+        if (!postcodeData.data[key]) {
+            document.getElementById('error-text').textContent = 'Postcode "' + raw + '" not found.';
+            errBar.style.display = 'flex';
+            return;
+        }
+        const r = postcodeData.data[key];
+        const names = postcodeData.names;
+        const data = {
+            postcode: r[0], lat: r[1], lon: r[2],
+            side: r[3] === 0 ? 'North' : 'South',
+            levels: [
+                { label: levelLabels[0], hospital: names[r[4]],  distance_km: r[5]  },
+                { label: levelLabels[1], hospital: names[r[6]],  distance_km: r[7]  },
+                { label: levelLabels[2], hospital: names[r[8]],  distance_km: r[9]  },
+                { label: levelLabels[3], hospital: names[r[10]], distance_km: r[11] },
+            ],
+        };
+        document.getElementById('resultPostcode').textContent = data.postcode;
+        const badge = document.getElementById('resultSide');
+        badge.textContent = '\u25c6 ' + data.side + ' of Thames';
+        badge.className = 'side-pill ' + (data.side === 'North' ? 'side-north' : 'side-south');
+        const cardsEl = document.getElementById('cards');
+        cardsEl.innerHTML = '';
+        data.levels.forEach((lvl, i) => {
+            const card = document.createElement('div');
+            card.className = 'card ' + levelClasses[i];
+            const hInfo = window.hospCoords[lvl.hospital];
+            let tagsHtml = '';
+            if (hInfo && hInfo.level === 3 && hInfo.tags) {
+                tagsHtml = '<div class="card-tags">' + hInfo.tags.split(',').map(t => '<span class="tag">' + t.trim() + '</span>').join(' ') + '</div>';
+            }
+            card.innerHTML = '<div class="card-level-badge">' + lvl.label + '</div>' +
+                '<div class="card-hospital">' + lvl.hospital + '</div>' +
+                '<div class="card-distance"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+                lvl.distance_km + ' km away</div>' + tagsHtml;
+            cardsEl.appendChild(card);
+        });
+        document.getElementById('results').style.display = 'block';
+        if (map) map.remove();
+        map = L.map('map').setView([data.lat, data.lon], 12);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '\u00a9 OpenStreetMap contributors \u00a9 CARTO', maxZoom: 19,
+        }).addTo(map);
+        markers = [];
+        const pcMarker = L.circleMarker([data.lat, data.lon], {
+            radius: 8, color: '#1A2340', weight: 2, fillColor: '#fff', fillOpacity: 1,
+        }).addTo(map).bindPopup('<b>' + data.postcode + '</b><br>' + data.side + ' of Thames');
+        markers.push(pcMarker);
+        const seen = new Set();
+        data.levels.forEach((lvl, i) => {
+            if (seen.has(lvl.hospital)) return;
+            seen.add(lvl.hospital);
+            const hc = window.hospCoords[lvl.hospital];
+            if (!hc) return;
+            const hospMarker = L.circleMarker([hc.lat, hc.lon], {
+                radius: 9, color: '#1A2340', weight: 2, fillColor: levelColours[i], fillOpacity: 0.9,
+            }).addTo(map).bindPopup('<b>' + lvl.hospital + '</b><br>' + lvl.distance_km + ' km');
+            markers.push(hospMarker);
+            L.polyline([[data.lat, data.lon], [hc.lat, hc.lon]], {
+                color: levelColours[i], weight: 2, dashArray: '6,6', opacity: 0.6,
+            }).addTo(map);
+        });
+        const group = L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.15));
     });
 </script>
 
