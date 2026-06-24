@@ -52,8 +52,9 @@ def hospitals_json():
 
 
 @app.route('/favicon.svg')
+@app.route('/favicon.png')
 def favicon():
-    return send_from_directory(DOCS_DIR, 'favicon.svg')
+    return send_from_directory(DOCS_DIR, 'favicon.png')
 
 
 @app.route('/home-logo.svg')
