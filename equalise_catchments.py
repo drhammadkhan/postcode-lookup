@@ -50,15 +50,20 @@ def scaled_xy(lats: np.ndarray, lons: np.ndarray) -> np.ndarray:
     return np.column_stack([lats, lons * COS_LAT])
 
 
+def normalise_postcode(pc: pd.Series) -> pd.Series:
+    """Return uppercase postcodes without spaces for joining datasets."""
+    return pc.astype(str).str.replace(" ", "", regex=False).str.upper().str.strip()
+
+
 # ── Load data ─────────────────────────────────────────────────────────────────
 
 print("Loading data …")
 
 pc_df = pd.read_csv(ALL_POSTCODES_CSV)
-pc_df["Postcode"] = pc_df["Postcode"].str.strip()
+pc_df["Postcode"] = normalise_postcode(pc_df["Postcode"])
 
 pop_raw = pd.read_csv(POPULATION_CSV)
-pop_raw["Postcode"] = pop_raw["Postcode"].str.strip()
+pop_raw["Postcode"] = normalise_postcode(pop_raw["Postcode"])
 population_by_pc = pop_raw.groupby("Postcode")["Count"].sum()
 pc_df["population"] = pc_df["Postcode"].map(population_by_pc).fillna(0).astype(int)
 

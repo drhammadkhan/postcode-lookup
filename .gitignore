@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .venv/
 .DS_Store
+ONSPD_*.csv
+postcodes_master_backup_*.csv
+postcodes_master_new.csv

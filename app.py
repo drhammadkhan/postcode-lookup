@@ -62,9 +62,19 @@ def home_logo():
     return send_from_directory(DOCS_DIR, 'home-logo.svg')
 
 
+@app.route('/Fredoka Variable Font.ttf')
+def docs_font():
+    return send_from_directory(DOCS_DIR, 'Fredoka Variable Font.ttf')
+
+
 @app.route('/outcode_population.html')
 def outcode_population_page():
     return send_from_directory(DOCS_DIR, 'outcode_population.html')
+
+
+@app.route('/hospitals.html')
+def hospitals_page():
+    return send_from_directory(DOCS_DIR, 'hospitals.html')
 
 
 @app.route('/outcode_populations.json')

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Directory - HO.ME</title>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <style>
+        @font-face {
+            font-family: 'Fredoka';
+            src: url('Fredoka Variable Font.ttf') format('truetype');
+            font-weight: 100 900;
+            font-style: normal;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #f4f9f7;
+            --surface: #ffffff;
+            --border: #dcebe7;
+            --dark-teal: #2e5b5f;
+            --text: #2e5b5f;
+            --muted: #668b8e;
+            --orange: #d2712a;
+            --teal-light: #e0f2ec;
+        }
+        body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        header {
+            background: var(--dark-teal);
+            color: white;
+            border-top: 3px solid var(--orange);
+        }
+        .header-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 0;
+        }
+        .brand span {
+            color: rgba(255,255,255,0.62);
+            font-size: 0.86rem;
+            font-weight: 400;
+            margin-left: 10px;
+        }
+        .home-link {
+            color: rgba(255,255,255,0.84);
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.32);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 0.88rem;
+            white-space: nowrap;
+        }
+        .home-link:hover { background: rgba(255,255,255,0.14); color: white; }
+        main {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 24px 20px 34px;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .stat {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 13px 14px;
+        }
+        .stat-value { font-size: 1.42rem; font-weight: 700; color: var(--dark-teal); }
+        .stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+        .directory {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .directory-head {
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        h1 {
+            font-size: 1.26rem;
+            font-weight: 700;
+            color: var(--dark-teal);
+            letter-spacing: 0;
+        }
+        .updated {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-align: right;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #f8fcfb;
+            color: var(--muted);
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0;
+        }
+        td { font-size: 0.92rem; }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: #fbfdfc; }
+        .hospital-name { font-weight: 650; color: var(--dark-teal); }
+        .postcode { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            min-height: 24px;
+            border-radius: 999px;
+            padding: 3px 9px;
+            font-size: 0.78rem;
+            font-weight: 650;
+            white-space: nowrap;
+        }
+        .network { background: var(--teal-light); color: var(--dark-teal); }
+        .level-3 { background: #fde9dc; color: #90450e; }
+        .level-2 { background: #e7edf9; color: #2e4f86; }
+        .level-1 { background: #e8f3e3; color: #3f6931; }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .tag {
+            background: #f3f6f5;
+            color: var(--muted);
+            border: 1px solid var(--border);
+        }
+        .empty {
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+        footer {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 20px 24px;
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+        footer a { color: var(--dark-teal); text-decoration: none; font-weight: 650; }
+        @media (max-width: 760px) {
+            .header-inner { align-items: flex-start; flex-direction: column; }
+            .brand span { display: block; margin: 2px 0 0; }
+            .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .directory-head { align-items: flex-start; flex-direction: column; }
+            table, thead, tbody, tr, th, td { display: block; }
+            thead { display: none; }
+            tr { border-bottom: 1px solid var(--border); padding: 10px 0; }
+            tbody tr:last-child { border-bottom: none; }
+            td { border: none; padding: 6px 14px; }
+            td::before {
+                content: attr(data-label);
+                display: block;
+                color: var(--muted);
+                font-size: 0.72rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-bottom: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <div class="brand">HO.ME <span>Neonatal hospital directory</span></div>
+            <a class="home-link" href="index.html">Back to lookup</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="summary" aria-label="Hospital summary">
+            <div class="stat"><div class="stat-value" id="totalHospitals">-</div><div class="stat-label">Hospitals</div></div>
+            <div class="stat"><div class="stat-value" id="level3Count">-</div><div class="stat-label">Level 3 units</div></div>
+            <div class="stat"><div class="stat-value" id="level2Count">-</div><div class="stat-label">Level 2 units</div></div>
+            <div class="stat"><div class="stat-value" id="level1Count">-</div><div class="stat-label">Level 1 units</div></div>
+        </section>
+
+        <section class="directory">
+            <div class="directory-head">
+                <h1>London Neonatal Units</h1>
+                <div class="updated">Source: hospitals_refined.csv</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hospital</th>
+                        <th>Network</th>
+                        <th>Care Level</th>
+                        <th>Specialties</th>
+                    </tr>
+                </thead>
+                <tbody id="hospitalRows">
+                    <tr><td colspan="4" class="empty">Loading hospitals...</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <a href="index.html">Lookup</a> &nbsp;|&nbsp;
+        <a href="extra_maps.html">Extra Maps</a> &nbsp;|&nbsp;
+        <a href="outcode_population.html">Catchment Data</a>
+    </footer>
+
+    <script>
+        const networkNames = {
+            NC: 'North Central',
+            NE: 'North East',
+            NW: 'North West',
+            SE: 'South East',
+            SW: 'South West',
+            Border: 'Border'
+        };
+        const networkOrder = ['NC', 'NE', 'NW', 'SE', 'SW', 'Border'];
+        const levelNames = {
+            1: 'Level 1 - SCBU',
+            2: 'Level 2 - LNU',
+            3: 'Level 3 - NICU'
+        };
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, ch => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[ch]));
+        }
+
+        function renderTags(tags) {
+            const parts = String(tags || '').split(',').map(t => t.trim()).filter(Boolean);
+            if (!parts.length) return '<span class="empty">None listed</span>';
+            return '<div class="tags">' + parts.map(tag =>
+                '<span class="pill tag">' + escapeHtml(tag) + '</span>'
+            ).join('') + '</div>';
+        }
+
+        function normaliseNetwork(sector) {
+            if (sector === 'South East') return 'SE';
+            if (sector === 'South West') return 'SW';
+            return sector || '';
+        }
+
+        fetch('hospitals.json')
+            .then(response => response.json())
+            .then(hospitals => {
+                const rows = document.getElementById('hospitalRows');
+                const sorted = hospitals.slice().sort((a, b) => {
+                    const aNetwork = normaliseNetwork(a.sector);
+                    const bNetwork = normaliseNetwork(b.sector);
+                    const networkDiff = networkOrder.indexOf(aNetwork) - networkOrder.indexOf(bNetwork);
+                    if (networkDiff !== 0) return networkDiff;
+                    if (b.level !== a.level) return b.level - a.level;
+                    return a.name.localeCompare(b.name);
+                });
+
+                document.getElementById('totalHospitals').textContent = sorted.length;
+                document.getElementById('level3Count').textContent = sorted.filter(h => h.level === 3).length;
+                document.getElementById('level2Count').textContent = sorted.filter(h => h.level === 2).length;
+                document.getElementById('level1Count').textContent = sorted.filter(h => h.level === 1).length;
+
+                rows.innerHTML = sorted.map(hospital => {
+                    const network = normaliseNetwork(hospital.sector);
+                    const networkLabel = networkNames[network] || network || 'Unassigned';
+                    const level = Number(hospital.level);
+                    return `
+                        <tr>
+                            <td data-label="Hospital">
+                                <div class="hospital-name">${escapeHtml(hospital.name)}</div>
+                            </td>
+                            <td data-label="Network"><span class="pill network">${escapeHtml(networkLabel)}</span></td>
+                            <td data-label="Care Level"><span class="pill level-${level}">${escapeHtml(levelNames[level] || ('Level ' + level))}</span></td>
+                            <td data-label="Specialties">${renderTags(hospital.tags)}</td>
+                        </tr>
+                    `;
+                }).join('');
+            })
+            .catch(() => {
+                document.getElementById('hospitalRows').innerHTML =
+                    '<tr><td colspan="4" class="empty">Hospital data could not be loaded.</td></tr>';
+            });
+    </script>
+</body>
+</html>

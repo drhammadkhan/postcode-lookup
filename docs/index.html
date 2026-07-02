@@ -40,7 +40,7 @@
         main { flex: 1; }
         .container { max-width: 1100px; margin: 0 auto; padding: 28px 24px; }
         .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
-        .tab { padding: 10px 22px; font-size: 1rem; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--text-soft); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.18s; font-family: 'Fredoka', sans-serif; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .tab { padding: 10px 22px; font-size: 1rem; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--text-soft); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.18s; font-family: 'Fredoka', sans-serif; display: flex; align-items: center; gap: 6px; white-space: nowrap; text-decoration: none; }
         .tab:hover { color: var(--dark-teal); }
         .tab.active { color: var(--dark-teal); border-bottom-color: var(--orange); font-weight: 600; }
         .tab-content { display: none; }
@@ -291,6 +291,10 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
             Catchment Map
         </button>
+        <a class="tab" href="hospitals.html">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v12"/><path d="M6 12h12"/><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16"/><path d="M3 21h18"/></svg>
+            Hospitals
+        </a>
     </div>
 
     <div class="tab-content active" id="tab-lookup">
@@ -298,7 +302,7 @@
         <div id="loading-state" class="loading-card">
             <div class="loading-msg">
                 <div class="loading-spinner"></div>
-                <span>Loading 326,000 postcodes&hellip;</span>
+                <span>Loading 333,000 postcodes&hellip;</span>
             </div>
             <div class="progress-track">
                 <div class="progress-fill" id="progressFill"></div>
@@ -360,7 +364,7 @@
 </div>
 
 <footer>
-    <span>HO.ME &nbsp;&middot;&nbsp; ~326,000 London-area postcodes</span>
+    <span>HO.ME &nbsp;&middot;&nbsp; ~333,000 London-area postcodes</span>
     <span class="footer-sep">|</span>
     <a href="#" onclick="switchTab('catchment');return false;">Catchment Map</a>
     <span class="footer-sep">|</span>
