@@ -1,0 +1,6 @@
+{"type":"server-started","port":55940,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:55940","screen_dir":"/Users/hammad/Code/postcode-lookup/.superpowers/brainstorm/92694-1782316576/content","state_dir":"/Users/hammad/Code/postcode-lookup/.superpowers/brainstorm/92694-1782316576/state"}
+{"type":"screen-added","file":"/Users/hammad/Code/postcode-lookup/.superpowers/brainstorm/92694-1782316576/content/redesign-v1.html"}
+{"type":"screen-added","file":"/Users/hammad/Code/postcode-lookup/.superpowers/brainstorm/92694-1782316576/content/redesign-v2.html"}
+{"type":"screen-added","file":"/Users/hammad/Code/postcode-lookup/.superpowers/brainstorm/92694-1782316576/content/redesign-v3.html"}
+{"type":"screen-added","file":"/Users/hammad/Code/postcode-lookup/.superpowers/brainstorm/92694-1782316576/content/redesign-v4.html"}
+{"type":"server-stopped","reason":"idle timeout"}

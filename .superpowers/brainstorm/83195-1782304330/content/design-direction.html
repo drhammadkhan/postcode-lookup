@@ -1,0 +1,101 @@
+<h2>Design Direction</h2>
+<p class="subtitle">Three approaches for applying the HO.ME brand to the frontend. Which overall direction feels right?</p>
+
+<div class="cards">
+
+  <!-- Option A: Bold Brand -->
+  <div class="card" data-choice="bold-brand" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#2e5b5f;padding:20px 24px 16px;border-radius:8px 8px 0 0;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-family:Georgia,serif;font-size:22px;font-weight:900;color:#66bca2;letter-spacing:-0.5px;">HO</span>
+          <span style="font-size:18px;">📍</span>
+          <span style="font-family:Georgia,serif;font-size:22px;font-weight:900;color:white;letter-spacing:-0.5px;">ME</span>
+        </div>
+        <div style="color:#a8d5c8;font-size:11px;margin-top:4px;letter-spacing:0.5px;">HOSPITAL NEAR ME · NEONATAL</div>
+      </div>
+      <div style="background:#f0f7f6;padding:16px 24px;">
+        <div style="display:flex;gap:8px;margin-bottom:14px;">
+          <div style="background:#2e5b5f;color:white;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:600;">🔍 Postcode Lookup</div>
+          <div style="background:white;border:1px solid #cce4df;color:#2e5b5f;padding:7px 16px;border-radius:6px;font-size:12px;">📍 Catchment Map</div>
+        </div>
+        <div style="background:white;border:1.5px solid #cce4df;border-radius:8px;padding:12px 14px;display:flex;gap:8px;align-items:center;">
+          <div style="flex:1;color:#888;font-size:12px;">e.g. SW1A 2AA or TW7 6QT</div>
+          <div style="background:#d2712a;color:white;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;">Find hospitals</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Bold Brand</h3>
+      <p>Dark teal header, brand logo prominent. Teal and orange used assertively throughout. Fredoka for the logo mark, clean sans-serif for body. Strong identity from first glance.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Clean Accent -->
+  <div class="card" data-choice="clean-accent" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:white;border-bottom:3px solid #66bca2;padding:20px 24px 16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-family:Georgia,serif;font-size:20px;font-weight:900;color:#2e5b5f;">HO</span>
+              <span style="color:#d2712a;font-size:16px;">●</span>
+              <span style="font-family:Georgia,serif;font-size:20px;font-weight:900;color:#2e5b5f;">ME</span>
+            </div>
+            <div style="color:#999;font-size:10px;letter-spacing:0.5px;margin-top:2px;">Hospital Near Me · Neonatal</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#fafafa;padding:16px 24px;">
+        <div style="display:flex;gap:0;margin-bottom:14px;border-bottom:2px solid #eee;">
+          <div style="color:#2e5b5f;padding:6px 14px;border-bottom:2px solid #2e5b5f;font-size:12px;font-weight:600;margin-bottom:-2px;">Postcode Lookup</div>
+          <div style="color:#aaa;padding:6px 14px;font-size:12px;">Catchment Map</div>
+        </div>
+        <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;display:flex;gap:8px;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <div style="flex:1;color:#aaa;font-size:12px;">e.g. SW1A 2AA or TW7 6QT</div>
+          <div style="background:#2e5b5f;color:white;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;">Search</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Clean Accent</h3>
+      <p>White header with teal underline accent. Brand colours used as highlights, not fills. Understated and professional — feels clinical and trustworthy. Logo sits in the top-left.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Warm Split -->
+  <div class="card" data-choice="warm-split" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:linear-gradient(135deg,#2e5b5f 60%,#3a7a6e 100%);padding:20px 24px 20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-family:Georgia,serif;font-size:20px;font-weight:900;color:#66bca2;">HO</span>
+              <div style="width:16px;height:16px;background:#d2712a;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;"></div>
+              <span style="font-family:Georgia,serif;font-size:20px;font-weight:900;color:white;">ME</span>
+            </div>
+            <div style="color:rgba(255,255,255,0.6);font-size:10px;margin-top:3px;">Hospital Near Me · Neonatal</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:5px 10px;">
+            <span style="color:white;font-size:10px;">London · 326k postcodes</span>
+          </div>
+        </div>
+        <div style="margin-top:14px;background:white;border-radius:8px;padding:10px 14px;display:flex;gap:8px;align-items:center;">
+          <div style="flex:1;color:#aaa;font-size:12px;">e.g. SW1A 2AA or TW7 6QT</div>
+          <div style="background:#d2712a;color:white;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;">Find hospitals</div>
+        </div>
+      </div>
+      <div style="background:white;padding:12px 24px;border-top:1px solid #eee;">
+        <div style="display:flex;gap:8px;">
+          <div style="background:#f0f7f6;border:1px solid #cce4df;color:#2e5b5f;padding:5px 12px;border-radius:20px;font-size:11px;">🔍 Lookup</div>
+          <div style="color:#aaa;padding:5px 12px;font-size:11px;">📍 Catchment</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Hero Header</h3>
+      <p>Full-bleed teal hero with the search bar embedded inside it — like a search engine homepage. Orange CTA pops against the teal. Tabs sit below the hero. Maximum impact on landing.</p>
+    </div>
+  </div>
+
+</div>

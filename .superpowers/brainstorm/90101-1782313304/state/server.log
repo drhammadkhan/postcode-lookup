@@ -1,0 +1,3 @@
+{"type":"server-started","port":62489,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:62489","screen_dir":"/Users/hammad/Code/postcode-lookup/.superpowers/brainstorm/90101-1782313304/content","state_dir":"/Users/hammad/Code/postcode-lookup/.superpowers/brainstorm/90101-1782313304/state"}
+{"type":"screen-added","file":"/Users/hammad/Code/postcode-lookup/.superpowers/brainstorm/90101-1782313304/content/split-map-v3.html"}
+{"type":"server-stopped","reason":"idle timeout"}
