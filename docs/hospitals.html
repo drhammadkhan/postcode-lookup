@@ -208,7 +208,6 @@
         <section class="directory">
             <div class="directory-head">
                 <h1>London Neonatal Units</h1>
-                <div class="updated">Source: hospitals_refined.csv</div>
             </div>
             <table>
                 <thead>
@@ -241,7 +240,6 @@
             SW: 'South West',
             Border: 'Border'
         };
-        const networkOrder = ['NC', 'NE', 'NW', 'SE', 'SW', 'Border'];
         const levelNames = {
             1: 'Level 1 - SCBU',
             2: 'Level 2 - LNU',
@@ -276,14 +274,7 @@
             .then(response => response.json())
             .then(hospitals => {
                 const rows = document.getElementById('hospitalRows');
-                const sorted = hospitals.slice().sort((a, b) => {
-                    const aNetwork = normaliseNetwork(a.sector);
-                    const bNetwork = normaliseNetwork(b.sector);
-                    const networkDiff = networkOrder.indexOf(aNetwork) - networkOrder.indexOf(bNetwork);
-                    if (networkDiff !== 0) return networkDiff;
-                    if (b.level !== a.level) return b.level - a.level;
-                    return a.name.localeCompare(b.name);
-                });
+                const sorted = hospitals.slice().sort((a, b) => a.name.localeCompare(b.name));
 
                 document.getElementById('totalHospitals').textContent = sorted.length;
                 document.getElementById('level3Count').textContent = sorted.filter(h => h.level === 3).length;
