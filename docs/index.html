@@ -63,6 +63,8 @@
         .search-btn { background: var(--orange); color: white; border: none; padding: 11px 22px; border-radius: 10px; font-size: 1rem; font-weight: 600; font-family: 'Fredoka', sans-serif; cursor: pointer; transition: background 0.18s, transform 0.12s; display: flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(210,113,42,0.3); }
         .search-btn:hover { background: #b85e20; }
         .search-btn:active { transform: scale(0.98); }
+        .lookup-guidance { margin-top: 13px; padding: 11px 13px; border-radius: 10px; background: var(--teal-light); color: var(--dark-teal); font-size: 0.88rem; line-height: 1.45; }
+        .lookup-guidance em { font-style: italic; font-weight: 650; }
         .error-bar { background: #fff5f0; color: #b84c20; border: 1px solid #f5c7ad; border-radius: 10px; padding: 12px 16px; margin-top: 12px; font-size: 0.92rem; display: none; align-items: center; gap: 8px; }
         #results { display: none; }
         .result-meta { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 22px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
@@ -91,6 +93,22 @@
         .tag { display: inline-block; background: #fff0ee; color: #c0392b; font-size: 0.67rem; font-weight: 600; padding: 2px 8px; border-radius: 99px; letter-spacing: 0.03em; }
         #map-container { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 6px; }
         #map { height: 380px; width: 100%; }
+        .hospital-distance-panel { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1.5px solid var(--border); margin-top: 16px; overflow: hidden; }
+        .hospital-distance-head { padding: 15px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+        .hospital-distance-title { font-size: 1rem; font-weight: 650; color: var(--dark-teal); }
+        .hospital-distance-note { font-size: 0.82rem; color: var(--text-soft); }
+        .hospital-distance-list { display: flex; flex-direction: column; }
+        .hospital-distance-row { display: grid; grid-template-columns: minmax(170px, 1.6fr) 82px 70px 118px 115px minmax(120px, 1fr); gap: 12px; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--border); border-left: 4px solid transparent; }
+        .hospital-distance-row:last-child { border-bottom: none; }
+        .hospital-distance-row:hover { background: var(--bg); }
+        .hospital-distance-row-right { background: #f0faf6; border-left-color: var(--teal); }
+        .hospital-distance-row-right:hover { background: #e8f7f1; }
+        .hospital-distance-name { font-size: 0.94rem; font-weight: 650; color: var(--dark-teal); line-height: 1.25; }
+        .hospital-distance-km { font-size: 0.95rem; font-weight: 650; color: var(--orange); white-space: nowrap; }
+        .hospital-distance-meta { color: var(--text-mid); font-size: 0.82rem; line-height: 1.35; }
+        .hospital-side-badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 99px; background: var(--teal-light); color: var(--dark-teal); font-size: 0.68rem; font-weight: 650; margin-top: 4px; white-space: nowrap; }
+        .hospital-distance-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+        .hospital-distance-empty { color: var(--text-soft); font-size: 0.84rem; }
         #catchment-map { height: calc(100vh - 145px); width: 100%; border: none; border-radius: 0; }
         #catchment-map .leaflet-control-layers { max-height: calc(100vh - 200px); overflow-y: auto; }
         .spinner { display: none; width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.65s linear infinite; }
@@ -105,6 +123,11 @@
             .search-row { flex-direction: column; }
             .tabs { overflow-x: auto; }
             .container { padding: 20px 16px; }
+            .hospital-distance-head { padding: 14px 15px; }
+            .hospital-distance-row { grid-template-columns: 1fr auto; gap: 8px 12px; padding: 13px 15px; }
+            .hospital-distance-name { grid-column: 1 / 2; }
+            .hospital-distance-km { grid-column: 2 / 3; grid-row: 1 / 2; text-align: right; }
+            .hospital-distance-meta, .hospital-distance-tags { grid-column: 1 / -1; }
         }
         @media (max-width: 400px) { .cards { grid-template-columns: 1fr; } }
 
@@ -320,6 +343,9 @@
                     <div class="spinner" id="spinner"></div>
                 </button>
             </div>
+            <div class="lookup-guidance">
+                This tool is a guide which can help you find the <em>closest</em> hospitals for a given postcode. This is not necessarily the same as the <em>local</em> hospital.
+            </div>
         </form>
 
         <div class="error-bar" id="error">
@@ -339,6 +365,13 @@
             <div id="map-container">
                 <div id="map"></div>
             </div>
+            <div class="hospital-distance-panel" id="hospitalDistancePanel">
+                <div class="hospital-distance-head">
+                    <div class="hospital-distance-title">All neonatal hospitals by distance</div>
+                    <div class="hospital-distance-note">Highlighted rows are on the matching Thames side or serve both sides</div>
+                </div>
+                <div class="hospital-distance-list" id="hospitalDistanceList"></div>
+            </div>
         </div>
 
     </div>
@@ -347,6 +380,9 @@
 </main>
 
 <div class="tab-content" id="tab-catchment">
+    <div class="lookup-guidance" style="margin:20px 20px 0 20px;">
+        This tool is a guide which can help you find the <em>closest</em> hospitals for a given postcode. This is not necessarily the same as the <em>local</em> hospital.
+    </div>
     <div id="catchment-loading" class="loading-card" style="margin:20px;padding:20px 28px;">
         <div class="loading-msg">
             <div class="loading-spinner"></div>
@@ -384,6 +420,33 @@
     const levelClasses = ['level-any', 'level-l1', 'level-l2', 'level-l3'];
     const levelColours = ['#1855A3', '#16A34A', '#D97706', '#DC2626'];
     const levelLabels = ['Any Level', 'Level 1 — Special Care', 'Level 2 — High Dependency', 'Level 3 — NICU'];
+    const sectorLabels = { NC: 'North Central', NE: 'North East', NW: 'North West', SE: 'South East', SW: 'South West', Border: 'Border' };
+
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, ch => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[ch]));
+    }
+
+    function distanceKm(lat1, lon1, lat2, lon2) {
+        const R = 6371.0088;
+        const toRad = deg => deg * Math.PI / 180;
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    function renderTags(tags) {
+        const parts = String(tags || '').split(',').map(t => t.trim()).filter(Boolean);
+        if (!parts.length) return '<span class="hospital-distance-empty">No specialties listed</span>';
+        return parts.map(t => '<span class="tag">' + escapeHtml(t) + '</span>').join('');
+    }
+
+    function formatSide(side) {
+        return side === 'Both' ? 'Both sides' : side + ' side';
+    }
 
     async function loadData() {
         const fill = document.getElementById('progressFill');
@@ -396,7 +459,7 @@
         fill.style.width = '100%';
         window.hospCoords = {};
         hospitalData.forEach(h => {
-            window.hospCoords[h.name] = { lat: h.lat, lon: h.lon, level: h.level, side: h.side, tags: h.tags || '' };
+            window.hospCoords[h.name] = { lat: h.lat, lon: h.lon, level: h.level, sector: h.sector, side: h.side, tags: h.tags || '' };
         });
         setTimeout(() => {
             document.getElementById('loading-state').style.display = 'none';
@@ -610,14 +673,35 @@
             const hInfo = window.hospCoords[lvl.hospital];
             let tagsHtml = '';
             if (hInfo && hInfo.level === 3 && hInfo.tags) {
-                tagsHtml = '<div class="card-tags">' + hInfo.tags.split(',').map(t => '<span class="tag">' + t.trim() + '</span>').join(' ') + '</div>';
+                tagsHtml = '<div class="card-tags">' + hInfo.tags.split(',').map(t => '<span class="tag">' + escapeHtml(t.trim()) + '</span>').join(' ') + '</div>';
             }
-            card.innerHTML = '<div class="card-level-badge">' + lvl.label + '</div>' +
-                '<div class="card-hospital">' + lvl.hospital + '</div>' +
+            card.innerHTML = '<div class="card-level-badge">' + escapeHtml(lvl.label) + '</div>' +
+                '<div class="card-hospital">' + escapeHtml(lvl.hospital) + '</div>' +
                 '<div class="card-distance"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
-                lvl.distance_km + ' km away</div>' + tagsHtml;
+                escapeHtml(lvl.distance_km) + ' km away</div>' + tagsHtml;
             cardsEl.appendChild(card);
         });
+        const listEl = document.getElementById('hospitalDistanceList');
+        const allHospitalRows = hospitalData
+            .filter(h => Number.isFinite(h.lat) && Number.isFinite(h.lon))
+            .map(h => ({
+                ...h,
+                distance_km: distanceKm(data.lat, data.lon, h.lat, h.lon),
+            }))
+            .sort((a, b) => a.distance_km - b.distance_km);
+        listEl.innerHTML = allHospitalRows.map(h => {
+            const sector = sectorLabels[h.sector] || h.sector || 'Network not listed';
+            const isRightSide = h.side === data.side || h.side === 'Both';
+            const sideBadge = isRightSide ? '<div class="hospital-side-badge">Same side as postcode</div>' : '';
+            return '<div class="hospital-distance-row' + (isRightSide ? ' hospital-distance-row-right' : '') + '">' +
+                '<div class="hospital-distance-name">' + escapeHtml(h.name) + '</div>' +
+                '<div class="hospital-distance-km">' + h.distance_km.toFixed(1) + ' km</div>' +
+                '<div class="hospital-distance-meta">Level ' + escapeHtml(h.level) + '</div>' +
+                '<div class="hospital-distance-meta">' + escapeHtml(formatSide(h.side)) + sideBadge + '</div>' +
+                '<div class="hospital-distance-meta">' + escapeHtml(sector) + '</div>' +
+                '<div class="hospital-distance-tags">' + renderTags(h.tags) + '</div>' +
+            '</div>';
+        }).join('');
         document.getElementById('results').style.display = 'block';
         if (map) map.remove();
         map = L.map('map').setView([data.lat, data.lon], 12);

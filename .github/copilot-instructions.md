@@ -1,7 +1,7 @@
 # Copilot Instructions — Neonatal Postcode Lookup
 
 ## Project Overview
-A London neonatal unit catchment tool: given a postcode it returns the nearest hospital at each care level (Any / L1 Special Care / L2 High Dependency / L3 NICU), honouring a strict North/South-of-Thames boundary. Two front-ends exist: a Flask app (local dev) and a fully static GitHub Pages / Netlify site (`docs/`).
+A London neonatal unit catchment tool: given a postcode it returns the nearest hospital at each care level (Any / L1 Special Care / L2 High Dependency / L3 NICU), honouring a strict North/South-of-Thames boundary. The front end lives in `docs/` and is served both by GitHub Pages / Netlify and by the local Flask app.
 
 ## Architecture & Data Flow
 
@@ -14,15 +14,17 @@ hospitals_refined.csv  ─┴─→ postcode_lookup.py ──→ output/All_Post
                               docs/postcodes.json   (compact indexed lookup)
                               docs/hospitals.json
                                     │
-                     ┌──────────────┴──────────────┐
-                 app.py (Flask)             docs/index.html (static)
+                                    │
+                              docs/index.html
+                                    │
+                         GitHub Pages / Flask
 ```
 
 - **`postcode_lookup.py`** — main pipeline; run once to regenerate `output/`.
 - **`build_static.py`** — converts `output/All_Postcodes.csv` into compact JSON for the browser.
 - **`generate_map.py`** — produces `neonatal_catchment_map.html` (standalone Folium map).
 - **`generate_extra_maps.py`** — writes the five thematic maps inside `docs/maps/`.
-- **`app.py`** — Flask server; reads `output/All_Postcodes.csv` at startup into a dict keyed by normalised postcode.
+- **`app.py`** — Flask server; serves `docs/index.html` and static docs assets locally, with legacy JSON/API routes that read `output/All_Postcodes.csv` at startup.
 
 ## Key Developer Commands
 
@@ -81,6 +83,6 @@ The static front-end is published via **GitHub Pages** from the `docs/` director
 
 No CI pipeline exists; regeneration and publishing are always manual steps.
 
-## Static Site vs Flask App
-- **Static (`docs/`)**: no server; JS fetches `postcodes.json` and searches client-side. Deploy by pushing `docs/` to GitHub Pages (see repository Pages settings).
-- **Flask (`app.py`)**: `/search?postcode=TW76QT` returns JSON; serves `docs/` assets at matching routes. Does **not** use `postcodes.json` — reads `output/All_Postcodes.csv` directly.
+## Static Site And Flask
+- **Static (`docs/`)**: canonical front end; JS fetches `postcodes.json` and searches client-side. Deploy by pushing `docs/` to GitHub Pages (see repository Pages settings).
+- **Flask (`app.py`)**: local server for the same `docs/index.html` and docs assets. Legacy routes such as `/search?postcode=TW76QT` still return JSON from `output/All_Postcodes.csv`.

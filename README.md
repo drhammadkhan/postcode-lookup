@@ -111,9 +111,9 @@ A Flask-based frontend (`app.py`) provides a local web interface at `http://127.
 - **Hospital API** — a `/hospitals` endpoint returning all hospitals as JSON.
 - **Catchment data pages** — links to outcode and equalised catchment pages (see below).
 
-### 6. Static site (GitHub Pages)
+### 6. Static site (GitHub Pages and local Flask)
 
-A fully client-side version lives in the `docs/` folder and is published via GitHub Pages at **https://drhammadkhan.github.io/postcode-lookup/**.
+The front end lives in the `docs/` folder and is published via GitHub Pages at **https://drhammadkhan.github.io/postcode-lookup/**. The local Flask app also serves `docs/index.html` at `/`, so there is a single front-page source of truth.
 
 The script `build_static.py` compresses the output into two compact JSON files (`docs/postcodes.json` and `docs/hospitals.json`) which `docs/index.html` loads and searches entirely in the browser — no server required.
 

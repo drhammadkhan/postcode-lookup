@@ -3,7 +3,7 @@ _2026-06-24_
 
 ## Summary
 
-Complete visual redesign of the postcode lookup frontend using the official HO.ME brand assets. Applies to both the Flask template (`templates/index.html`) and the static GitHub Pages version (`docs/index.html`).
+Complete visual redesign of the postcode lookup frontend using the official HO.ME brand assets. This spec originally applied to separate Flask and static front pages; the project now uses `docs/index.html` as the single front-page source for both GitHub Pages and local Flask.
 
 ## Brand Assets Used
 
@@ -55,14 +55,13 @@ All from `/Home Assets/`:
 
 ## Files to Change
 
-1. `templates/index.html` — Flask template; rebuild with new design, keep Jinja/API calls intact
-2. `docs/index.html` — Static site; rebuild with new design, keep existing JS data-fetching logic intact
-3. `docs/Fredoka Variable Font.ttf` — copy font asset so GitHub Pages can serve it
-4. `docs/HO.ME Map.svg` — copy for GitHub Pages
-5. `docs/HOspital near ME.svg` — copy for GitHub Pages
+1. `docs/index.html` — canonical static front page; rebuild with new design, keep existing JS data-fetching logic intact
+2. `docs/Fredoka Variable Font.ttf` — copy font asset so GitHub Pages can serve it
+3. `docs/HO.ME Map.svg` — copy for GitHub Pages
+4. `docs/HOspital near ME.svg` — copy for GitHub Pages
 
 ## Constraints
 
-- The Flask app and static site have different data layers (API vs JSON fetch) — the HTML structure/CSS should be shared/identical, only the JS differs.
-- Font must be embedded as `@font-face` using a relative path (both versions serve from their own directory).
+- The Flask app serves the same `docs/index.html` used by the static site.
+- Font must be embedded as `@font-face` using a relative path from `docs/`.
 - Existing functionality must be preserved: postcode lookup, map display, catchment tab, loading states, error states.
