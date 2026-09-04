@@ -208,7 +208,10 @@ html = f"""<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
 *, *::before, *::after {{ margin:0; padding:0; box-sizing:border-box; }}
@@ -437,8 +440,9 @@ let mapInitialised = false;
 function initMap() {{
   mapInitialised = true;
   const map = L.map('map').setView([51.50, -0.12], 10);
-  L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
-    attribution: '© OpenStreetMap contributors © CARTO', maxZoom: 19
+  L.maplibreGL({{
+    style: 'https://tiles.openfreemap.org/styles/positron',
+    attribution: '© OpenStreetMap contributors'
   }}).addTo(map);
 
   // Group layers by hospital

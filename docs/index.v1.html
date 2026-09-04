@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neonatal Unit Lookup</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -377,9 +380,9 @@
 
         catchmentMap = L.map(mapDiv).setView([51.5, -0.1], 10);
         setTimeout(() => catchmentMap.invalidateSize(), 50);
-        const baseLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-            maxZoom: 19,
+        const baseLayer = L.maplibreGL({
+            style: 'https://tiles.openfreemap.org/styles/positron',
+            attribution: '&copy; OpenStreetMap contributors',
         }).addTo(catchmentMap);
 
         // Sector colour logic mirrors generate_map.py.
@@ -639,9 +642,9 @@
         if (map) map.remove();
 
         map = L.map('map').setView([data.lat, data.lon], 12);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-            maxZoom: 19,
+        L.maplibreGL({
+            style: 'https://tiles.openfreemap.org/styles/positron',
+            attribution: '&copy; OpenStreetMap contributors',
         }).addTo(map);
 
         markers = [];

@@ -6,7 +6,10 @@
     <title>HO.ME &ndash; Hospital Near Me (Neonatal)</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>
     <style>
         @font-face {
             font-family: 'Fredoka';
@@ -484,8 +487,9 @@
         mapDiv.style.display = 'block';
         catchmentMap = L.map(mapDiv).setView([51.5, -0.1], 10);
         setTimeout(() => catchmentMap.invalidateSize(), 50);
-        const baseLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '© OpenStreetMap contributors © CARTO', maxZoom: 19,
+        const baseLayer = L.maplibreGL({
+            style: 'https://tiles.openfreemap.org/styles/positron',
+            attribution: '© OpenStreetMap contributors',
         }).addTo(catchmentMap);
         const SECTOR_RANGES = {
             'NC':     { h: [210, 235], s: [80, 90], l: [22, 72] },
@@ -705,8 +709,9 @@
         document.getElementById('results').style.display = 'block';
         if (map) map.remove();
         map = L.map('map').setView([data.lat, data.lon], 12);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '© OpenStreetMap contributors © CARTO', maxZoom: 19,
+        L.maplibreGL({
+            style: 'https://tiles.openfreemap.org/styles/positron',
+            attribution: '© OpenStreetMap contributors',
         }).addTo(map);
         markers = [];
         const pcMarker = L.circleMarker([data.lat, data.lon], {

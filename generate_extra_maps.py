@@ -50,7 +50,7 @@ colour_map  = dict(zip(hospital_names, colour_list))
 
 CENTRE   = [51.5, -0.1]
 ZOOM     = 10
-BASETILE = 'cartodbpositron'
+POSITRON_STYLE = 'https://tiles.openfreemap.org/styles/positron'
 
 
 # ── Shared helpers ─────────────────────────────────────────────────────────────
@@ -69,6 +69,18 @@ def add_hospital_markers(m):
             tooltip=name,
         ).add_to(lg)
     lg.add_to(m)
+
+
+def add_positron_base(m):
+    """Add OpenFreeMap Positron vector basemap to a Folium map."""
+    m.get_root().header.add_child(folium.Element(
+        '<link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet"/>'
+        '<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>'
+        '<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>'
+    ))
+    m.get_root().script.add_child(folium.Element(
+        f"L.maplibreGL({{style:'{POSITRON_STYLE}',attribution:'&copy; OpenStreetMap contributors'}}).addTo({m.get_name()});"
+    ))
 
 
 _TOGGLE_JS = """<script>
@@ -144,7 +156,7 @@ def build_map4():
     ]
 
     m = folium.Map(location=CENTRE, zoom_start=ZOOM, tiles=None)
-    folium.TileLayer(BASETILE, name='Base Map').add_to(m)
+    add_positron_base(m)
 
     MAX_RADIUS = 45
     for label, col, show in level_defs:
@@ -201,6 +213,9 @@ def build_map5():
 <title>Catchment Grid</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet"/>
+<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>
 <style>
 html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
 #map{height:100%;}
@@ -401,8 +416,8 @@ _DOT_LAYER = """var DotLayer=L.Layer.extend({
   }
 });"""
 
-_BASE_TILE = ("L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',"
-              "{attribution:'&copy; OpenStreetMap contributors &copy; CARTO',maxZoom:19}).addTo(map);")
+_BASE_TILE = ("L.maplibreGL({style:'https://tiles.openfreemap.org/styles/positron',"
+              "attribution:'&copy; OpenStreetMap contributors'}).addTo(map);")
 
 _HOSP_JS = """var nc={};names.forEach(function(n,i){nc[n]='hsl('+Math.round((i/names.length)*360)+',75%,45%)';});
   hospData.forEach(function(h){
@@ -418,6 +433,13 @@ def _write_leaflet(path, template):
                .replace('_DOT_LAYER_', _DOT_LAYER)
                .replace('_BASE_TILE_', _BASE_TILE)
                .replace('_HOSP_JS_', _HOSP_JS))
+    leaflet_script = '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>'
+    maplibre_assets = (
+        '<link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet"/>\n'
+        '<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>\n'
+        '<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>'
+    )
+    content = content.replace(leaflet_script, leaflet_script + '\n' + maplibre_assets)
     with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
     kb = os.path.getsize(path) // 1024
