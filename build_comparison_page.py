@@ -199,10 +199,7 @@ html = f"""<!DOCTYPE html>
 <title>Catchment Comparison — Geographic vs Equalised</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
-<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>
 <style>
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{ font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; }}
@@ -257,9 +254,8 @@ let DOTS = null;
 // ── Create both maps ──────────────────────────────────────────────────────────
 function makeMap(id) {{
   const m = L.map(id, {{ center: [51.505, -0.09], zoom: 10, zoomControl: false }});
-  L.maplibreGL({{
-    style: 'https://tiles.openfreemap.org/styles/positron',
-    attribution: '© OpenStreetMap contributors'
+  L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+    attribution: '© OpenStreetMap contributors', maxZoom: 19
   }}).addTo(m);
   L.control.zoom({{ position: 'bottomleft' }}).addTo(m);
   return m;
