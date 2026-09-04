@@ -401,8 +401,8 @@ _DOT_LAYER = """var DotLayer=L.Layer.extend({
   }
 });"""
 
-_BASE_TILE = ("L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',"
-              "{attribution:'&copy; OpenStreetMap contributors',maxZoom:19}).addTo(map);")
+_BASE_TILE = ("L.maplibreGL({style:'https://tiles.openfreemap.org/styles/positron',"
+              "attribution:'&copy; OpenStreetMap contributors'}).addTo(map);")
 
 _HOSP_JS = """var nc={};names.forEach(function(n,i){nc[n]='hsl('+Math.round((i/names.length)*360)+',75%,45%)';});
   hospData.forEach(function(h){

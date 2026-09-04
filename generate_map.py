@@ -185,7 +185,15 @@ results_plot = results[~non_geographic_mask].copy()
 sampled = results_plot.iloc[::SAMPLE_RATE].copy()
 
 m = folium.Map(location=[51.5, -0.1], zoom_start=10, tiles=None)
-folium.TileLayer('OpenStreetMap', name='Base Map').add_to(m)
+m.get_root().header.add_child(folium.Element(
+    '<link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet"/>'
+    '<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>'
+    '<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>'
+))
+m.get_root().script.add_child(folium.Element(
+    f"L.maplibreGL({{style:'https://tiles.openfreemap.org/styles/positron',"
+    f"attribution:'&copy; OpenStreetMap contributors'}}).addTo({m.get_name()});"
+))
 
 for name in hospital_names:
     subset = sampled[sampled['Closest_Any'] == name]
