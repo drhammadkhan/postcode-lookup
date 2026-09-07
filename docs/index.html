@@ -34,74 +34,118 @@
             --shadow:     0 2px 12px rgba(46,91,95,0.09);
             --shadow-lg:  0 6px 28px rgba(46,91,95,0.15);
         }
-        body { font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-        header { background: var(--dark-teal); }
+        body { font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif; background: #f7f8f8; color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: #ffffff; border-bottom: 1px solid #dcebe7; display: none; }
+        body.has-results header, body.catchment-active header { display: block; }
         .header-accent { height: 3px; background: var(--orange); }
-        .header-inner { max-width: 1100px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 20px; }
-        .header-map { flex-shrink: 0; opacity: 0.95; }
-        .header-wordmark { flex: 1; min-width: 0; }
+        .header-inner { max-width: 1360px; margin: 0 auto; padding: 8px 24px; display: grid; grid-template-columns: 400px minmax(320px, 480px) 1fr; align-items: center; gap: 20px; }
+        .app-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--dark-teal); }
+        .app-brand img { height: 62px; width: auto; display: block; }
+        .app-brand-sep { width: 1px; height: 26px; background: #dcebe7; }
+        .app-brand-caption { font-size: 0.9rem; color: var(--text-mid); font-weight: 500; white-space: nowrap; }
+        .header-map, .header-wordmark { display: none; }
+        .header-search { min-width: 0; }
+        .header-search .search-row { padding: 3px 3px 3px 18px; }
+        .header-search .search-btn { height: 36px; padding: 0 16px; font-size: 0.92rem; }
+        .header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 16px; min-width: 0; }
+        .header-caption { font-size: 0.85rem; color: #5f898d; white-space: nowrap; }
+        .feedback-btn { background: transparent; color: var(--dark-teal); border: 2px solid var(--dark-teal); height: 36px; padding: 0 16px; border-radius: 999px; font-size: 0.88rem; font-weight: 650; font-family: 'Fredoka', sans-serif; cursor: pointer; white-space: nowrap; }
+        .feedback-btn:hover { background: rgba(102,188,162,0.15); }
+        .result-guidance { display: none; background: var(--teal-light); border-top: 3px solid var(--orange); border-bottom: 1px solid #cfe9dd; color: var(--dark-teal); }
+        body.has-results .result-guidance { display: block; }
+        body.guidance-dismissed .result-guidance { display: none; }
+        .result-guidance-inner { max-width: 1360px; margin: 0 auto; padding: 10px 24px; display: flex; align-items: center; gap: 14px; font-size: 0.88rem; line-height: 1.45; }
+        .result-guidance-inner p { flex: 1; margin: 0; }
+        .result-guidance em { font-style: italic; font-weight: 650; }
+        .guidance-close { width: 28px; height: 28px; border: 0; border-radius: 50%; background: transparent; color: var(--dark-teal); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .guidance-close:hover { background: rgba(46,91,95,0.08); }
         main { flex: 1; }
-        .container { max-width: 1100px; margin: 0 auto; padding: 28px 24px; }
-        .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+        .container { max-width: 1360px; margin: 0 auto; padding: 28px 24px; }
+        .tabs { display: none; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+        body.catchment-active .tabs { display: flex; }
         .tab { padding: 10px 22px; font-size: 1rem; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--text-soft); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.18s; font-family: 'Fredoka', sans-serif; display: flex; align-items: center; gap: 6px; white-space: nowrap; text-decoration: none; }
         .tab:hover { color: var(--dark-teal); }
         .tab.active { color: var(--dark-teal); border-bottom-color: var(--orange); font-weight: 600; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .loading-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; color: var(--text-mid); font-size: 0.95rem; }
+        .loading-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; color: var(--text-mid); font-size: 0.95rem; max-width: 720px; margin: 24px auto; }
         .loading-msg { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
         .loading-spinner { width: 18px; height: 18px; border: 2.5px solid var(--border); border-top-color: var(--teal); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
         .progress-track { height: 5px; background: var(--bg); border-radius: 99px; overflow: hidden; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--orange)); border-radius: 99px; width: 0%; transition: width 0.35s ease; }
-        .search-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; margin-bottom: 16px; }
-        .search-label { font-size: 0.82rem; font-weight: 600; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
-        .search-row { display: flex; gap: 10px; align-items: stretch; }
+        .search-card { background: transparent; border-radius: 0; box-shadow: none; padding: 0; max-width: 640px; margin: 10vh auto 16px; }
+        .search-card::before { content: ''; display: block; width: min(320px, 70vw); height: 128px; margin: 0 auto 30px; background: url('assets/home-map-light.svg') center / contain no-repeat; }
+        body.has-results .search-card { display: none !important; }
+        body.catchment-active .search-card { max-width: none; margin: 0 0 16px; }
+        body.has-results .search-card::before, body.catchment-active .search-card::before { display: none; }
+        .search-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+        .search-row { display: flex; gap: 8px; align-items: center; padding: 5px 5px 5px 22px; background: #fff; border: 2px solid var(--border); border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: border-color 0.15s, box-shadow 0.15s; }
+        .search-row:focus-within { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(102,188,162,0.22), 0 4px 12px rgba(0,0,0,0.06); }
         .search-input-wrap { flex: 1; position: relative; }
-        .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-soft); pointer-events: none; }
-        .search-input-wrap input { width: 100%; font-size: 1.05rem; font-family: 'Fredoka', sans-serif; font-weight: 400; padding: 11px 38px 11px 42px; border: 2px solid var(--border); border-radius: 10px; outline: none; color: var(--text); background: white; transition: border-color 0.18s, box-shadow 0.18s; }
+        .search-icon { position: absolute; left: 0; top: 50%; transform: translateY(-50%); color: var(--text-soft); pointer-events: none; }
+        .search-input-wrap input { width: 100%; font-size: 1.08rem; font-family: 'Fredoka', sans-serif; font-weight: 400; padding: 8px 38px 8px 29px; border: none; border-radius: 0; outline: none; color: var(--text); background: transparent; transition: border-color 0.18s, box-shadow 0.18s; }
         .search-input-wrap input::placeholder { color: var(--text-soft); }
-        .search-input-wrap input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(102,188,162,0.15); }
+        .search-input-wrap input:focus { box-shadow: none; }
         .clear-btn { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-soft); display: none; padding: 3px; line-height: 0; border-radius: 50%; transition: color 0.15s, background 0.15s; }
         .clear-btn:hover { color: var(--text); background: var(--bg); }
-        .search-btn { background: var(--orange); color: white; border: none; padding: 11px 22px; border-radius: 10px; font-size: 1rem; font-weight: 600; font-family: 'Fredoka', sans-serif; cursor: pointer; transition: background 0.18s, transform 0.12s; display: flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(210,113,42,0.3); }
-        .search-btn:hover { background: #b85e20; }
+        .search-btn { background: var(--dark-teal); color: white; border: none; height: 42px; padding: 0 20px; border-radius: 999px; font-size: 1rem; font-weight: 500; font-family: 'Fredoka', sans-serif; cursor: pointer; transition: background 0.18s, transform 0.12s; display: flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: none; }
+        .search-btn:hover { background: #264d51; }
         .search-btn:active { transform: scale(0.98); }
-        .lookup-guidance { margin-top: 13px; padding: 11px 13px; border-radius: 10px; background: var(--teal-light); color: var(--dark-teal); font-size: 0.88rem; line-height: 1.45; }
-        .lookup-guidance em { font-style: italic; font-weight: 650; }
+        .about-prompt { margin-top: 28px; text-align: center; font-size: 0.9rem; color: #5f898d; }
+        body.has-results .about-prompt, body.catchment-active .about-prompt { display: none; }
+        .about-link { background: none; border: none; padding: 2px 3px; font: inherit; font-weight: 650; color: var(--dark-teal); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; border-radius: 4px; }
+        .about-link:hover { color: var(--orange); }
+        .modal-backdrop { position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(46, 91, 95, 0.5); }
+        .modal-backdrop.open { display: flex; }
+        .about-dialog { width: min(520px, 100%); background: #fff; border-radius: 12px; box-shadow: 0 16px 44px rgba(0,0,0,0.2); padding: 22px; position: relative; }
+        .about-dialog h2 { font-size: 1.15rem; font-weight: 650; color: var(--dark-teal); margin: 0 42px 16px 0; }
+        .about-dialog p { margin: 0; color: var(--dark-teal); font-size: 0.95rem; line-height: 1.55; }
+        .about-dialog em { font-style: italic; font-weight: 650; }
+        .modal-close { position: absolute; top: 12px; right: 12px; width: 38px; height: 38px; border: 2px solid #b7ddd4; border-radius: 50%; background: transparent; color: #5f898d; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .modal-close:hover { color: var(--dark-teal); background: #eef8f5; }
         .error-bar { background: #fff5f0; color: #b84c20; border: 1px solid #f5c7ad; border-radius: 10px; padding: 12px 16px; margin-top: 12px; font-size: 0.92rem; display: none; align-items: center; gap: 8px; }
         #results { display: none; }
-        .result-meta { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 22px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+        .result-meta { background: transparent; border-radius: 0; box-shadow: none; padding: 0; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
         .result-meta-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         .result-postcode { font-size: 1.6rem; font-weight: 600; color: var(--dark-teal); letter-spacing: 0.01em; }
         .side-pill { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 99px; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.02em; }
         .side-north { background: var(--teal-light); color: var(--dark-teal); }
         .side-south { background: var(--orange-light); color: #7a3d0e; }
         .result-hint { font-size: 0.85rem; color: var(--text-soft); }
-        .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
+        .result-layout { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 20px; align-items: start; }
+        .results-sidebar { min-width: 0; }
+        .section-kicker { font-size: 0.78rem; font-weight: 650; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 10px; }
+        .cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
         .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; border: 1.5px solid var(--border); transition: transform 0.15s, box-shadow 0.15s; position: relative; overflow: hidden; }
         .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .card::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 4px; }
         .card.level-any::before { background: var(--dark-teal); }
         .card.level-l1::before  { background: var(--teal); }
         .card.level-l2::before  { background: var(--orange); }
         .card.level-l3::before  { background: #c0392b; }
-        .card-level-badge { display: inline-flex; align-items: center; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; padding: 3px 8px; border-radius: 99px; margin-bottom: 10px; }
+        .card-topline { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+        .card-level-badge { display: inline-flex; align-items: center; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; padding: 3px 8px; border-radius: 99px; }
+        .card-level-badge-soft { background: rgba(46,91,95,0.1); color: var(--dark-teal); }
         .card.level-any .card-level-badge { background: rgba(46,91,95,0.1); color: var(--dark-teal); }
         .card.level-l1  .card-level-badge { background: rgba(102,188,162,0.15); color: #2a7a60; }
         .card.level-l2  .card-level-badge { background: var(--orange-light); color: #7a3d0e; }
         .card.level-l3  .card-level-badge { background: #fff0ee; color: #c0392b; }
+        .card .card-level-badge-soft { background: rgba(46,91,95,0.1); color: var(--dark-teal); }
         .card-hospital { font-size: 0.96rem; font-weight: 600; color: var(--dark-teal); line-height: 1.3; margin-bottom: 6px; }
-        .card-distance { font-size: 0.85rem; color: var(--orange); font-weight: 500; display: flex; align-items: center; gap: 4px; }
+        .card-distance { margin-left: auto; font-size: 0.85rem; color: var(--text-mid); font-weight: 600; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+        .card-phone { margin-top: 7px; color: var(--text-mid); font-size: 0.84rem; font-weight: 500; display: flex; align-items: center; gap: 5px; }
         .card-tags { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px; }
         .tag { display: inline-block; background: #fff0ee; color: #c0392b; font-size: 0.67rem; font-weight: 600; padding: 2px 8px; border-radius: 99px; letter-spacing: 0.03em; }
-        #map-container { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 6px; }
-        #map { height: 380px; width: 100%; }
-        .hospital-distance-panel { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1.5px solid var(--border); margin-top: 16px; overflow: hidden; }
-        .hospital-distance-head { padding: 15px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+        #map-container { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1.5px solid var(--border); position: sticky; top: 20px; height: calc(100vh - 40px); min-height: 520px; }
+        #map { height: 100%; width: 100%; }
+        .hospital-distance-wrap { margin-top: 4px; }
+        .hospital-distance-panel { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1.5px solid var(--border); overflow: hidden; }
+        .hospital-distance-head { padding: 0 0 10px; border-bottom: none; display: block; }
         .hospital-distance-title { font-size: 1rem; font-weight: 650; color: var(--dark-teal); }
         .hospital-distance-note { font-size: 0.82rem; color: var(--text-soft); }
+        .hospital-distance-table-head { display: grid; grid-template-columns: minmax(0, 1fr) 62px 52px 86px; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: #fafdfc; color: var(--text-mid); font-size: 0.7rem; font-weight: 650; text-transform: uppercase; letter-spacing: 0.07em; }
         .hospital-distance-list { display: flex; flex-direction: column; }
-        .hospital-distance-row { display: grid; grid-template-columns: minmax(170px, 1.6fr) 82px 70px 118px 115px minmax(120px, 1fr); gap: 12px; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--border); border-left: 4px solid transparent; }
+        .hospital-distance-row { display: grid; grid-template-columns: minmax(0, 1fr) 62px 52px 86px; gap: 10px; align-items: center; padding: 11px 16px; border-bottom: 1px solid var(--border); border-left: 4px solid transparent; }
         .hospital-distance-row:last-child { border-bottom: none; }
         .hospital-distance-row:hover { background: var(--bg); }
         .hospital-distance-row-right { background: #f0faf6; border-left-color: var(--teal); }
@@ -109,18 +153,24 @@
         .hospital-distance-name { font-size: 0.94rem; font-weight: 650; color: var(--dark-teal); line-height: 1.25; }
         .hospital-distance-km { font-size: 0.95rem; font-weight: 650; color: var(--orange); white-space: nowrap; }
         .hospital-distance-meta { color: var(--text-mid); font-size: 0.82rem; line-height: 1.35; }
+        .hospital-side { min-width: 0; overflow-wrap: anywhere; }
         .hospital-side-badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 99px; background: var(--teal-light); color: var(--dark-teal); font-size: 0.68rem; font-weight: 650; margin-top: 4px; white-space: nowrap; }
-        .hospital-distance-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+        .hospital-distance-tags { display: none; flex-wrap: wrap; gap: 4px; }
         .hospital-distance-empty { color: var(--text-soft); font-size: 0.84rem; }
         #catchment-map { height: calc(100vh - 145px); width: 100%; border: none; border-radius: 0; }
         #catchment-map .leaflet-control-layers { max-height: calc(100vh - 200px); overflow-y: auto; }
         .spinner { display: none; width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.65s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        footer { background: var(--dark-teal); padding: 16px 24px; text-align: center; color: rgba(255,255,255,0.45); font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; font-family: 'Fredoka', sans-serif; }
-        footer a { color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 500; transition: color 0.15s; }
-        footer a:hover { color: white; }
-        footer .footer-sep { color: rgba(255,255,255,0.2); }
-        @media (max-width: 800px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+        footer { background: #ffffff; border-top: 1px solid #dcebe7; padding: 16px 24px; text-align: center; color: #5f898d; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; font-family: 'Fredoka', sans-serif; }
+        footer a { color: var(--dark-teal); text-decoration: none; font-weight: 600; transition: color 0.15s; }
+        footer a:hover { color: var(--orange); }
+        footer .footer-sep { color: #dcebe7; }
+        @media (max-width: 980px) {
+            .header-inner { grid-template-columns: 1fr; }
+            .header-actions { justify-content: flex-start; }
+            .result-layout { grid-template-columns: 1fr; }
+            #map-container { position: static; height: 420px; min-height: 420px; }
+        }
         @media (max-width: 560px) {
             .header-inner { padding: 12px 16px; gap: 12px; }
             .search-row { flex-direction: column; }
@@ -140,6 +190,27 @@
 
 <header>
     <div class="header-inner">
+        <a class="app-brand" href="#" onclick="resetLookup(event)" aria-label="HO.ME home">
+            <img src="assets/home-map-light.svg" alt="HO.ME - HOspital near ME">
+            <span class="app-brand-sep" aria-hidden="true"></span>
+            <span class="app-brand-caption">HOspital near ME</span>
+        </a>
+        <form class="header-search" id="headerSearchForm" autocomplete="off">
+            <div class="search-row">
+                <div class="search-input-wrap">
+                    <svg class="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="headerPostcodeInput" placeholder="Enter a postcode - e.g. SE1 7EH" />
+                    <button type="button" class="clear-btn" id="headerClearBtn" aria-label="Clear postcode" tabindex="-1">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+                <button type="submit" class="search-btn">Search</button>
+            </div>
+        </form>
+        <div class="header-actions">
+            <div class="header-caption">London Neonatal Units</div>
+            <button type="button" class="feedback-btn">Submit Feedback</button>
+        </div>
         <div class="header-map">
 <svg data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 590.06 387.21" style="height:56px;width:auto;display:block;" aria-hidden="true">
   <defs>
@@ -302,8 +373,16 @@
 </svg>
         </div>
     </div>
-    <div class="header-accent"></div>
 </header>
+
+<div class="result-guidance" id="resultGuidance">
+    <div class="result-guidance-inner">
+        <p>This tool is a guide which can help you find the <em>closest</em> hospitals for a given postcode. This is not necessarily the same as the <em>local</em> hospital.</p>
+        <button type="button" class="guidance-close" id="guidanceClose" aria-label="Dismiss notice">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+    </div>
+</div>
 
 <main>
 <div class="container">
@@ -336,18 +415,19 @@
             <div class="search-row">
                 <div class="search-input-wrap">
                     <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" id="postcodeInput" placeholder="e.g. SW1A 2AA or TW7 6QT" />
+                    <input type="text" id="postcodeInput" placeholder="Enter a postcode - e.g. SE1 7EH" />
                     <button type="button" class="clear-btn" id="clearBtn" aria-label="Clear postcode" tabindex="-1">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                 </div>
                 <button type="submit" class="search-btn" id="searchBtn">
-                    Find hospitals
+                    Search
                     <div class="spinner" id="spinner"></div>
                 </button>
             </div>
-            <div class="lookup-guidance">
-                This tool is a guide which can help you find the <em>closest</em> hospitals for a given postcode. This is not necessarily the same as the <em>local</em> hospital.
+            <div class="about-prompt">
+                First time here?
+                <button type="button" class="about-link" id="aboutLink">Find out more about HO.ME</button>
             </div>
         </form>
 
@@ -364,16 +444,28 @@
                 </div>
                 <div class="result-hint">Nearest hospital at each care level</div>
             </div>
-            <div class="cards" id="cards"></div>
-            <div id="map-container">
-                <div id="map"></div>
-            </div>
-            <div class="hospital-distance-panel" id="hospitalDistancePanel">
-                <div class="hospital-distance-head">
-                    <div class="hospital-distance-title">All neonatal hospitals by distance</div>
-                    <div class="hospital-distance-note">Highlighted rows are on the matching Thames side or serve both sides</div>
+            <div class="result-layout">
+                <div class="results-sidebar">
+                    <div class="section-kicker">Recommended - nearest at each care level</div>
+                    <div class="cards" id="cards"></div>
+                    <div class="hospital-distance-wrap">
+                        <div class="hospital-distance-head">
+                            <div class="hospital-distance-title">Other results - all hospitals by distance</div>
+                        </div>
+                        <div class="hospital-distance-panel" id="hospitalDistancePanel">
+                            <div class="hospital-distance-table-head">
+                                <span>Hospital</span>
+                                <span>Dist.</span>
+                                <span>Level</span>
+                                <span>Side</span>
+                            </div>
+                            <div class="hospital-distance-list" id="hospitalDistanceList"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="hospital-distance-list" id="hospitalDistanceList"></div>
+                <div id="map-container">
+                    <div id="map"></div>
+                </div>
             </div>
         </div>
 
@@ -383,9 +475,6 @@
 </main>
 
 <div class="tab-content" id="tab-catchment">
-    <div class="lookup-guidance" style="margin:20px 20px 0 20px;">
-        This tool is a guide which can help you find the <em>closest</em> hospitals for a given postcode. This is not necessarily the same as the <em>local</em> hospital.
-    </div>
     <div id="catchment-loading" class="loading-card" style="margin:20px;padding:20px 28px;">
         <div class="loading-msg">
             <div class="loading-spinner"></div>
@@ -403,13 +492,23 @@
     <span class="footer-sep">|</span>
     <a href="hospitals.html">Hospitals</a>
     <span class="footer-sep">|</span>
-    <a href="extra_maps.html">
+    <a href="#" onclick="switchTab('catchment'); return false;">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-        Extra Maps
+        Catchment Map
     </a>
     <span class="footer-sep">|</span>
     <span>Erin Coupland &amp; Hammad Khan</span>
 </footer>
+
+<div class="modal-backdrop" id="aboutModal" role="presentation">
+    <div class="about-dialog" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+        <button type="button" class="modal-close" id="aboutClose" aria-label="Close dialog">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <h2 id="aboutTitle">What is HO.ME?</h2>
+        <p>This tool is a guide which can help you find the <em>closest</em> hospitals for a given postcode. This is not necessarily the same as the <em>local</em> hospital.</p>
+    </div>
+</div>
 
 <script>
 
@@ -424,6 +523,39 @@
     const levelColours = ['#1855A3', '#16A34A', '#D97706', '#DC2626'];
     const levelLabels = ['Any Level', 'Level 1 — Special Care', 'Level 2 — High Dependency', 'Level 3 — NICU'];
     const sectorLabels = { NC: 'North Central', NE: 'North East', NW: 'North West', SE: 'South East', SW: 'South West', Border: 'Border' };
+    const hospitalPhones = {
+        'Barnet Hospital': '020 8216 4600',
+        'Chelsea & Westminster': '020 3315 8000',
+        'Croydon University': '020 8401 3000',
+        'Darent Valley': '01322 428 100',
+        'East Surrey': '01737 768 511',
+        'Epsom Hospital': '01372 735 735',
+        "Evelina (St Thomas')": '020 7188 7188',
+        'Hillingdon Hospital': '01895 238 282',
+        'Homerton University': '020 8510 5555',
+        'Kings College Hospital': '020 3299 9000',
+        'Kingston Hospital': '020 8546 7711',
+        'Newham General': '020 7476 4000',
+        'North Middlesex': '020 8887 2000',
+        'Northwick Park': '020 8864 3232',
+        'Princess Royal (PRUH)': '01689 863 000',
+        'Queen Elizabeth Woolwich': '020 8836 6000',
+        "Queen Charlottes'": '020 3313 1111',
+        'Queens Hospital': '0330 400 4333',
+        'Royal Free Hospital': '020 7794 0500',
+        'St Heliers Hospital': '020 8296 2000',
+        'St Marys Hospital': '020 3312 6666',
+        'St Peters Hospital': '01932 872000',
+        'St. Georges Hospital': '020 8672 1255',
+        'The Royal London': '020 7377 7000',
+        'UCH (University College)': '020 3456 7890',
+        'University Lewisham': '020 8333 3000',
+        'Watford General': '01923 244 366',
+        'West Middlesex': '020 8560 2121',
+        'Whipps Cross': '020 8539 5522',
+        'Whittington Hospital': '020 7272 3070',
+        'Wexham Park': '0300 614 5000',
+    };
 
     function escapeHtml(value) {
         return String(value ?? '').replace(/[&<>"']/g, ch => ({
@@ -472,11 +604,28 @@
 
     loadData();
 
+    function setModeClass(tabName, hasResults = document.body.classList.contains('has-results')) {
+        document.body.classList.toggle('catchment-active', tabName === 'catchment');
+        document.body.classList.toggle('has-results', hasResults && tabName === 'lookup');
+    }
+
+    function resetLookup(event) {
+        if (event) event.preventDefault();
+        switchTab('lookup');
+        postcodeInput.value = '';
+        clearBtn.style.display = 'none';
+        document.getElementById('error').style.display = 'none';
+        document.getElementById('results').style.display = 'none';
+        document.body.classList.remove('has-results');
+        postcodeInput.focus();
+    }
+
     function switchTab(tabName) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelector('[data-tab="' + tabName + '"]').classList.add('active');
         document.getElementById('tab-' + tabName).classList.add('active');
+        setModeClass(tabName);
         if (tabName === 'catchment' && !catchmentLoaded) buildCatchmentMap();
     }
 
@@ -629,24 +778,70 @@
 
     const postcodeInput = document.getElementById('postcodeInput');
     const clearBtn = document.getElementById('clearBtn');
-    postcodeInput.addEventListener('input', () => {
-        clearBtn.style.display = postcodeInput.value ? 'block' : 'none';
+    const headerPostcodeInput = document.getElementById('headerPostcodeInput');
+    const headerClearBtn = document.getElementById('headerClearBtn');
+    const guidanceClose = document.getElementById('guidanceClose');
+    const aboutLink = document.getElementById('aboutLink');
+    const aboutModal = document.getElementById('aboutModal');
+    const aboutClose = document.getElementById('aboutClose');
+
+    function openAboutModal() {
+        aboutModal.classList.add('open');
+        aboutClose.focus();
+    }
+
+    function closeAboutModal() {
+        aboutModal.classList.remove('open');
+        aboutLink.focus();
+    }
+
+    aboutLink.addEventListener('click', openAboutModal);
+    aboutClose.addEventListener('click', closeAboutModal);
+    aboutModal.addEventListener('click', (event) => {
+        if (event.target === aboutModal) closeAboutModal();
     });
-    clearBtn.addEventListener('click', () => {
-        postcodeInput.value = '';
-        clearBtn.style.display = 'none';
-        document.getElementById('error').style.display = 'none';
-        document.getElementById('results').style.display = 'none';
-        postcodeInput.focus();
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && aboutModal.classList.contains('open')) closeAboutModal();
     });
 
-    document.getElementById('searchForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const raw = document.getElementById('postcodeInput').value.trim();
+    function syncInputs(value) {
+        postcodeInput.value = value;
+        headerPostcodeInput.value = value;
+        clearBtn.style.display = value ? 'block' : 'none';
+        headerClearBtn.style.display = value ? 'block' : 'none';
+    }
+
+    function clearLookup() {
+        syncInputs('');
+        document.getElementById('error').style.display = 'none';
+        document.getElementById('results').style.display = 'none';
+        document.body.classList.remove('has-results');
+        postcodeInput.focus();
+    }
+
+    guidanceClose.addEventListener('click', () => {
+        document.body.classList.add('guidance-dismissed');
+    });
+
+    postcodeInput.addEventListener('input', () => {
+        syncInputs(postcodeInput.value);
+    });
+    headerPostcodeInput.addEventListener('input', () => {
+        syncInputs(headerPostcodeInput.value);
+    });
+    clearBtn.addEventListener('click', clearLookup);
+    headerClearBtn.addEventListener('click', () => {
+        clearLookup();
+        headerPostcodeInput.focus();
+    });
+
+    function performLookup(rawValue) {
+        const raw = rawValue.trim();
         const key = raw.replace(/\s/g, '').toUpperCase();
         const errBar = document.getElementById('error');
         errBar.style.display = 'none';
         document.getElementById('results').style.display = 'none';
+        document.body.classList.remove('has-results');
         if (!key) return;
         if (!postcodeData.data[key]) {
             document.getElementById('error-text').textContent = 'Postcode "' + raw + '" not found.';
@@ -655,14 +850,15 @@
         }
         const r = postcodeData.data[key];
         const names = postcodeData.names;
+        syncInputs(raw);
         const data = {
             postcode: r[0], lat: r[1], lon: r[2],
             side: r[3] === 0 ? 'North' : 'South',
             levels: [
-                { label: levelLabels[0], hospital: names[r[4]],  distance_km: r[5]  },
-                { label: levelLabels[1], hospital: names[r[6]],  distance_km: r[7]  },
-                { label: levelLabels[2], hospital: names[r[8]],  distance_km: r[9]  },
-                { label: levelLabels[3], hospital: names[r[10]], distance_km: r[11] },
+                { label: levelLabels[0], level: 0, hospital: names[r[4]],  distance_km: r[5]  },
+                { label: levelLabels[1], level: 1, hospital: names[r[6]],  distance_km: r[7]  },
+                { label: levelLabels[2], level: 2, hospital: names[r[8]],  distance_km: r[9]  },
+                { label: levelLabels[3], level: 3, hospital: names[r[10]], distance_km: r[11] },
             ],
         };
         document.getElementById('resultPostcode').textContent = data.postcode;
@@ -671,18 +867,24 @@
         badge.className = 'side-pill ' + (data.side === 'North' ? 'side-north' : 'side-south');
         const cardsEl = document.getElementById('cards');
         cardsEl.innerHTML = '';
-        data.levels.forEach((lvl, i) => {
+        const anyHospital = data.levels[0].hospital;
+        const recommendedLevels = data.levels.slice(1).sort((a, b) => Number(a.distance_km) - Number(b.distance_km));
+        recommendedLevels.forEach((lvl) => {
             const card = document.createElement('div');
-            card.className = 'card ' + levelClasses[i];
+            card.className = 'card ' + levelClasses[lvl.level];
             const hInfo = window.hospCoords[lvl.hospital];
             let tagsHtml = '';
             if (hInfo && hInfo.level === 3 && hInfo.tags) {
                 tagsHtml = '<div class="card-tags">' + hInfo.tags.split(',').map(t => '<span class="tag">' + escapeHtml(t.trim()) + '</span>').join(' ') + '</div>';
             }
-            card.innerHTML = '<div class="card-level-badge">' + escapeHtml(lvl.label) + '</div>' +
+            const anyBadge = lvl.hospital === anyHospital ? '<span class="card-level-badge card-level-badge-soft">Any level</span>' : '';
+            const phone = hospitalPhones[lvl.hospital] || '';
+            const phoneHtml = phone ? '<div class="card-phone"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>' + escapeHtml(phone) + '</div>' : '';
+            card.innerHTML = '<div class="card-topline"><span class="card-level-badge">' + escapeHtml(lvl.label) + '</span>' + anyBadge +
+                '<span class="card-distance"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+                escapeHtml(lvl.distance_km) + ' km</span></div>' +
                 '<div class="card-hospital">' + escapeHtml(lvl.hospital) + '</div>' +
-                '<div class="card-distance"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
-                escapeHtml(lvl.distance_km) + ' km away</div>' + tagsHtml;
+                phoneHtml + tagsHtml;
             cardsEl.appendChild(card);
         });
         const listEl = document.getElementById('hospitalDistanceList');
@@ -696,17 +898,18 @@
         listEl.innerHTML = allHospitalRows.map(h => {
             const sector = sectorLabels[h.sector] || h.sector || 'Network not listed';
             const isRightSide = h.side === data.side || h.side === 'Both';
-            const sideBadge = isRightSide ? '<div class="hospital-side-badge">Same side as postcode</div>' : '';
+            const sideBadge = isRightSide ? '<div class="hospital-side-badge">Same side</div>' : '';
             return '<div class="hospital-distance-row' + (isRightSide ? ' hospital-distance-row-right' : '') + '">' +
-                '<div class="hospital-distance-name">' + escapeHtml(h.name) + '</div>' +
+                '<div><div class="hospital-distance-name">' + escapeHtml(h.name) + '</div>' +
+                '<div class="hospital-distance-meta">' + escapeHtml(sector) + '</div></div>' +
                 '<div class="hospital-distance-km">' + h.distance_km.toFixed(1) + ' km</div>' +
                 '<div class="hospital-distance-meta">Level ' + escapeHtml(h.level) + '</div>' +
-                '<div class="hospital-distance-meta">' + escapeHtml(formatSide(h.side)) + sideBadge + '</div>' +
-                '<div class="hospital-distance-meta">' + escapeHtml(sector) + '</div>' +
-                '<div class="hospital-distance-tags">' + renderTags(h.tags) + '</div>' +
+                '<div class="hospital-distance-meta hospital-side">' + escapeHtml(formatSide(h.side)) + sideBadge + '</div>' +
             '</div>';
         }).join('');
         document.getElementById('results').style.display = 'block';
+        document.body.classList.add('has-results');
+        document.body.classList.remove('guidance-dismissed');
         if (map) map.remove();
         map = L.map('map').setView([data.lat, data.lon], 12);
         L.maplibreGL({
@@ -734,6 +937,15 @@
         });
         const group = L.featureGroup(markers);
         map.fitBounds(group.getBounds().pad(0.15));
+    }
+
+    document.getElementById('searchForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        performLookup(postcodeInput.value);
+    });
+    document.getElementById('headerSearchForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        performLookup(headerPostcodeInput.value);
     });
 
 </script>
