@@ -91,6 +91,7 @@
         .search-btn { background: var(--dark-teal); color: white; border: none; height: 42px; padding: 0 20px; border-radius: 999px; font-size: 1rem; font-weight: 500; font-family: 'Fredoka', sans-serif; cursor: pointer; transition: background 0.18s, transform 0.12s; display: flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: none; }
         .search-btn:hover { background: #264d51; }
         .search-btn:active { transform: scale(0.98); }
+        .search-btn:disabled { cursor: wait; opacity: 0.74; transform: none; }
         .about-prompt { margin-top: 28px; text-align: center; font-size: 0.9rem; color: #5f898d; }
         body.has-results .about-prompt, body.catchment-active .about-prompt { display: none; }
         .about-link { background: none; border: none; padding: 2px 3px; font: inherit; font-weight: 650; color: var(--dark-teal); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; border-radius: 4px; }
@@ -405,7 +406,7 @@
         <div id="loading-state" class="loading-card">
             <div class="loading-msg">
                 <div class="loading-spinner"></div>
-                <span>Loading 333,000 postcodes&hellip;</span>
+                <span id="loadingText">Preparing lookup&hellip;</span>
             </div>
             <div class="progress-track">
                 <div class="progress-fill" id="progressFill"></div>
@@ -525,6 +526,7 @@
 <script>
 
     let postcodeData = null;
+    let postcodeDataPromise = null;
     let hospitalData = null;
     let map = null;
     let markers = [];
@@ -602,14 +604,62 @@
         return side === 'Both' ? 'Both sides' : side + ' side';
     }
 
+    function getSharedPostcode() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('postcode') || params.get('pc') || '';
+    }
+
+    function updateSharedPostcode(postcode) {
+        const url = new URL(window.location.href);
+        if (postcode) {
+            url.searchParams.set('postcode', postcode.replace(/\s/g, '').toUpperCase());
+        } else {
+            url.searchParams.delete('postcode');
+            url.searchParams.delete('pc');
+        }
+        window.history.replaceState({}, '', url);
+    }
+
+    function setLookupLoading(isLoading) {
+        document.querySelectorAll('.search-btn').forEach(btn => {
+            btn.disabled = isLoading;
+        });
+        const spinner = document.getElementById('spinner');
+        if (spinner) spinner.style.display = isLoading ? 'block' : 'none';
+    }
+
+    async function loadPostcodeData() {
+        if (postcodeData) return postcodeData;
+        if (!postcodeDataPromise) {
+            const fill = document.getElementById('progressFill');
+            const loadingText = document.getElementById('loadingText');
+            loadingText.textContent = 'Loading postcode data...';
+            fill.style.width = '25%';
+            postcodeDataPromise = fetch('postcodes.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('Postcode data could not be loaded.');
+                    fill.style.width = '70%';
+                    return response.json();
+                })
+                .then(data => {
+                    postcodeData = data;
+                    fill.style.width = '100%';
+                    return data;
+                })
+                .catch(error => {
+                    postcodeDataPromise = null;
+                    throw error;
+                });
+        }
+        return postcodeDataPromise;
+    }
+
     async function loadData() {
         const fill = document.getElementById('progressFill');
-        fill.style.width = '20%';
-        const [pcRes, hospRes] = await Promise.all([fetch('postcodes.json'), fetch('hospitals.json')]);
-        fill.style.width = '60%';
-        postcodeData = await pcRes.json();
-        fill.style.width = '85%';
-        hospitalData = hospRes.json ? await hospRes.json() : hospRes;
+        fill.style.width = '35%';
+        const hospRes = await fetch('hospitals.json');
+        fill.style.width = '75%';
+        hospitalData = await hospRes.json();
         fill.style.width = '100%';
         window.hospCoords = {};
         hospitalData.forEach(h => {
@@ -618,6 +668,11 @@
         setTimeout(() => {
             document.getElementById('loading-state').style.display = 'none';
             document.getElementById('searchForm').style.display = 'block';
+            const sharedPostcode = getSharedPostcode();
+            if (sharedPostcode) {
+                syncInputs(sharedPostcode);
+                performLookup(sharedPostcode, { updateUrl: false });
+            }
         }, 300);
     }
 
@@ -650,7 +705,8 @@
 
     async function buildCatchmentMap() {
         document.getElementById('catchment-loading').style.display = 'block';
-        while (!postcodeData || !hospitalData) { await new Promise(r => setTimeout(r, 100)); }
+        while (!hospitalData) { await new Promise(r => setTimeout(r, 100)); }
+        await loadPostcodeData();
         const mapDiv = document.getElementById('catchment-map');
         mapDiv.style.display = 'block';
         catchmentMap = L.map(mapDiv).setView([51.5, -0.1], 10);
@@ -746,13 +802,13 @@
         hospitalData.forEach(h => {
             L.circleMarker([h.lat, h.lon], { radius: 8, color: '#1a202c', weight: 2, fillColor: colours[h.name] || '#333', fillOpacity: 1 })
              .bindPopup('<b>' + displayHospitalName(h.name) + '</b><br>Level ' + h.level + ' | ' + h.side)
-             .bindTooltip(h.name).addTo(hospMarkerLayer);
+             .bindTooltip(displayHospitalName(h.name)).addTo(hospMarkerLayer);
         });
         const overlays = { 'Hospitals': hospMarkerLayer };
         SECTOR_ORDER.forEach(sec => {
             sectorHosps[sec].forEach(name => {
                 const c = colours[name];
-                overlays['<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:' + c + ';margin-right:5px;vertical-align:middle;"></span>' + name] = hospLayers[name];
+                overlays['<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:' + c + ';margin-right:5px;vertical-align:middle;"></span>' + displayHospitalName(name)] = hospLayers[name];
             });
         });
         L.control.layers({ 'Base Map': baseLayer }, overlays, { collapsed: true }).addTo(catchmentMap);
@@ -784,7 +840,7 @@
                 html += '<div style="margin-top:8px;margin-bottom:2px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#8aadb0;font-weight:600;">' + SECTOR_LABELS[sec] + '</div>';
                 hosps.forEach(name => {
                     const c = colours[name]; const count = countsByName[name] || 0;
-                    html += '<div><span style="background:' + c + ';width:12px;height:12px;display:inline-block;border-radius:2px;margin-right:6px;vertical-align:middle;"></span>' + name + ' (' + count.toLocaleString() + ')</div>';
+                    html += '<div><span style="background:' + c + ';width:12px;height:12px;display:inline-block;border-radius:2px;margin-right:6px;vertical-align:middle;"></span>' + displayHospitalName(name) + ' (' + count.toLocaleString() + ')</div>';
                 });
             });
             div.innerHTML = html; return div;
@@ -851,6 +907,7 @@
 
     function clearLookup() {
         syncInputs('');
+        updateSharedPostcode('');
         document.getElementById('error').style.display = 'none';
         document.getElementById('results').style.display = 'none';
         document.body.classList.remove('has-results');
@@ -873,7 +930,8 @@
         headerPostcodeInput.focus();
     });
 
-    function performLookup(rawValue) {
+    async function performLookup(rawValue, options = {}) {
+        const shouldUpdateUrl = options.updateUrl !== false;
         const raw = rawValue.trim();
         const key = raw.replace(/\s/g, '').toUpperCase();
         const errBar = document.getElementById('error');
@@ -881,6 +939,16 @@
         document.getElementById('results').style.display = 'none';
         document.body.classList.remove('has-results');
         if (!key) return;
+        setLookupLoading(true);
+        try {
+            await loadPostcodeData();
+        } catch (error) {
+            document.getElementById('error-text').textContent = 'Postcode data could not be loaded. Please try again.';
+            errBar.style.display = 'flex';
+            setLookupLoading(false);
+            return;
+        }
+        setLookupLoading(false);
         if (!postcodeData.data[key]) {
             document.getElementById('error-text').textContent = 'Postcode "' + raw + '" not found.';
             errBar.style.display = 'flex';
@@ -899,6 +967,7 @@
                 { label: levelLabels[3], level: 3, hospital: names[r[10]], distance_km: r[11] },
             ],
         };
+        if (shouldUpdateUrl) updateSharedPostcode(data.postcode);
         document.getElementById('resultPostcode').textContent = data.postcode;
         const badge = document.getElementById('resultSide');
         badge.textContent = '◆ ' + data.side + ' of Thames';
