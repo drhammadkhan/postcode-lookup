@@ -100,6 +100,8 @@
         .about-dialog { width: min(520px, 100%); background: #fff; border-radius: 12px; box-shadow: 0 16px 44px rgba(0,0,0,0.2); padding: 22px; position: relative; }
         .about-dialog h2 { font-size: 1.15rem; font-weight: 650; color: var(--dark-teal); margin: 0 42px 16px 0; }
         .about-dialog p { margin: 0; color: var(--dark-teal); font-size: 0.95rem; line-height: 1.55; }
+        .about-dialog a { color: var(--dark-teal); font-weight: 650; text-underline-offset: 3px; }
+        .about-dialog a:hover { color: var(--orange); }
         .about-dialog em { font-style: italic; font-weight: 650; }
         .modal-close { position: absolute; top: 12px; right: 12px; width: 38px; height: 38px; border: 2px solid #b7ddd4; border-radius: 50%; background: transparent; color: #5f898d; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .modal-close:hover { color: var(--dark-teal); background: #eef8f5; }
@@ -209,7 +211,7 @@
         </form>
         <div class="header-actions">
             <div class="header-caption">London Neonatal Units</div>
-            <button type="button" class="feedback-btn">Submit Feedback</button>
+            <button type="button" class="feedback-btn" id="feedbackBtn">Submit Feedback</button>
         </div>
         <div class="header-map">
 <svg data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 590.06 387.21" style="height:56px;width:auto;display:block;" aria-hidden="true">
@@ -510,6 +512,16 @@
     </div>
 </div>
 
+<div class="modal-backdrop" id="feedbackModal" role="presentation">
+    <div class="about-dialog" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+        <button type="button" class="modal-close" id="feedbackClose" aria-label="Close dialog">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <h2 id="feedbackTitle">Submit Feedback</h2>
+        <p>This page is still being built. Please contact <a href="mailto:erin.franklin@nhs.net">erin.franklin@nhs.net</a> with your feedback.</p>
+    </div>
+</div>
+
 <script>
 
     let postcodeData = null;
@@ -523,6 +535,9 @@
     const levelColours = ['#1855A3', '#16A34A', '#D97706', '#DC2626'];
     const levelLabels = ['Any Level', 'Level 1 — Special Care', 'Level 2 — High Dependency', 'Level 3 — NICU'];
     const sectorLabels = { NC: 'North Central', NE: 'North East', NW: 'North West', SE: 'South East', SW: 'South West', Border: 'Border' };
+    const hospitalDisplayNames = {
+        'University Lewisham': 'Lewisham Hospital',
+    };
     const hospitalPhones = {
         'Barnet Hospital': '020 8216 4600',
         'Chelsea & Westminster': '020 3315 8000',
@@ -561,6 +576,10 @@
         return String(value ?? '').replace(/[&<>"']/g, ch => ({
             '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
         }[ch]));
+    }
+
+    function displayHospitalName(name) {
+        return hospitalDisplayNames[name] || name;
     }
 
     function distanceKm(lat1, lon1, lat2, lon2) {
@@ -726,7 +745,7 @@
         const hospMarkerLayer = L.layerGroup().addTo(catchmentMap);
         hospitalData.forEach(h => {
             L.circleMarker([h.lat, h.lon], { radius: 8, color: '#1a202c', weight: 2, fillColor: colours[h.name] || '#333', fillOpacity: 1 })
-             .bindPopup('<b>' + h.name + '</b><br>Level ' + h.level + ' | ' + h.side)
+             .bindPopup('<b>' + displayHospitalName(h.name) + '</b><br>Level ' + h.level + ' | ' + h.side)
              .bindTooltip(h.name).addTo(hospMarkerLayer);
         });
         const overlays = { 'Hospitals': hospMarkerLayer };
@@ -784,6 +803,9 @@
     const aboutLink = document.getElementById('aboutLink');
     const aboutModal = document.getElementById('aboutModal');
     const aboutClose = document.getElementById('aboutClose');
+    const feedbackBtn = document.getElementById('feedbackBtn');
+    const feedbackModal = document.getElementById('feedbackModal');
+    const feedbackClose = document.getElementById('feedbackClose');
 
     function openAboutModal() {
         aboutModal.classList.add('open');
@@ -795,13 +817,29 @@
         aboutLink.focus();
     }
 
+    function openFeedbackModal() {
+        feedbackModal.classList.add('open');
+        feedbackClose.focus();
+    }
+
+    function closeFeedbackModal() {
+        feedbackModal.classList.remove('open');
+        feedbackBtn.focus();
+    }
+
     aboutLink.addEventListener('click', openAboutModal);
     aboutClose.addEventListener('click', closeAboutModal);
     aboutModal.addEventListener('click', (event) => {
         if (event.target === aboutModal) closeAboutModal();
     });
+    feedbackBtn.addEventListener('click', openFeedbackModal);
+    feedbackClose.addEventListener('click', closeFeedbackModal);
+    feedbackModal.addEventListener('click', (event) => {
+        if (event.target === feedbackModal) closeFeedbackModal();
+    });
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && aboutModal.classList.contains('open')) closeAboutModal();
+        if (event.key === 'Escape' && feedbackModal.classList.contains('open')) closeFeedbackModal();
     });
 
     function syncInputs(value) {
@@ -883,7 +921,7 @@
             card.innerHTML = '<div class="card-topline"><span class="card-level-badge">' + escapeHtml(lvl.label) + '</span>' + anyBadge +
                 '<span class="card-distance"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
                 escapeHtml(lvl.distance_km) + ' km</span></div>' +
-                '<div class="card-hospital">' + escapeHtml(lvl.hospital) + '</div>' +
+                '<div class="card-hospital">' + escapeHtml(displayHospitalName(lvl.hospital)) + '</div>' +
                 phoneHtml + tagsHtml;
             cardsEl.appendChild(card);
         });
@@ -900,7 +938,7 @@
             const isRightSide = h.side === data.side || h.side === 'Both';
             const sideBadge = isRightSide ? '<div class="hospital-side-badge">Same side</div>' : '';
             return '<div class="hospital-distance-row' + (isRightSide ? ' hospital-distance-row-right' : '') + '">' +
-                '<div><div class="hospital-distance-name">' + escapeHtml(h.name) + '</div>' +
+                '<div><div class="hospital-distance-name">' + escapeHtml(displayHospitalName(h.name)) + '</div>' +
                 '<div class="hospital-distance-meta">' + escapeHtml(sector) + '</div></div>' +
                 '<div class="hospital-distance-km">' + h.distance_km.toFixed(1) + ' km</div>' +
                 '<div class="hospital-distance-meta">Level ' + escapeHtml(h.level) + '</div>' +
@@ -929,7 +967,7 @@
             if (!hc) return;
             const hospMarker = L.circleMarker([hc.lat, hc.lon], {
                 radius: 9, color: '#2e5b5f', weight: 2, fillColor: levelColours[i], fillOpacity: 0.9,
-            }).addTo(map).bindPopup('<b>' + lvl.hospital + '</b><br>' + lvl.distance_km + ' km');
+            }).addTo(map).bindPopup('<b>' + displayHospitalName(lvl.hospital) + '</b><br>' + lvl.distance_km + ' km');
             markers.push(hospMarker);
             L.polyline([[data.lat, data.lon], [hc.lat, hc.lon]], {
                 color: levelColours[i], weight: 2, dashArray: '6,6', opacity: 0.6,

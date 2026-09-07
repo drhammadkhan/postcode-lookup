@@ -244,6 +244,9 @@
             2: 'Level 2 - LNU',
             3: 'Level 3 - NICU'
         };
+        const hospitalDisplayNames = {
+            'University Lewisham': 'Lewisham Hospital',
+        };
         const hospitalPhones = {
             'Barnet Hospital': '020 8216 4600',
             'Chelsea & Westminster': '020 3315 8000',
@@ -288,6 +291,14 @@
             }[ch]));
         }
 
+        function displayHospitalName(name) {
+            return hospitalDisplayNames[name] || name;
+        }
+
+        function directorySortName(name) {
+            return displayHospitalName(name).replace(/^St\.?\s+/i, '');
+        }
+
         function renderTags(tags) {
             const parts = String(tags || '').split(',').map(t => t.trim()).filter(Boolean);
             if (!parts.length) return '<span class="empty">None listed</span>';
@@ -316,7 +327,9 @@
             .then(response => response.json())
             .then(hospitals => {
                 const rows = document.getElementById('hospitalRows');
-                const sorted = hospitals.slice().sort((a, b) => a.name.localeCompare(b.name));
+                const sorted = hospitals.slice().sort((a, b) =>
+                    directorySortName(a.name).localeCompare(directorySortName(b.name))
+                );
 
                 document.getElementById('totalHospitals').textContent = sorted.length;
                 document.getElementById('level3Count').textContent = sorted.filter(h => h.level === 3).length;
@@ -330,7 +343,7 @@
                     return `
                         <tr>
                             <td data-label="Hospital">
-                                <div class="hospital-name">${escapeHtml(hospital.name)}</div>
+                                <div class="hospital-name">${escapeHtml(displayHospitalName(hospital.name))}</div>
                                 ${renderPhone(hospital.name)}
                             </td>
                             <td data-label="Network"><span class="pill network">${escapeHtml(networkLabel)}</span></td>
