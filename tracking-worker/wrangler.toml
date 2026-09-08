@@ -1,0 +1,7 @@
+name = "home-postcode-sector-tracking"
+main = "worker.js"
+compatibility_date = "2026-09-07"
+
+[[kv_namespaces]]
+binding = "POSTCODE_SECTOR_SEARCHES"
+id = "218885f9e4954cacad22687e745e81a9"
