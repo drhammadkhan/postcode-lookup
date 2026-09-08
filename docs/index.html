@@ -177,9 +177,46 @@
         }
         @media (max-width: 560px) {
             .header-inner { padding: 12px 16px; gap: 12px; }
-            .search-row { flex-direction: column; }
+            .search-card { max-width: none; margin: 5.5vh auto 16px; }
+            .search-card::before { width: min(290px, 80vw); height: 112px; margin-bottom: 24px; }
+            .search-card .search-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                padding: 0;
+                border: 0;
+                border-radius: 0;
+                background: transparent;
+                box-shadow: none;
+            }
+            .search-card .search-row:focus-within { box-shadow: none; }
+            .search-card .search-input-wrap {
+                width: 100%;
+                min-width: 0;
+                min-height: 56px;
+                display: flex;
+                align-items: center;
+                border: 2px solid var(--border);
+                border-radius: 999px;
+                background: #fff;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            }
+            .search-card .search-input-wrap:focus-within {
+                border-color: var(--teal);
+                box-shadow: 0 0 0 3px rgba(102,188,162,0.2), 0 4px 12px rgba(0,0,0,0.06);
+            }
+            .search-card .search-input-wrap input { min-width: 0; font-size: 1rem; padding: 12px 38px 12px 48px; }
+            .search-card .search-icon { left: 18px; }
+            .search-card .clear-btn { right: 16px; }
+            .search-card .search-btn { align-self: center; justify-content: center; width: min(240px, 70vw); height: 48px; }
+            .header-search .search-row { gap: 6px; padding: 3px 3px 3px 16px; }
+            .header-search .search-input-wrap input { font-size: 0.96rem; }
+            .header-search .search-btn { min-width: 78px; padding: 0 14px; }
+            .about-prompt { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 6px; line-height: 1.4; }
             .tabs { overflow-x: auto; }
             .container { padding: 20px 16px; }
+            footer { gap: 10px 14px; padding: 14px 16px; line-height: 1.35; }
+            footer .footer-sep { display: none; }
             .hospital-distance-head { padding: 14px 15px; }
             .hospital-distance-row { grid-template-columns: 1fr auto; gap: 8px 12px; padding: 13px 15px; }
             .hospital-distance-name { grid-column: 1 / 2; }
@@ -203,7 +240,7 @@
             <div class="search-row">
                 <div class="search-input-wrap">
                     <svg class="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" id="headerPostcodeInput" placeholder="Enter a postcode - e.g. SE1 7EH" />
+                    <input type="text" id="headerPostcodeInput" placeholder="Enter postcode - e.g. SE1 7EH" />
                     <button type="button" class="clear-btn" id="headerClearBtn" aria-label="Clear postcode" tabindex="-1">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
@@ -419,7 +456,7 @@
             <div class="search-row">
                 <div class="search-input-wrap">
                     <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" id="postcodeInput" placeholder="Enter a postcode - e.g. SE1 7EH" />
+                    <input type="text" id="postcodeInput" placeholder="Enter postcode - e.g. SE1 7EH" />
                     <button type="button" class="clear-btn" id="clearBtn" aria-label="Clear postcode" tabindex="-1">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
