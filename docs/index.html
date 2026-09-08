@@ -10,6 +10,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
     <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>
+    <script src="tracking-config.js"></script>
     <style>
         @font-face {
             font-family: 'Fredoka';
@@ -584,6 +585,24 @@
         return hospitalDisplayNames[name] || name;
     }
 
+    function postcodeSector(postcode) {
+        const compact = String(postcode || '').replace(/\s/g, '').toUpperCase();
+        const match = compact.match(/^([A-Z]{1,2}\d[A-Z\d]?)(\d)[A-Z]{2}$/);
+        return match ? match[1] + ' ' + match[2] : '';
+    }
+
+    function trackPostcodeSector(postcode) {
+        const endpoint = window.HOME_POSTCODE_TRACKING_ENDPOINT || '';
+        const sector = postcodeSector(postcode);
+        if (!endpoint || !sector) return;
+        fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sector }),
+            keepalive: true,
+        }).catch(() => {});
+    }
+
     function distanceKm(lat1, lon1, lat2, lon2) {
         const R = 6371.0088;
         const toRad = deg => deg * Math.PI / 180;
@@ -968,6 +987,7 @@
             ],
         };
         if (shouldUpdateUrl) updateSharedPostcode(data.postcode);
+        trackPostcodeSector(data.postcode);
         document.getElementById('resultPostcode').textContent = data.postcode;
         const badge = document.getElementById('resultSide');
         badge.textContent = '◆ ' + data.side + ' of Thames';

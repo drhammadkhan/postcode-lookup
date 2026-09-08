@@ -1,0 +1,10 @@
+name = "home-postcode-sector-tracking"
+main = "worker.js"
+compatibility_date = "2026-09-07"
+
+[[kv_namespaces]]
+binding = "POSTCODE_SECTOR_SEARCHES"
+id = "replace-with-your-kv-namespace-id"
+
+# Optional: set READ_TOKEN as a Worker secret to protect the unlinked stats page.
+# wrangler secret put READ_TOKEN

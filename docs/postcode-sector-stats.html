@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Postcode Sector Searches - HO.ME</title>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <script src="tracking-config.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Fredoka';
+            src: url('Fredoka Variable Font.ttf') format('truetype');
+            font-weight: 100 900;
+            font-style: normal;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #f7f8f8;
+            --surface: #ffffff;
+            --border: #dcebe7;
+            --dark-teal: #2e5b5f;
+            --muted: #668b8e;
+            --orange: #d2712a;
+        }
+        body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--dark-teal);
+            font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        main {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 28px 20px 42px;
+        }
+        h1 {
+            font-size: 1.36rem;
+            font-weight: 650;
+            margin-bottom: 8px;
+        }
+        .intro {
+            color: var(--muted);
+            font-size: 0.94rem;
+            margin-bottom: 18px;
+        }
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 18px rgba(46,91,95,0.045);
+        }
+        .status {
+            padding: 18px;
+            color: var(--muted);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+        th {
+            background: #f8fcfb;
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        tbody tr:last-child td { border-bottom: 0; }
+        .count {
+            color: var(--orange);
+            font-weight: 650;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Postcode Sector Searches</h1>
+        <p class="intro">Aggregate search counts by postcode sector. Full postcodes are not stored by this page.</p>
+        <section class="panel">
+            <div class="status" id="status">Loading sector counts...</div>
+            <table id="results" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Postcode Sector</th>
+                        <th>Searches</th>
+                    </tr>
+                </thead>
+                <tbody id="rows"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        const endpoint = window.HOME_POSTCODE_TRACKING_ENDPOINT || '';
+        const token = window.HOME_POSTCODE_TRACKING_STATS_TOKEN || new URLSearchParams(window.location.search).get('token') || '';
+        const statusEl = document.getElementById('status');
+        const resultsEl = document.getElementById('results');
+        const rowsEl = document.getElementById('rows');
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, ch => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[ch]));
+        }
+
+        async function loadStats() {
+            if (!endpoint) {
+                statusEl.textContent = 'Tracking endpoint is not configured yet.';
+                return;
+            }
+            const url = new URL(endpoint);
+            url.searchParams.set('summary', '1');
+            if (token) url.searchParams.set('token', token);
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Stats could not be loaded.');
+            const data = await response.json();
+            const sectors = Array.isArray(data.sectors) ? data.sectors : [];
+            if (!sectors.length) {
+                statusEl.textContent = 'No postcode-sector searches recorded yet.';
+                return;
+            }
+            rowsEl.innerHTML = sectors.map(row =>
+                '<tr><td>' + escapeHtml(row.sector) + '</td><td class="count">' + Number(row.count || 0).toLocaleString() + '</td></tr>'
+            ).join('');
+            statusEl.style.display = 'none';
+            resultsEl.style.display = 'table';
+        }
+
+        loadStats().catch(() => {
+            statusEl.textContent = 'Stats could not be loaded.';
+        });
+    </script>
+</body>
+</html>
