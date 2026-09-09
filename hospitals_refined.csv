@@ -7,7 +7,7 @@ Queen Charlottes',3,NW,Neuro,W12 0HS,51.517,-0.23632,North,1,1
 Evelina (St Thomas'),3,South East,"Surg, Cardiac, ENT, Neuro",SE1 7EH,51.5003,-0.1189,South,1,1
 St. Georges Hospital,3,South West,"Surg, Neuro Surg, ENT",SW17 0QT,51.4273,-0.1748,South,1,1
 Kings College Hospital,3,South East,"Surg, Neuro Surg",SE5 9RS,51.4683,-0.0919,South,1,1
-St Peters Hospital,3,Border,Regional NICU,KT16 0PZ,51.3773,-0.526,Both,1,0
+St Peters Hospital,3,Border,Regional NICU,KT16 0PZ,51.377831,-0.527041,Both,1,0
 Barnet Hospital,2,NC,LNU,EN5 3DJ,51.6507,-0.2152,North,1,1
 Whittington Hospital,2,NC,LNU,N19 5NF,51.5665,-0.1403,North,1,1
 Newham General,2,NE,LNU,E13 8SL,51.5223,0.035,North,1,1
@@ -22,11 +22,50 @@ Croydon University,2,South West,LNU,CR7 7YE,51.3908,-0.1104,South,1,1
 University Lewisham,2,South East,LNU,SE13 6LH,51.4528,-0.0186,South,1,1
 Queen Elizabeth Woolwich,2,South East,LNU,SE18 4QH,51.4788,0.0514,South,1,1
 Princess Royal (PRUH),2,South East,LNU,BR6 8ND,51.3656,0.06,South,1,1
-Watford General,2,Border,LNU,WD18 0HB,51.6485,-0.4046,Both,1,0
-East Surrey,2,Border,LNU,RH1 5RH,51.2185,-0.162,Both,1,0
-Wexham Park,2,Border,LNU,SL2 4HL,51.532,-0.5878,Both,1,0
+Watford General,2,Border,LNU,WD18 0HB,51.648926,-0.404165,Both,1,0
+East Surrey,2,Border,LNU,RH1 5RH,51.219192,-0.161983,Both,1,0
+Wexham Park,2,Border,LNU,SL2 4HL,51.532009,-0.573974,Both,1,0
 Royal Free Hospital,1,NC,SCBU,NW3 2QG,51.5532,-0.1654,North,1,1
 North Middlesex,2,NC,SCBU,N18 1QX,51.6133,-0.073,North,1,1
 West Middlesex,1,NW,SCBU,TW7 6AF,51.4733,-0.3249,North,1,1
-Darent Valley,1,Border,SCBU,DA2 8DA,51.4353,0.2586,South,1,0
+Darent Valley,1,Border,SCBU,DA2 8DA,51.434952,0.258673,South,1,0
 Epsom Hospital,1,South West,SCBU,KT18 7EG,51.3259,-0.2726,South,1,0
+John Radcliffe Hospital,3,TVW,Regional NICU,OX3 9DU,51.763867,-1.219773,Both,1,0
+Milton Keynes University Hospital,2,TVW,LNU,MK6 5LD,52.026384,-0.73576,Both,1,0
+Royal Berkshire Hospital,2,TVW,LNU,RG1 5AN,51.451023,-0.95931,Both,1,0
+Stoke Mandeville Hospital,2,TVW,LNU,HP21 8AL,51.797983,-0.801989,Both,1,0
+Princess Anne Hospital,3,TVW,Regional NICU,SO16 5YA,50.935249,-1.434855,Both,1,0
+Queen Alexandra Hospital,3,TVW,Regional NICU,PO6 3LY,50.850287,-1.069917,Both,1,0
+Royal Bournemouth Hospital,2,TVW,LNU,BH7 7DW,50.747472,-1.820512,Both,1,0
+Basingstoke and North Hampshire Hospital,1,TVW,SCBU,RG24 9NA,51.280633,-1.1099,Both,1,0
+Royal Hampshire County Hospital,1,TVW,SCBU,SO22 5DG,51.0617,-1.329159,Both,1,0
+Salisbury District Hospital,2,TVW,LNU,SP2 8BJ,51.04394,-1.789814,Both,1,0
+St Richard's Hospital,1,TVW,SCBU,PO19 6SE,50.843544,-0.768008,Both,1,0
+Dorset County Hospital,1,TVW,SCBU,DT1 2JY,50.712931,-2.446934,Both,1,0
+St Mary's Hospital Isle of Wight,1,TVW,SCBU,PO30 5TG,50.710832,-1.301363,Both,1,0
+Medway Maritime Hospital,3,KSS,Regional NICU,ME7 5NY,51.379861,0.54209,Both,1,0
+Tunbridge Wells Hospital,2,KSS,LNU,TN2 4QJ,51.148451,0.307497,Both,1,0
+William Harvey Hospital,3,KSS,Regional NICU,TN24 0LZ,51.14149,0.91624,Both,1,0
+Queen Elizabeth Queen Mother Hospital,1,KSS,SCBU,CT9 4AN,51.378059,1.389411,Both,1,0
+Royal Surrey County Hospital,1,KSS,SCBU,GU2 7XX,51.241012,-0.607443,Both,1,0
+Frimley Park Hospital,2,KSS,LNU,GU16 7UJ,51.319666,-0.742011,Both,1,0
+Royal Sussex County Hospital,3,KSS,Regional NICU,BN2 3EW,50.831176,-0.114497,Both,1,0
+Princess Royal Hospital Haywards Heath,1,KSS,SCBU,RH16 4EX,50.99109,-0.090256,Both,1,0
+Worthing Hospital,1,KSS,SCBU,BN11 2DH,50.816683,-0.363404,Both,1,0
+Conquest Hospital,1,KSS,SCBU,TN37 7RD,50.885163,0.567299,Both,1,0
+Bedford Hospital,1,EoE,SCBU,MK42 9DJ,52.128277,-0.472474,Both,1,0
+Peterborough City Hospital,2,EoE,LNU,PE3 9GZ,52.58394,-0.279371,Both,1,0
+Hinchingbrooke Hospital,1,EoE,SCBU,PE29 6NT,52.333364,-0.202658,Both,1,0
+Addenbrooke's Hospital,3,EoE,Regional NICU,CB2 0QQ,52.175003,0.14065,Both,1,0
+Luton and Dunstable University Hospital,3,EoE,Regional NICU,LU4 0DZ,51.894292,-0.474153,Both,1,0
+The Princess Alexandra Hospital,2,EoE,LNU,CM20 1QX,51.771322,0.087315,Both,1,0
+Southend University Hospital,2,EoE,LNU,SS0 0RY,51.553842,0.688646,Both,1,0
+Broomfield Hospital,2,EoE,LNU,CM1 7ET,51.774662,0.466021,Both,1,0
+Basildon University Hospital,2,EoE,LNU,SS16 5NL,51.558437,0.451767,Both,1,0
+Lister Hospital,2,EoE,LNU,SG1 4AB,51.924246,-0.211889,Both,1,0
+West Suffolk Hospital,1,EoE,SCBU,IP33 2QZ,52.231679,0.709205,Both,1,0
+Ipswich Hospital,2,EoE,LNU,IP4 5PD,52.056863,1.197945,Both,1,0
+Colchester Hospital,2,EoE,LNU,CO4 5JL,51.910174,0.899242,Both,1,0
+James Paget University Hospital,2,EoE,LNU,NR31 6LA,52.561697,1.718003,Both,1,0
+Queen Elizabeth Hospital King's Lynn,2,EoE,LNU,PE30 4ET,52.75663,0.446694,Both,1,0
+Norfolk and Norwich University Hospital,3,EoE,Regional NICU,NR4 7UY,52.617567,1.221195,Both,1,0

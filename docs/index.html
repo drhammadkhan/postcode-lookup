@@ -563,8 +563,12 @@
 
 <script>
 
-    let postcodeData = null;
-    let postcodeDataPromise = null;
+    let postcodeIndex = null;
+    let postcodeIndexPromise = null;
+    let catchmentData = null;
+    let catchmentDataPromise = null;
+    const postcodeAreaCache = {};
+    const postcodeAreaPromises = {};
     let hospitalData = null;
     let map = null;
     let markers = [];
@@ -684,30 +688,81 @@
         if (spinner) spinner.style.display = isLoading ? 'block' : 'none';
     }
 
-    async function loadPostcodeData() {
-        if (postcodeData) return postcodeData;
-        if (!postcodeDataPromise) {
+    function postcodeAreaFromKey(key) {
+        const match = String(key || '').match(/^[A-Z]+/);
+        return match ? match[0] : '';
+    }
+
+    async function loadPostcodeIndex() {
+        if (postcodeIndex) return postcodeIndex;
+        if (!postcodeIndexPromise) {
             const fill = document.getElementById('progressFill');
             const loadingText = document.getElementById('loadingText');
-            loadingText.textContent = 'Loading postcode data...';
+            loadingText.textContent = 'Loading postcode index...';
             fill.style.width = '25%';
-            postcodeDataPromise = fetch('postcodes.json')
+            postcodeIndexPromise = fetch('postcodes/index.json')
                 .then(response => {
-                    if (!response.ok) throw new Error('Postcode data could not be loaded.');
+                    if (!response.ok) throw new Error('Postcode index could not be loaded.');
                     fill.style.width = '70%';
                     return response.json();
                 })
                 .then(data => {
-                    postcodeData = data;
+                    postcodeIndex = data;
                     fill.style.width = '100%';
                     return data;
                 })
                 .catch(error => {
-                    postcodeDataPromise = null;
+                    postcodeIndexPromise = null;
                     throw error;
                 });
         }
-        return postcodeDataPromise;
+        return postcodeIndexPromise;
+    }
+
+    async function loadPostcodeArea(key) {
+        await loadPostcodeIndex();
+        const area = postcodeAreaFromKey(key);
+        if (!area) throw new Error('Postcode area could not be identified.');
+        if (postcodeAreaCache[area]) return postcodeAreaCache[area];
+        if (!postcodeAreaPromises[area]) {
+            const areaMeta = postcodeIndex.areas && postcodeIndex.areas[area];
+            const areaFile = areaMeta && areaMeta.file ? areaMeta.file : 'postcodes/' + area + '.json';
+            postcodeAreaPromises[area] = fetch(areaFile)
+                .then(response => {
+                    if (response.status === 404) return { area, data: {} };
+                    if (!response.ok) throw new Error('Postcode area data could not be loaded.');
+                    return response.json();
+                })
+                .then(data => {
+                    postcodeAreaCache[area] = data;
+                    return data;
+                })
+                .catch(error => {
+                    postcodeAreaPromises[area] = null;
+                    throw error;
+                });
+        }
+        return postcodeAreaPromises[area];
+    }
+
+    async function loadCatchmentData() {
+        if (catchmentData) return catchmentData;
+        if (!catchmentDataPromise) {
+            catchmentDataPromise = fetch('postcodes/catchment.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('Catchment data could not be loaded.');
+                    return response.json();
+                })
+                .then(data => {
+                    catchmentData = data;
+                    return data;
+                })
+                .catch(error => {
+                    catchmentDataPromise = null;
+                    throw error;
+                });
+        }
+        return catchmentDataPromise;
     }
 
     async function loadData() {
@@ -762,7 +817,8 @@
     async function buildCatchmentMap() {
         document.getElementById('catchment-loading').style.display = 'block';
         while (!hospitalData) { await new Promise(r => setTimeout(r, 100)); }
-        await loadPostcodeData();
+        await loadPostcodeIndex();
+        await loadCatchmentData();
         const mapDiv = document.getElementById('catchment-map');
         mapDiv.style.display = 'block';
         catchmentMap = L.map(mapDiv).setView([51.5, -0.1], 10);
@@ -793,8 +849,8 @@
             return order;
         }
         function interpolate(start, end, t) { return Math.round(start + t * (end - start)); }
-        const names = postcodeData.names;
-        const catchmentMeta = postcodeData.catchment || {};
+        const names = catchmentData.names || postcodeIndex.names || [];
+        const catchmentMeta = catchmentData.catchment || {};
         const precomputedPoints = Array.isArray(catchmentMeta.points) ? catchmentMeta.points : null;
         const sampleRate = Number.isInteger(catchmentMeta.sample_rate) ? catchmentMeta.sample_rate : 10;
         const hospitalSectorMap = {};
@@ -822,20 +878,11 @@
         if (Array.isArray(catchmentMeta.counts_any) && catchmentMeta.counts_any.length === names.length) {
             names.forEach((name, idx) => { countsByName[name] = catchmentMeta.counts_any[idx] || 0; });
         } else {
-            Object.keys(postcodeData.data).forEach(key => {
-                const r = postcodeData.data[key];
-                const hospName = names[r[4]];
-                countsByName[hospName] = (countsByName[hospName] || 0) + 1;
-            });
+            names.forEach(name => { countsByName[name] = 0; });
         }
         const hospLayers = {};
         names.forEach(name => { hospLayers[name] = L.layerGroup().addTo(catchmentMap); });
-        const points = precomputedPoints || (() => {
-            const keys = Object.keys(postcodeData.data);
-            return keys.filter((_, i) => i % sampleRate === 0).map(key => {
-                const r = postcodeData.data[key]; return [r[0], r[1], r[2], r[4]];
-            });
-        })();
+        const points = precomputedPoints || [];
         const suppressedTotal = Number.isInteger(catchmentMeta.suppressed_total) ? catchmentMeta.suppressed_total : 0;
         const displaySampleRate = precomputedPoints ? (catchmentMeta.sample_rate || 5) : sampleRate;
         document.getElementById('catchment-loading-text').textContent =
@@ -996,8 +1043,9 @@
         document.body.classList.remove('has-results');
         if (!key) return;
         setLookupLoading(true);
+        let areaData;
         try {
-            await loadPostcodeData();
+            areaData = await loadPostcodeArea(key);
         } catch (error) {
             document.getElementById('error-text').textContent = 'Postcode data could not be loaded. Please try again.';
             errBar.style.display = 'flex';
@@ -1005,13 +1053,13 @@
             return;
         }
         setLookupLoading(false);
-        if (!postcodeData.data[key]) {
+        if (!areaData.data || !areaData.data[key]) {
             document.getElementById('error-text').textContent = 'Postcode "' + raw + '" not found.';
             errBar.style.display = 'flex';
             return;
         }
-        const r = postcodeData.data[key];
-        const names = postcodeData.names;
+        const r = areaData.data[key];
+        const names = postcodeIndex.names;
         syncInputs(raw);
         const data = {
             postcode: r[0], lat: r[1], lon: r[2],

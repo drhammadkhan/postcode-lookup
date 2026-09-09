@@ -7,11 +7,13 @@ Also exports a hospitals JSON.
 import pandas as pd
 import json
 import os
+import re
 from shapely.geometry import Point, Polygon
 
 from hospital_profiles import load_hospitals_for_profile
 
 os.makedirs('docs', exist_ok=True)
+os.makedirs('docs/postcodes', exist_ok=True)
 
 # 1. Load data
 df = pd.read_csv('output/lookup/All_Postcodes.csv', dtype={'Postcode': str})
@@ -77,6 +79,10 @@ for _, row in df.iterrows():
         round(row['Distance_L3_km'], 2),
     ]
 
+def postcode_area(key):
+    match = re.match(r'^([A-Z]+)', key)
+    return match.group(1) if match else 'OTHER'
+
 # 3. Build pre-filtered catchment points for static map (matches generate_map.py)
 sample_rate = 5
 
@@ -113,10 +119,37 @@ catchment_points = [
 counts_any = df['Closest_Any'].value_counts()
 counts_any_indexed = [int(counts_any.get(name, 0)) for name in all_hosp_names]
 
-# 3. Save as JSON with hospital name index
-output = {
+# 3. Save as sharded JSON with hospital name index
+area_records = {}
+for key, value in records.items():
+    area_records.setdefault(postcode_area(key), {})[key] = value
+
+manifest = {
     'names': all_hosp_names,
-    'data': records,
+    'areas': {
+        area: {
+            'file': f'postcodes/{area}.json',
+            'count': len(area_data),
+        }
+        for area, area_data in sorted(area_records.items())
+    },
+    'total': len(records),
+}
+
+for filename in os.listdir('docs/postcodes'):
+    if filename.endswith('.json'):
+        os.remove(os.path.join('docs/postcodes', filename))
+
+for area, area_data in sorted(area_records.items()):
+    area_output = {
+        'area': area,
+        'data': area_data,
+    }
+    with open(f'docs/postcodes/{area}.json', 'w') as f:
+        json.dump(area_output, f, separators=(',', ':'))
+
+catchment_output = {
+    'names': all_hosp_names,
     'catchment': {
         'sample_rate': sample_rate,
         'suppressed_total': int(non_geographic_mask.sum()),
@@ -129,10 +162,33 @@ output = {
         'counts_any': counts_any_indexed,
     }
 }
+
+with open('docs/postcodes/index.json', 'w') as f:
+    json.dump(manifest, f, separators=(',', ':'))
+with open('docs/postcodes/catchment.json', 'w') as f:
+    json.dump(catchment_output, f, separators=(',', ':'))
 with open('docs/postcodes.json', 'w') as f:
-    json.dump(output, f, separators=(',', ':'))
-size_mb = os.path.getsize('docs/postcodes.json') / (1024 * 1024)
-print(f"docs/postcodes.json → {size_mb:.1f} MB ({len(records):,} postcodes)")
+    json.dump({
+        'message': 'Postcode data is split by postcode area. Use postcodes/index.json and postcodes/{AREA}.json.',
+        'index': 'postcodes/index.json',
+        'catchment': 'postcodes/catchment.json',
+    }, f, separators=(',', ':'))
+
+area_sizes = [
+    os.path.getsize(f'docs/postcodes/{area}.json') / (1024 * 1024)
+    for area in area_records
+]
+index_mb = os.path.getsize('docs/postcodes/index.json') / (1024 * 1024)
+catchment_mb = os.path.getsize('docs/postcodes/catchment.json') / (1024 * 1024)
+legacy_mb = os.path.getsize('docs/postcodes.json') / (1024 * 1024)
+print(
+    f"docs/postcodes/*.json → {sum(area_sizes):.1f} MB across {len(area_records)} areas "
+    f"({len(records):,} postcodes; largest {max(area_sizes):.1f} MB)"
+)
+print(
+    f"  index: {index_mb:.3f} MB | catchment: {catchment_mb:.1f} MB | "
+    f"legacy stub: {legacy_mb:.3f} MB"
+)
 print(
     "  Catchment points: "
     f"{len(catchment_points):,} (1/{sample_rate} of {len(results_plot):,} after suppression; "
