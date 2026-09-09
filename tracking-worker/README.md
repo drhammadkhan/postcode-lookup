@@ -1,6 +1,6 @@
 # Postcode Sector Tracking Worker
 
-This Worker stores aggregate HO.ME postcode-sector search counts in Cloudflare KV.
+This Worker stores aggregate HO.ME postcode-sector search attempt counts in Cloudflare KV.
 It does not receive or store full postcodes.
 
 ## Deploy
@@ -59,8 +59,12 @@ Record a search:
 POST /
 Content-Type: application/json
 
-{ "sector": "SE1 7" }
+{ "sector": "SE1 7", "found": true }
 ```
+
+`found` defaults to `true` for compatibility with older clients. Send
+`"found": false` for syntactically valid searches that are not present in the
+lookup dataset.
 
 Read aggregate counts:
 
@@ -73,7 +77,7 @@ Response:
 ```json
 {
   "sectors": [
-    { "sector": "SE1 7", "count": 12 }
+    { "sector": "SE1 7", "count": 12, "attempts": 12, "found": 10, "not_found": 2 }
   ]
 }
 ```

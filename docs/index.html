@@ -628,14 +628,14 @@
         return match ? match[1] + ' ' + match[2] : '';
     }
 
-    function trackPostcodeSector(postcode) {
+    function trackPostcodeSector(postcode, found) {
         const endpoint = window.HOME_POSTCODE_TRACKING_ENDPOINT || '';
         const sector = postcodeSector(postcode);
         if (!endpoint || !sector) return;
         fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sector }),
+            body: JSON.stringify({ sector, found: Boolean(found) }),
             keepalive: true,
         }).catch(() => {});
     }
@@ -1006,6 +1006,7 @@
         }
         setLookupLoading(false);
         if (!postcodeData.data[key]) {
+            trackPostcodeSector(raw, false);
             document.getElementById('error-text').textContent = 'Postcode "' + raw + '" not found.';
             errBar.style.display = 'flex';
             return;
@@ -1024,7 +1025,7 @@
             ],
         };
         if (shouldUpdateUrl) updateSharedPostcode(data.postcode);
-        trackPostcodeSector(data.postcode);
+        trackPostcodeSector(data.postcode, true);
         document.getElementById('resultPostcode').textContent = data.postcode;
         const badge = document.getElementById('resultSide');
         badge.textContent = '◆ ' + data.side + ' of Thames';

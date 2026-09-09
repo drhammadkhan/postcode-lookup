@@ -88,14 +88,16 @@
 <body>
     <main>
         <h1>Postcode Sector Searches</h1>
-        <p class="intro">Aggregate search counts by postcode sector. Full postcodes are not stored by this page.</p>
+        <p class="intro">Aggregate attempted search counts by postcode sector. Full postcodes are not stored by this page.</p>
         <section class="panel">
             <div class="status" id="status">Loading sector counts...</div>
             <table id="results" style="display:none;">
                 <thead>
                     <tr>
                         <th>Postcode Sector</th>
-                        <th>Searches</th>
+                        <th>Attempts</th>
+                        <th>Found</th>
+                        <th>Not Found</th>
                     </tr>
                 </thead>
                 <tbody id="rows"></tbody>
@@ -134,7 +136,10 @@
                 return;
             }
             rowsEl.innerHTML = sectors.map(row =>
-                '<tr><td>' + escapeHtml(row.sector) + '</td><td class="count">' + Number(row.count || 0).toLocaleString() + '</td></tr>'
+                '<tr><td>' + escapeHtml(row.sector) + '</td>' +
+                '<td class="count">' + Number(row.attempts || row.count || 0).toLocaleString() + '</td>' +
+                '<td>' + Number(row.found || 0).toLocaleString() + '</td>' +
+                '<td>' + Number(row.not_found || 0).toLocaleString() + '</td></tr>'
             ).join('');
             statusEl.style.display = 'none';
             resultsEl.style.display = 'table';
