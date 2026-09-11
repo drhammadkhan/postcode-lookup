@@ -62,6 +62,11 @@ def home_logo():
     return send_from_directory(DOCS_DIR, 'home-logo.svg')
 
 
+@app.route('/assets/<path:filename>')
+def docs_asset(filename):
+    return send_from_directory(os.path.join(DOCS_DIR, 'assets'), filename)
+
+
 @app.route('/Fredoka Variable Font.ttf')
 def docs_font():
     return send_from_directory(DOCS_DIR, 'Fredoka Variable Font.ttf')
@@ -75,6 +80,31 @@ def outcode_population_page():
 @app.route('/hospitals.html')
 def hospitals_page():
     return send_from_directory(DOCS_DIR, 'hospitals.html')
+
+
+@app.route('/about.html')
+def about_page():
+    return send_from_directory(DOCS_DIR, 'about.html')
+
+
+@app.route('/privacy.html')
+def privacy_page():
+    return send_from_directory(DOCS_DIR, 'privacy.html')
+
+
+@app.route('/info.css')
+def info_styles():
+    return send_from_directory(DOCS_DIR, 'info.css')
+
+
+@app.route('/robots.txt')
+def robots_txt():
+    return send_from_directory(DOCS_DIR, 'robots.txt')
+
+
+@app.route('/sitemap.xml')
+def sitemap_xml():
+    return send_from_directory(DOCS_DIR, 'sitemap.xml')
 
 
 @app.route('/outcode_populations.json')

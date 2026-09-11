@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How HO.ME handles postcode searches, aggregate usage statistics and technical request data.">
+    <meta name="robots" content="index, follow">
+    <title>Privacy and Data Use - HO.ME</title>
+    <link rel="canonical" href="https://hometool.uk/privacy.html">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="info.css">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="HO.ME">
+    <meta property="og:title" content="Privacy and Data Use - HO.ME">
+    <meta property="og:description" content="How the HO.ME neonatal postcode lookup handles searches and aggregate usage statistics.">
+    <meta property="og:url" content="https://hometool.uk/privacy.html">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Privacy and Data Use - HO.ME",
+        "url": "https://hometool.uk/privacy.html",
+        "description": "How HO.ME handles postcode searches, aggregate usage statistics and technical request data.",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "HO.ME",
+            "url": "https://hometool.uk/"
+        }
+    }
+    </script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="brand" href="index.html" aria-label="HO.ME postcode lookup">
+                <img src="home-logo.svg" alt="HO.ME" width="138" height="40">
+            </a>
+            <nav class="site-nav" aria-label="Primary navigation">
+                <a href="index.html">Lookup</a>
+                <a href="hospitals.html">Hospitals</a>
+                <a href="about.html">About</a>
+                <a href="privacy.html" aria-current="page">Privacy</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a> / Privacy</nav>
+
+        <header class="page-intro">
+            <p class="eyebrow">Privacy</p>
+            <h1>Privacy and data use</h1>
+            <p class="lead">HO.ME is designed to perform postcode lookups in the browser and collect only limited, aggregate information about searches.</p>
+        </header>
+
+        <section class="content-section" aria-labelledby="lookup-heading">
+            <h2 id="lookup-heading">Postcode lookups</h2>
+            <p>The postcode lookup dataset is downloaded to your browser. A postcode entered into the search box is matched against that local dataset; the full postcode is not sent to the search-statistics service.</p>
+            <p>After a successful search, the postcode is added to the page address so the result can be bookmarked or shared. If that address is shared or the page is reloaded, the full address, including its postcode parameter, may be included in standard web-hosting request logs.</p>
+        </section>
+
+        <section class="content-section" aria-labelledby="statistics-heading">
+            <h2 id="statistics-heading">Aggregate search statistics</h2>
+            <p>When a syntactically valid postcode is searched, HO.ME derives its postcode sector, such as <strong>SE1 7</strong>, and records the sector together with whether the postcode was found. This allows aggregate demand and out-of-area searches to be counted without storing the full postcode.</p>
+            <p>The tracking store contains counters by postcode sector and outcome. It does not contain names, user accounts, patient records or full postcodes.</p>
+        </section>
+
+        <section class="content-section" aria-labelledby="providers-heading">
+            <h2 id="providers-heading">Technical providers</h2>
+            <p>The site is delivered using GitHub Pages and Cloudflare. Mapping resources are loaded from unpkg and OpenFreeMap. Like most web services, these providers may process standard technical information such as IP address, browser details and requested URLs to deliver and protect their services.</p>
+        </section>
+
+        <section class="content-section" aria-labelledby="cookies-heading">
+            <h2 id="cookies-heading">Cookies and advertising</h2>
+            <p>HO.ME does not set first-party cookies, create advertising profiles or include advertising trackers.</p>
+        </section>
+
+        <section class="content-section" aria-labelledby="contact-heading">
+            <h2 id="contact-heading">Questions</h2>
+            <p>For questions about this page or how HO.ME handles search information, contact <a href="mailto:erin.franklin@nhs.net">erin.franklin@nhs.net</a>.</p>
+            <time class="updated" datetime="2026-09-11">Last updated: 11 September 2026</time>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <span>HO.ME - Hospital Near Me</span>
+            <nav class="footer-links" aria-label="Footer navigation">
+                <a href="index.html">Lookup</a>
+                <a href="hospitals.html">Hospitals</a>
+                <a href="about.html">About</a>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>
