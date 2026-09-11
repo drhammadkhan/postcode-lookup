@@ -135,12 +135,18 @@
                 statusEl.textContent = 'No postcode-sector searches recorded yet.';
                 return;
             }
-            rowsEl.innerHTML = sectors.map(row =>
-                '<tr><td>' + escapeHtml(row.sector) + '</td>' +
-                '<td class="count">' + Number(row.attempts || row.count || 0).toLocaleString() + '</td>' +
-                '<td>' + Number(row.found || 0).toLocaleString() + '</td>' +
-                '<td>' + Number(row.not_found || 0).toLocaleString() + '</td></tr>'
-            ).join('');
+            rowsEl.innerHTML = sectors.map(row => {
+                const hasOutcomeFields = Object.prototype.hasOwnProperty.call(row, 'found') ||
+                    Object.prototype.hasOwnProperty.call(row, 'not_found');
+                const legacyCount = Number(row.count || 0);
+                const attempts = Number(row.attempts || legacyCount || 0);
+                const found = hasOutcomeFields ? Number(row.found || 0) : legacyCount;
+                const notFound = hasOutcomeFields ? Number(row.not_found || 0) : 0;
+                return '<tr><td>' + escapeHtml(row.sector) + '</td>' +
+                    '<td class="count">' + attempts.toLocaleString() + '</td>' +
+                    '<td>' + found.toLocaleString() + '</td>' +
+                    '<td>' + notFound.toLocaleString() + '</td></tr>';
+            }).join('');
             statusEl.style.display = 'none';
             resultsEl.style.display = 'table';
         }
