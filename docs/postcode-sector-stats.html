@@ -72,8 +72,18 @@
             letter-spacing: 0.04em;
         }
         tbody tr:last-child td { border-bottom: 0; }
+        tbody tr.has-not-found {
+            background: #fff8f2;
+        }
+        tbody tr.has-not-found td:first-child {
+            box-shadow: inset 4px 0 0 #d2712a;
+        }
         .count {
             color: var(--orange);
+            font-weight: 650;
+        }
+        .not-found-count {
+            color: #b84c20;
             font-weight: 650;
         }
         @media (max-width: 560px) {
@@ -142,10 +152,12 @@
                 const attempts = Number(row.attempts || legacyCount || 0);
                 const found = hasOutcomeFields ? Number(row.found || 0) : legacyCount;
                 const notFound = hasOutcomeFields ? Number(row.not_found || 0) : 0;
-                return '<tr><td>' + escapeHtml(row.sector) + '</td>' +
+                const rowClass = notFound > 0 ? ' class="has-not-found"' : '';
+                const notFoundClass = notFound > 0 ? ' class="not-found-count"' : '';
+                return '<tr' + rowClass + '><td>' + escapeHtml(row.sector) + '</td>' +
                     '<td class="count">' + attempts.toLocaleString() + '</td>' +
                     '<td>' + found.toLocaleString() + '</td>' +
-                    '<td>' + notFound.toLocaleString() + '</td></tr>';
+                    '<td' + notFoundClass + '>' + notFound.toLocaleString() + '</td></tr>';
             }).join('');
             statusEl.style.display = 'none';
             resultsEl.style.display = 'table';
