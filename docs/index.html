@@ -75,7 +75,7 @@
         .header-search .search-btn { height: 36px; padding: 0 16px; font-size: 0.92rem; }
         .header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 16px; min-width: 0; }
         .header-caption { font-size: 0.85rem; color: #5f898d; white-space: nowrap; }
-        .feedback-btn { background: transparent; color: var(--dark-teal); border: 2px solid var(--dark-teal); height: 36px; padding: 0 16px; border-radius: 999px; font-size: 0.88rem; font-weight: 650; font-family: 'Fredoka', sans-serif; cursor: pointer; white-space: nowrap; }
+        .feedback-btn { background: transparent; color: var(--dark-teal); border: 2px solid var(--dark-teal); height: 36px; padding: 0 16px; border-radius: 999px; font-size: 0.88rem; font-weight: 650; font-family: 'Fredoka', sans-serif; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; text-decoration: none; }
         .feedback-btn:hover { background: rgba(102,188,162,0.15); }
         .result-guidance { display: none; background: var(--teal-light); border-top: 3px solid var(--orange); border-bottom: 1px solid #cfe9dd; color: var(--dark-teal); }
         body.has-results .result-guidance { display: block; }
@@ -282,7 +282,7 @@
         </form>
         <div class="header-actions">
             <div class="header-caption">London Neonatal Units</div>
-            <button type="button" class="feedback-btn" id="feedbackBtn">Submit Feedback</button>
+            <a class="feedback-btn" href="https://forms.cloud.microsoft/e/dCrxb4BRCq" target="_blank" rel="noopener">Submit Feedback</a>
         </div>
         <div class="header-map">
 <svg data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 590.06 387.21" style="height:56px;width:auto;display:block;" aria-hidden="true">
@@ -582,16 +582,6 @@
     <span class="footer-sep">|</span>
     <span>Erin Coupland &amp; Hammad Khan</span>
 </footer>
-
-<div class="modal-backdrop" id="feedbackModal" role="presentation">
-    <div class="about-dialog" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
-        <button type="button" class="modal-close" id="feedbackClose" aria-label="Close dialog">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-        <h2 id="feedbackTitle">Submit Feedback</h2>
-        <p>This page is still being built. Please contact <a href="mailto:erin.franklin@nhs.net">erin.franklin@nhs.net</a> with your feedback.</p>
-    </div>
-</div>
 
 <script>
 
@@ -944,29 +934,6 @@
     const headerPostcodeInput = document.getElementById('headerPostcodeInput');
     const headerClearBtn = document.getElementById('headerClearBtn');
     const guidanceClose = document.getElementById('guidanceClose');
-    const feedbackBtn = document.getElementById('feedbackBtn');
-    const feedbackModal = document.getElementById('feedbackModal');
-    const feedbackClose = document.getElementById('feedbackClose');
-
-    function openFeedbackModal() {
-        feedbackModal.classList.add('open');
-        feedbackClose.focus();
-    }
-
-    function closeFeedbackModal() {
-        feedbackModal.classList.remove('open');
-        feedbackBtn.focus();
-    }
-
-    feedbackBtn.addEventListener('click', openFeedbackModal);
-    feedbackClose.addEventListener('click', closeFeedbackModal);
-    feedbackModal.addEventListener('click', (event) => {
-        if (event.target === feedbackModal) closeFeedbackModal();
-    });
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && feedbackModal.classList.contains('open')) closeFeedbackModal();
-    });
-
     function syncInputs(value) {
         postcodeInput.value = value;
         headerPostcodeInput.value = value;
