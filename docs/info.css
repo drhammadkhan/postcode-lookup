@@ -67,13 +67,29 @@ a:focus-visible {
 .brand {
     display: inline-flex;
     align-items: center;
+    gap: 14px;
     flex: 0 0 auto;
+    color: var(--text);
+    text-decoration: none;
 }
 
 .brand img {
     display: block;
-    width: 138px;
-    height: 40px;
+    width: auto;
+    height: 56px;
+}
+
+.brand-sep {
+    width: 1px;
+    height: 26px;
+    background: var(--border);
+}
+
+.brand-caption {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
 }
 
 .site-nav {
@@ -238,8 +254,11 @@ p + p {
     }
 
     .brand img {
-        width: 121px;
-        height: 35px;
+        height: 52px;
+    }
+
+    .brand-caption {
+        font-size: 0.86rem;
     }
 
     .site-nav {
