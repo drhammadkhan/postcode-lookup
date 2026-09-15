@@ -692,6 +692,10 @@
         return side === 'Both' ? 'Both sides' : side + ' side';
     }
 
+    function levelColour(level) {
+        return levelColours[Number(level)] || '#5f898d';
+    }
+
     function getSharedPostcode() {
         const params = new URLSearchParams(window.location.search);
         return params.get('postcode') || params.get('pc') || '';
@@ -1083,8 +1087,7 @@
         const selectedHospitals = new Set(data.levels.map(lvl => lvl.hospital));
         allHospitalRows.forEach(h => {
             const isSelected = selectedHospitals.has(h.name);
-            const sameSide = h.side === data.side || h.side === 'Both';
-            const fillColor = sameSide ? '#5f898d' : '#d88850';
+            const fillColor = levelColour(h.level);
             const contextMarker = L.circleMarker([h.lat, h.lon], {
                 radius: isSelected ? 7 : 6,
                 color: isSelected ? '#2e5b5f' : '#ffffff',
@@ -1103,12 +1106,13 @@
             seen.add(lvl.hospital);
             const hc = window.hospCoords[lvl.hospital];
             if (!hc) return;
+            const markerColour = levelColour(hc.level);
             const hospMarker = L.circleMarker([hc.lat, hc.lon], {
-                radius: 9, color: '#2e5b5f', weight: 2, fillColor: levelColours[i], fillOpacity: 0.9,
+                radius: 9, color: '#2e5b5f', weight: 2, fillColor: markerColour, fillOpacity: 0.9,
             }).addTo(map).bindPopup('<b>' + displayHospitalName(lvl.hospital) + '</b><br>' + lvl.distance_km + ' km');
             markers.push(hospMarker);
             L.polyline([[data.lat, data.lon], [hc.lat, hc.lon]], {
-                color: levelColours[i], weight: 2, dashArray: '6,6', opacity: 0.6,
+                color: markerColour, weight: 2, dashArray: '6,6', opacity: 0.6,
             }).addTo(map);
         });
         const group = L.featureGroup(markers);
