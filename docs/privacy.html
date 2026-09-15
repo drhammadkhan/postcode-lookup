@@ -57,19 +57,21 @@
 
         <section class="content-section" aria-labelledby="lookup-heading">
             <h2 id="lookup-heading">Postcode lookups</h2>
+            <p>HO.ME only searches postcodes. It does not ask for names, street addresses, NHS numbers or patient details.</p>
             <p>The postcode lookup dataset is downloaded to your browser. A postcode entered into the search box is matched against that local dataset; the full postcode is not sent to the search-statistics service.</p>
-            <p>After a successful search, the postcode is added to the page address so the result can be bookmarked or shared. If that address is shared or the page is reloaded, the full address, including its postcode parameter, may be included in standard web-hosting request logs.</p>
+            <p>After a successful search, the postcode is added to the page URL as a postcode parameter so the result can be bookmarked or shared. If that page URL is shared, opened or reloaded, the URL, including its postcode parameter, may appear in standard web-hosting request logs.</p>
         </section>
 
         <section class="content-section" aria-labelledby="statistics-heading">
             <h2 id="statistics-heading">Aggregate search statistics</h2>
-            <p>When a syntactically valid postcode is searched, HO.ME derives its postcode sector, such as <strong>SE1 7</strong>, and records the sector together with whether the postcode was found. This allows aggregate demand and out-of-area searches to be counted without storing the full postcode.</p>
-            <p>The tracking store contains counters by postcode sector and outcome. It does not contain names, user accounts, patient records or full postcodes.</p>
+            <p>When a syntactically valid postcode is searched, HO.ME derives its postcode sector, such as <strong>SE1 7</strong>, and records the sector together with whether the postcode was found in the lookup dataset. This allows aggregate demand and out-of-area searches to be counted without storing the full postcode in the search-statistics store.</p>
+            <p>The tracking store contains counters by postcode sector and outcome. It does not contain names, user accounts, patient records, street addresses or full postcodes.</p>
         </section>
 
         <section class="content-section" aria-labelledby="providers-heading">
             <h2 id="providers-heading">Technical providers</h2>
-            <p>The site is delivered using GitHub Pages and Cloudflare. Mapping resources are loaded from unpkg and OpenFreeMap. Like most web services, these providers may process standard technical information such as IP address, browser details and requested URLs to deliver and protect their services.</p>
+            <p>The site is delivered using GitHub Pages and Cloudflare. Mapping resources are loaded from unpkg and OpenFreeMap. Like most web services, these providers may process standard technical information such as IP address, browser details and requested page URLs to deliver and protect their services.</p>
+            <p>If you choose to use the HO.ME feedback form, the information you submit is handled by Microsoft Forms.</p>
         </section>
 
         <section class="content-section" aria-labelledby="cookies-heading">
@@ -80,7 +82,7 @@
         <section class="content-section" aria-labelledby="contact-heading">
             <h2 id="contact-heading">Questions</h2>
             <p>For questions about this page or how HO.ME handles search information, please use the <a href="https://forms.cloud.microsoft/e/dCrxb4BRCq" target="_blank" rel="noopener">HO.ME feedback form</a>.</p>
-            <time class="updated" datetime="2026-09-11">Last updated: 11 September 2026</time>
+            <time class="updated" datetime="2026-09-15">Last updated: 15 September 2026</time>
         </section>
     </main>
 
