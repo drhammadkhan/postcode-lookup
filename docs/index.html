@@ -1080,6 +1080,24 @@
         }).addTo(map).bindPopup('<b>' + data.postcode + '</b><br>' + data.side + ' of Thames');
         markers.push(pcMarker);
         const seen = new Set();
+        const selectedHospitals = new Set(data.levels.map(lvl => lvl.hospital));
+        allHospitalRows.forEach(h => {
+            const isSelected = selectedHospitals.has(h.name);
+            const sameSide = h.side === data.side || h.side === 'Both';
+            const fillColor = sameSide ? '#5f898d' : '#d88850';
+            const contextMarker = L.circleMarker([h.lat, h.lon], {
+                radius: isSelected ? 7 : 6,
+                color: isSelected ? '#2e5b5f' : '#ffffff',
+                weight: isSelected ? 1.5 : 1,
+                fillColor,
+                fillOpacity: isSelected ? 0.78 : 0.68,
+            }).addTo(map).bindPopup(
+                '<b>' + escapeHtml(displayHospitalName(h.name)) + '</b><br>' +
+                'Level ' + escapeHtml(h.level) + '<br>' +
+                escapeHtml(h.distance_km.toFixed(1)) + ' km'
+            );
+            markers.push(contextMarker);
+        });
         data.levels.forEach((lvl, i) => {
             if (seen.has(lvl.hospital)) return;
             seen.add(lvl.hospital);
