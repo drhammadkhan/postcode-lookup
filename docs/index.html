@@ -59,8 +59,9 @@
             --radius:     12px;
             --shadow:     0 2px 12px rgba(46,91,95,0.09);
             --shadow-lg:  0 6px 28px rgba(46,91,95,0.15);
+            --footer-space: 58px;
         }
-        body { font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif; background: #f7f8f8; color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+        body { font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif; background: #f7f8f8; color: var(--text); min-height: 100vh; display: flex; flex-direction: column; padding-bottom: var(--footer-space); }
         header { background: #ffffff; border-bottom: 1px solid #dcebe7; display: none; }
         body.has-results header, body.catchment-active header { display: block; }
         .header-accent { height: 3px; background: var(--orange); }
@@ -168,7 +169,7 @@
         .card-phone { margin-top: 7px; color: var(--text-mid); font-size: 0.84rem; font-weight: 500; display: flex; align-items: center; gap: 5px; }
         .card-tags { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px; }
         .tag { display: inline-block; background: #fff0ee; color: #c0392b; font-size: 0.67rem; font-weight: 600; padding: 2px 8px; border-radius: 99px; letter-spacing: 0.03em; }
-        #map-container { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1.5px solid var(--border); position: sticky; top: 20px; height: calc(100vh - 40px); min-height: 520px; }
+        #map-container { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1.5px solid var(--border); position: sticky; top: 20px; height: calc(100vh - var(--footer-space) - 40px); min-height: 520px; }
         #map { height: 100%; width: 100%; }
         .hospital-distance-wrap { margin-top: 4px; }
         .hospital-distance-panel { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1.5px solid var(--border); overflow: hidden; }
@@ -189,11 +190,11 @@
         .hospital-side-badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 99px; background: var(--teal-light); color: var(--dark-teal); font-size: 0.68rem; font-weight: 650; margin-top: 4px; white-space: nowrap; }
         .hospital-distance-tags { display: none; flex-wrap: wrap; gap: 4px; }
         .hospital-distance-empty { color: var(--text-soft); font-size: 0.84rem; }
-        #catchment-map { height: calc(100vh - 145px); width: 100%; border: none; border-radius: 0; }
-        #catchment-map .leaflet-control-layers { max-height: calc(100vh - 200px); overflow-y: auto; }
+        #catchment-map { height: calc(100vh - var(--footer-space) - 145px); width: 100%; border: none; border-radius: 0; }
+        #catchment-map .leaflet-control-layers { max-height: calc(100vh - var(--footer-space) - 200px); overflow-y: auto; }
         .spinner { display: none; width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.65s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        footer { background: #ffffff; border-top: 1px solid #dcebe7; padding: 16px 24px; text-align: center; color: #5f898d; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; font-family: 'Fredoka', sans-serif; }
+        footer { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1200; min-height: var(--footer-space); background: #ffffff; border-top: 1px solid #dcebe7; padding: 16px 24px; text-align: center; color: #5f898d; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; font-family: 'Fredoka', sans-serif; box-shadow: 0 -2px 12px rgba(46,91,95,0.07); }
         footer a { color: var(--dark-teal); text-decoration: none; font-weight: 600; transition: color 0.15s; }
         footer a:hover { color: var(--orange); }
         footer .footer-sep { color: #dcebe7; }
@@ -204,6 +205,7 @@
             #map-container { position: static; height: 420px; min-height: 420px; }
         }
         @media (max-width: 560px) {
+            :root { --footer-space: 112px; }
             .header-inner { padding: 12px 16px; gap: 12px; }
             .landing-intro { margin-top: 24px; }
             .landing-brand { height: 112px; max-width: 80vw; margin-bottom: 18px; }
