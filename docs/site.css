@@ -1,0 +1,154 @@
+/* Shared chrome for every HO.ME page: header, footer, breadcrumb, modals, level badges. */
+@font-face {
+    font-family: 'Fredoka';
+    src: url('Fredoka Variable Font.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+    --teal:         #66bca2;
+    --teal-light:   #e0f2ec;
+    --dark-teal:    #2e5b5f;
+    --orange:       #d2712a;
+    --orange-light: #fdf0e6;
+    --bg:           #f4f9f7;
+    --page-bg:      #f7f8f8;
+    --surface:      #ffffff;
+    --border:       #e0eeeb;
+    --line:         #dcebe7;
+    --text:         #2e5b5f;
+    --text-mid:     #4a7a7e;
+    --text-muted:   #5f898d;
+    --text-soft:    #8aadb0;
+    --neutral-bg:   #eef3f2;
+    --radius:       12px;
+    --shadow:       0 2px 12px rgba(46,91,95,0.09);
+    --shadow-lg:    0 6px 28px rgba(46,91,95,0.15);
+    --focus-ring:   0 0 0 3px rgba(102,188,162,0.35);
+    --footer-space: 58px;
+    --page-width:   1100px;
+}
+
+html { background: var(--page-bg); }
+
+.site-body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--footer-space);
+    background: var(--page-bg);
+    color: var(--text);
+    font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.leaflet-container { font-family: 'Fredoka', sans-serif; }
+
+/* ---------- Header ---------- */
+.site-header { background: #ffffff; border-bottom: 1px solid var(--line); }
+.header-accent { height: 3px; background: var(--orange); }
+.header-inner { max-width: 1360px; margin: 0 auto; padding: 8px 24px; display: grid; grid-template-columns: 400px minmax(320px, 480px) 1fr; align-items: center; gap: 20px; }
+.app-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--dark-teal); border-radius: 8px; }
+.app-brand:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.app-brand img { height: 62px; width: auto; display: block; }
+.app-brand-sep { width: 1px; height: 26px; background: var(--line); }
+.app-brand-caption { font-size: 0.9rem; color: var(--text-mid); font-weight: 500; white-space: nowrap; }
+.header-search { min-width: 0; }
+.header-search .search-row { padding: 3px 3px 3px 18px; }
+.header-search .search-btn { height: 36px; padding: 0 16px; font-size: 0.92rem; }
+.header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 16px; min-width: 0; }
+.header-caption { font-size: 0.85rem; color: var(--text-muted); white-space: nowrap; }
+.feedback-btn { background: transparent; color: var(--dark-teal); border: 2px solid var(--dark-teal); height: 36px; padding: 0 16px; border-radius: 999px; font-size: 0.88rem; font-weight: 500; font-family: 'Fredoka', sans-serif; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; text-decoration: none; transition: background 0.15s, transform 0.06s; }
+.feedback-btn:hover { background: rgba(102,188,162,0.15); color: var(--dark-teal); }
+.feedback-btn:active { background: rgba(102,188,162,0.25); transform: scale(0.97); }
+.feedback-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(46,91,95,0.3); }
+
+/* ---------- Search pill (landing + header) ---------- */
+.search-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.search-row { display: flex; gap: 8px; align-items: center; padding: 5px 5px 5px 22px; background: #fff; border: 2px solid var(--border); border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: border-color 0.15s, box-shadow 0.15s; }
+.search-row:hover { box-shadow: 0 5px 18px rgba(0,0,0,0.12); }
+.search-row:focus-within { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(102,188,162,0.22), 0 4px 12px rgba(0,0,0,0.06); }
+.search-input-wrap { flex: 1; position: relative; min-width: 0; }
+.search-icon { position: absolute; left: 0; top: 50%; transform: translateY(-50%); color: var(--text-soft); pointer-events: none; }
+.search-input-wrap input { width: 100%; font-size: 1.08rem; font-family: 'Fredoka', sans-serif; font-weight: 400; padding: 8px 46px 8px 29px; border: none; border-radius: 0; outline: none; color: var(--text); background: transparent; }
+.search-input-wrap input::placeholder { color: var(--text-soft); }
+.clear-btn { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; background: transparent; border: none; cursor: pointer; color: var(--text-muted); display: none; align-items: center; justify-content: center; padding: 0; line-height: 0; border-radius: 50%; transition: color 0.15s, background 0.15s; }
+.clear-btn:hover { color: var(--text); background: var(--teal-light); }
+.clear-btn:active { background: #cfe9df; }
+.clear-btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.search-btn { background: var(--dark-teal); color: white; border: none; height: 42px; padding: 0 20px; border-radius: 999px; font-size: 1rem; font-weight: 500; font-family: 'Fredoka', sans-serif; cursor: pointer; transition: background 0.15s, transform 0.06s; display: flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: none; }
+.search-btn:hover { background: #264d51; }
+.search-btn:active { background: #1d4145; transform: scale(0.97); }
+.search-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(46,91,95,0.3); }
+.search-btn:disabled { cursor: wait; opacity: 0.74; transform: none; }
+
+/* ---------- Page container, breadcrumb, headings ---------- */
+.page { width: min(100% - 48px, var(--page-width)); margin: 0 auto; padding: 20px 0 42px; flex: 1; }
+.breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.86rem; margin: 4px 0 18px; color: var(--text-muted); }
+.breadcrumb a { color: var(--dark-teal); text-decoration: none; border-radius: 4px; }
+.breadcrumb a:hover { color: var(--dark-teal); text-decoration: underline; text-underline-offset: 3px; }
+.breadcrumb a:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.breadcrumb .crumb-home { font-weight: 500; }
+.breadcrumb .crumb-back { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; flex-shrink: 0; transition: background 0.15s; }
+.breadcrumb .crumb-back:hover { background: #e5f4ee; text-decoration: none; }
+.breadcrumb .crumb-back:active { background: #d5ece1; }
+.breadcrumb-sep { color: var(--text-soft); }
+
+.page-title { margin: 0 0 16px; font-size: 1.35rem; line-height: 1.25; font-weight: 500; color: var(--text); }
+.section-title { margin: 0 0 10px; font-size: 1.1rem; line-height: 1.3; font-weight: 500; color: var(--text); }
+.page-description { margin: 0 0 20px; color: var(--text-muted); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 0.92rem; line-height: 1.55; }
+
+/* ---------- Level badges + neutral chips (shared by cards, directory, modal) ---------- */
+.level-badge { display: inline-flex; align-items: center; font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+.level-badge.lvl-0 { background: var(--neutral-bg); color: var(--text-mid); }
+.level-badge.lvl-1 { background: rgba(102,188,162,0.16); color: #2a7a60; }
+.level-badge.lvl-2 { background: rgba(46,91,95,0.16); color: var(--dark-teal); }
+.level-badge.lvl-3 { background: var(--orange-light); color: #9c5216; }
+.network-pill { display: inline-flex; align-items: center; font-size: 0.72rem; font-weight: 500; padding: 3px 10px; border-radius: 99px; background: #e5f4ee; color: var(--dark-teal); white-space: nowrap; }
+.tag { display: inline-block; background: var(--neutral-bg); color: var(--text-mid); font-size: 0.72rem; font-weight: 500; padding: 3px 10px; border-radius: 99px; letter-spacing: 0.02em; }
+
+/* ---------- Footer ---------- */
+.site-footer { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1200; background: #ffffff; border-top: 1px solid var(--line); padding: 16px 24px; text-align: center; color: var(--text-muted); font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; font-family: 'Fredoka', sans-serif; box-shadow: 0 -2px 12px rgba(46,91,95,0.07); }
+.site-footer a { color: var(--dark-teal); text-decoration: none; font-weight: 500; transition: color 0.15s; display: inline-flex; align-items: center; gap: 5px; border-radius: 4px; }
+.site-footer a:hover { color: var(--orange); }
+.site-footer a:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.site-footer a svg { flex-shrink: 0; }
+.site-footer .footer-sep { color: var(--line); }
+
+/* ---------- Modals (external link, hospital contact) ---------- */
+.modal-backdrop { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(29,45,47,0.5); }
+.modal-dialog { position: relative; width: min(440px, 100%); background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 16px 44px rgba(0,0,0,0.2); padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; font-family: 'Fredoka', sans-serif; color: var(--text); }
+.modal-dialog h2 { margin: 0 0 2px; padding-right: 34px; font-size: 1.15rem; font-weight: 500; color: var(--text); }
+.modal-dialog p { margin: 0; font-size: 0.9rem; line-height: 1.55; font-family: 'Fredoka', sans-serif; }
+.modal-close { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; background: transparent; border: none; border-radius: 50%; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: color 0.15s, background 0.15s; }
+.modal-close:hover { color: var(--text); background: var(--neutral-bg); }
+.modal-close:active { background: var(--teal-light); }
+.modal-close:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.modal-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.modal-details { display: flex; flex-direction: column; gap: 8px; background: #f8fbfa; border: 1px solid #e5f0ec; border-radius: 10px; padding: 12px 14px; }
+.modal-detail-row { display: flex; justify-content: space-between; gap: 12px; font-size: 0.9rem; }
+.modal-detail-row span:first-child { color: var(--text-muted); }
+.modal-detail-row span:last-child { color: var(--text); font-weight: 500; }
+.modal-action { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--dark-teal); color: #fff; height: 42px; border-radius: 10px; font-size: 0.95rem; font-weight: 500; text-decoration: none; transition: background 0.15s, transform 0.06s; }
+.modal-action:hover { background: #264d51; color: #fff; }
+.modal-action:active { background: #1d4145; transform: scale(0.98); }
+.modal-action:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(46,91,95,0.3); }
+
+@media (max-width: 980px) {
+    .header-inner { grid-template-columns: 1fr; }
+    .header-actions { justify-content: flex-start; }
+}
+@media (max-width: 560px) {
+    :root { --footer-space: 112px; }
+    .header-inner { padding: 12px 16px; gap: 12px; }
+    .page { width: min(100% - 32px, var(--page-width)); }
+    .site-footer { gap: 10px 14px; padding: 14px 16px; line-height: 1.35; }
+    .site-footer .footer-sep { display: none; }
+    .site-footer > span:first-child, .site-footer > span:last-child { flex-basis: 100%; }
+    .header-search .search-row { gap: 6px; padding: 3px 3px 3px 16px; }
+    .header-search .search-input-wrap input { font-size: 0.96rem; }
+    .header-search .search-btn { min-width: 78px; padding: 0 14px; }
+}

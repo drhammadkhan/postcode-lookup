@@ -27,214 +27,82 @@
         }
     }
     </script>
+    <link rel="stylesheet" href="site.css" />
     <style>
-        @font-face {
-            font-family: 'Fredoka';
-            src: url('Fredoka Variable Font.ttf') format('truetype');
-            font-weight: 100 900;
-            font-style: normal;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --bg: #f7f8f8;
-            --surface: #ffffff;
-            --border: #dcebe7;
-            --dark-teal: #2e5b5f;
-            --text: #2e5b5f;
-            --muted: #668b8e;
-            --orange: #d2712a;
-            --teal-light: #e0f2ec;
-        }
-        body {
-            min-height: 100vh;
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-        main {
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 16px 20px 42px;
-        }
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 22px;
-            color: var(--muted);
-            font-size: 0.88rem;
-            font-weight: 550;
-        }
-        .breadcrumb a {
-            color: var(--dark-teal);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .breadcrumb a:hover { color: var(--orange); }
-        .breadcrumb-sep { color: #aac5c2; }
-        .page-title {
-            font-size: 1.28rem;
-            line-height: 1.2;
-            font-weight: 650;
-            color: var(--dark-teal);
-            margin-bottom: 8px;
-        }
-        .page-description { max-width: 760px; margin: 0 0 20px; color: var(--muted); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 0.92rem; line-height: 1.55; }
-        .summary {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .stat {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 17px 18px 15px;
-            box-shadow: 0 8px 18px rgba(46,91,95,0.06);
-        }
-        .stat-value {
-            font-size: 1.45rem;
-            line-height: 1;
-            font-weight: 650;
-            color: var(--dark-teal);
-        }
-        .stat-label {
-            font-size: 0.84rem;
-            color: var(--muted);
-            margin-top: 4px;
-        }
-        .directory {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 8px 18px rgba(46,91,95,0.045);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px 18px;
-            border-bottom: 1px solid var(--border);
-            text-align: left;
-            vertical-align: middle;
-        }
-        th {
-            background: #f8fcfb;
-            color: var(--muted);
-            font-size: 0.72rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
+        .summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+        .stat { background: var(--surface); border: 1.5px solid #e5f0ec; border-radius: var(--radius); padding: 14px 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+        .stat-value { font-size: 1.45rem; line-height: 1.2; font-weight: 500; color: var(--text); }
+        .stat-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+        .directory { background: var(--surface); border: 1.5px solid #e5f0ec; border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 18px; border-bottom: 1px solid #eef5f2; text-align: left; vertical-align: middle; }
+        th { background: #fafdfc; border-bottom-color: #e5f0ec; color: var(--text-muted); font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; }
         td { font-size: 0.92rem; }
         tbody tr:last-child td { border-bottom: none; }
-        tbody tr:hover { background: #fbfdfc; }
-        .hospital-name {
-            font-weight: 650;
-            color: var(--dark-teal);
-            line-height: 1.25;
-            margin-bottom: 4px;
-        }
-        .postcode { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            min-height: 18px;
-            border-radius: 999px;
-            padding: 2px 8px;
-            font-size: 0.68rem;
-            font-weight: 650;
-            white-space: nowrap;
-        }
-        .network { background: var(--teal-light); color: var(--dark-teal); }
-        .level-3 { background: #fde9dc; color: #9b4d13; }
-        .level-2 { background: #e0e8e7; color: var(--dark-teal); }
-        .level-1 { background: #dff3ec; color: #23815f; }
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .tag {
-            background: #eef5f3;
-            color: var(--muted);
-        }
-        .empty {
-            color: var(--muted);
-            font-size: 0.88rem;
-        }
-        .phone-link {
-            color: var(--muted);
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.82rem;
-            font-weight: 500;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-        .phone-link:hover { color: var(--orange); }
-        .phone-link svg {
-            width: 12px;
-            height: 12px;
-            flex: 0 0 auto;
-        }
-        footer {
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 0 20px 24px;
-            color: var(--muted);
-            font-size: 0.82rem;
-        }
-        footer nav { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        footer a { color: var(--dark-teal); text-decoration: none; font-weight: 650; }
-        .footer-sep { color: #aac5c2; }
+        tbody tr.contact-trigger { cursor: pointer; transition: background 0.12s; }
+        tbody tr.contact-trigger:hover { background: #f8fbfa; }
+        tbody tr.contact-trigger:focus-visible { outline: none; box-shadow: inset 0 0 0 3px rgba(102,188,162,0.35); }
+        .hospital-name { font-weight: 500; color: var(--text); line-height: 1.25; margin-bottom: 3px; }
+        .phone { color: var(--text-muted); display: inline-flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 400; white-space: nowrap; }
+        .phone svg { width: 11px; height: 11px; flex: 0 0 auto; }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .empty { color: var(--text-muted); font-size: 0.88rem; }
         @media (max-width: 760px) {
-            main { padding: 14px 14px 32px; }
             .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             table, thead, tbody, tr, th, td { display: block; }
             thead { display: none; }
             tr { border-bottom: 1px solid var(--border); padding: 10px 0; }
             tbody tr:last-child { border-bottom: none; }
             td { border: none; padding: 6px 14px; }
-            td::before {
-                content: attr(data-label);
-                display: block;
-                color: var(--muted);
-                font-size: 0.72rem;
-                font-weight: 700;
-                text-transform: uppercase;
-                margin-bottom: 3px;
-            }
+            td::before { content: attr(data-label); display: block; color: var(--text-muted); font-size: 0.72rem; font-weight: 500; text-transform: uppercase; margin-bottom: 3px; }
         }
     </style>
 </head>
-<body>
-    <main>
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="index.html">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-                Home
+<body class="site-body">
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="app-brand" href="index.html" aria-label="HO.ME home">
+                <img src="assets/home-map-light.svg" alt="HO.ME - HOspital near ME">
+                <span class="app-brand-sep" aria-hidden="true"></span>
+                <span class="app-brand-caption">HOspital near ME</span>
             </a>
-            <span class="breadcrumb-sep">/</span>
-            <span>Hospitals</span>
+            <form class="header-search" id="headerSearchForm" autocomplete="off">
+                <div class="search-row">
+                    <div class="search-input-wrap">
+                        <svg class="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <label class="search-label" for="headerPostcodeInput">Enter a postcode</label>
+                        <input type="text" id="headerPostcodeInput" placeholder="Enter postcode - e.g. SE1 7EH" />
+                        <button type="button" class="clear-btn" id="headerClearBtn" aria-label="Clear postcode">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                    </div>
+                    <button type="submit" class="search-btn">Search</button>
+                </div>
+            </form>
+            <div class="header-actions">
+                <div class="header-caption">London Neonatal Units</div>
+                <a class="feedback-btn" href="https://forms.cloud.microsoft/e/dCrxb4BRCq" target="_blank" rel="noopener" data-feedback>Submit Feedback</a>
+            </div>
+        </div>
+        <div class="header-accent" aria-hidden="true"></div>
+    </header>
+    <main class="page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a class="crumb-back" href="index.html" aria-label="Back to lookup">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            </a>
+            <a class="crumb-home" href="index.html">Home</a>
+            <span class="breadcrumb-sep" aria-hidden="true">/</span>
+            <span aria-current="page">Hospitals</span>
         </nav>
-
         <h1 class="page-title">London Neonatal Units</h1>
         <p class="page-description">Neonatal hospital units included in the HO.ME postcode lookup, with their network, level of care, listed specialties and main hospital contact number.</p>
-
         <section class="summary" aria-label="Hospital summary">
             <div class="stat"><div class="stat-value" id="totalHospitals">-</div><div class="stat-label">Hospitals</div></div>
             <div class="stat"><div class="stat-value" id="level3Count">-</div><div class="stat-label">Level 3 units</div></div>
             <div class="stat"><div class="stat-value" id="level2Count">-</div><div class="stat-label">Level 2 units</div></div>
             <div class="stat"><div class="stat-value" id="level1Count">-</div><div class="stat-label">Level 1 units</div></div>
         </section>
-
         <section class="directory">
             <table>
                 <thead>
@@ -251,113 +119,39 @@
             </table>
         </section>
     </main>
-
-    <footer>
-        <nav aria-label="Footer navigation">
-            <a href="index.html">Lookup</a>
-            <span class="footer-sep">|</span>
-            <a href="about.html">About</a>
-            <span class="footer-sep">|</span>
-            <a href="privacy.html">Privacy</a>
-        </nav>
+    <footer class="site-footer">
+        <span>HO.ME &nbsp;&middot;&nbsp; ~333,000 London-area postcodes</span>
+        <span class="footer-sep">|</span>
+        <a href="hospitals.html">Hospitals</a>
+        <span class="footer-sep">|</span>
+        <a href="about.html">About</a>
+        <span class="footer-sep">|</span>
+        <a href="privacy.html">Privacy</a>
+        <span class="footer-sep">|</span>
+        <a href="index.html?view=catchment" id="catchmentLink">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+            Catchment Map
+        </a>
+        <span class="footer-sep">|</span>
+        <span>Erin Coupland &amp; Hammad Khan</span>
     </footer>
-
+    <script src="site.js"></script>
     <script>
-        const networkNames = {
-            NC: 'North Central',
-            NE: 'North East',
-            NW: 'North West',
-            SE: 'South East',
-            SW: 'South West',
-            TVW: 'Thames Valley and Wessex',
-            KSS: 'Kent, Surrey and Sussex',
-            EoE: 'East of England',
-            Border: 'Border'
-        };
-        const levelNames = {
-            1: 'Level 1 - SCBU',
-            2: 'Level 2 - LNU',
-            3: 'Level 3 - NICU'
-        };
-        const hospitalDisplayNames = {
-            'University Lewisham': 'Lewisham Hospital',
-        };
-        const hospitalPhones = {
-            'Barnet Hospital': '020 8216 4600',
-            'Chelsea & Westminster': '020 3315 8000',
-            'Croydon University': '020 8401 3000',
-            'Darent Valley': '01322 428 100',
-            'East Surrey': '01737 768 511',
-            'Epsom Hospital': '01372 735 735',
-            "Evelina (St Thomas')": '020 7188 7188',
-            'Hillingdon Hospital': '01895 238 282',
-            'Homerton University': '020 8510 5555',
-            'Kings College Hospital': '020 3299 9000',
-            'Kingston Hospital': '020 8546 7711',
-            'Newham General': '020 7476 4000',
-            'North Middlesex': '020 8887 2000',
-            'Northwick Park': '020 8864 3232',
-            'Princess Royal (PRUH)': '01689 863 000',
-            'Queen Elizabeth Woolwich': '020 8836 6000',
-            "Queen Charlottes'": '020 3313 1111',
-            'Queens Hospital': '0330 400 4333',
-            'Royal Free Hospital': '020 7794 0500',
-            'St Heliers Hospital': '020 8296 2000',
-            'St Marys Hospital': '020 3312 6666',
-            'St Peters Hospital': '01932 872000',
-            'St. Georges Hospital': '020 8672 1255',
-            'The Royal London': '020 7377 7000',
-            'UCH (University College)': '020 3456 7890',
-            'University Lewisham': '020 8333 3000',
-            'Watford General': '01923 244 366',
-            'West Middlesex': '020 8560 2121',
-            'Whipps Cross': '020 8539 5522',
-            'Whittington Hospital': '020 7272 3070',
-            'Wexham Park': '0300 614 5000',
-        };
-
-        function escapeHtml(value) {
-            return String(value ?? '').replace(/[&<>"']/g, ch => ({
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#39;'
-            }[ch]));
-        }
-
-        function displayHospitalName(name) {
-            return hospitalDisplayNames[name] || name;
-        }
-
+        const { escapeHtml, displayHospitalName, hospitalPhones, normaliseNetwork, networkLabel, levelShortNames, bindContactTrigger } = HOME;
+        const PHONE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
         function directorySortName(name) {
             return displayHospitalName(name).replace(/^St\.?\s+/i, '');
         }
-
         function renderTags(tags) {
             const parts = String(tags || '').split(',').map(t => t.trim()).filter(Boolean);
             if (!parts.length) return '<span class="empty">None listed</span>';
-            return '<div class="tags">' + parts.map(tag =>
-                '<span class="pill tag">' + escapeHtml(tag) + '</span>'
-            ).join('') + '</div>';
+            return '<div class="tags">' + parts.map(tag => '<span class="tag">' + escapeHtml(tag) + '</span>').join('') + '</div>';
         }
-
-        function normaliseNetwork(sector) {
-            if (sector === 'South East') return 'SE';
-            if (sector === 'South West') return 'SW';
-            return sector || '';
-        }
-
-        function phoneHref(phone) {
-            return 'tel:' + String(phone).replace(/[^\d+]/g, '');
-        }
-
         function renderPhone(hospitalName) {
             const phone = hospitalPhones[hospitalName];
             if (!phone) return '<span class="empty">Not listed</span>';
-            return '<a class="phone-link" href="' + phoneHref(phone) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>' + escapeHtml(phone) + '</a>';
+            return '<span class="phone">' + PHONE_ICON + escapeHtml(phone) + '</span>';
         }
-
         fetch('hospitals.json')
             .then(response => response.json())
             .then(hospitals => {
@@ -365,28 +159,26 @@
                 const sorted = hospitals.slice().sort((a, b) =>
                     directorySortName(a.name).localeCompare(directorySortName(b.name))
                 );
-
                 document.getElementById('totalHospitals').textContent = sorted.length;
                 document.getElementById('level3Count').textContent = sorted.filter(h => h.level === 3).length;
                 document.getElementById('level2Count').textContent = sorted.filter(h => h.level === 2).length;
                 document.getElementById('level1Count').textContent = sorted.filter(h => h.level === 1).length;
-
                 rows.innerHTML = sorted.map(hospital => {
-                    const network = normaliseNetwork(hospital.sector);
-                    const networkLabel = networkNames[network] || network || 'Unassigned';
                     const level = Number(hospital.level);
+                    const levelText = 'Level ' + level + ' - ' + (levelShortNames[level] || '');
                     return `
                         <tr>
                             <td data-label="Hospital">
                                 <div class="hospital-name">${escapeHtml(displayHospitalName(hospital.name))}</div>
                                 ${renderPhone(hospital.name)}
                             </td>
-                            <td data-label="Network"><span class="pill network">${escapeHtml(networkLabel)}</span></td>
-                            <td data-label="Care Level"><span class="pill level-${level}">${escapeHtml(levelNames[level] || ('Level ' + level))}</span></td>
+                            <td data-label="Network"><span class="network-pill">${escapeHtml(networkLabel(hospital.sector))}</span></td>
+                            <td data-label="Care Level"><span class="level-badge lvl-${level}">${escapeHtml(levelText)}</span></td>
                             <td data-label="Specialties">${renderTags(hospital.tags)}</td>
                         </tr>
                     `;
                 }).join('');
+                rows.querySelectorAll('tr').forEach((row, i) => bindContactTrigger(row, () => sorted[i]));
             })
             .catch(() => {
                 document.getElementById('hospitalRows').innerHTML =
