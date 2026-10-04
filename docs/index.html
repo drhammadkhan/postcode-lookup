@@ -610,7 +610,7 @@
             SECTOR_ORDER.forEach(sec => {
                 const hosps = sectorHosps[sec];
                 if (!hosps.length) return;
-                html += '<div style="margin-top:8px;margin-bottom:2px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#8aadb0;font-weight:600;">' + SECTOR_LABELS[sec] + '</div>';
+                html += '<div style="margin-top:8px;margin-bottom:2px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#8aadb0;font-weight:500;">' + SECTOR_LABELS[sec] + '</div>';
                 hosps.forEach(name => {
                     const c = colours[name]; const count = countsByName[name] || 0;
                     html += '<div><span style="background:' + c + ';width:12px;height:12px;display:inline-block;border-radius:2px;margin-right:6px;vertical-align:middle;"></span>' + displayHospitalName(name) + ' (' + count.toLocaleString() + ')</div>';
