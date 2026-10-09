@@ -6,7 +6,7 @@ A detailed, human-readable breakdown of how the postcode lookup script works, in
 
 ## Overview
 
-The script takes ~326,000 London postcodes and a profile-filtered neonatal hospital list, and for each postcode finds the nearest hospital at each care level (1, 2, 3, and any). It does this in three stages:
+The script takes ~<!--auto:postcodes_k-->333,000<!--/auto--> London postcodes and a profile-filtered neonatal hospital list, and for each postcode finds the nearest hospital at each care level (1, 2, 3, and any). It does this in three stages:
 
 1. **Classify** each postcode as North or South of the Thames
 2. **Search** for the nearest hospital using a spatial data structure (KD-tree)
@@ -125,7 +125,7 @@ These exceptions are checked **before** the district-level classification, so th
 
 ### The problem
 
-Given a postcode at coordinates (lat, lon), find the closest hospital from a filtered subset. Doing this with brute force — calculating the distance to every hospital for every postcode — would mean 326,000 × 34 = ~11 million distance calculations, repeated for each care level.
+Given a postcode at coordinates (lat, lon), find the closest hospital from a filtered subset. Doing this with brute force — calculating the distance to every hospital for every postcode — would mean <!--auto:postcodes_k-->333,000<!--/auto--> × <!--auto:hospitals-->31<!--/auto--> = ~<!--auto:brute_force_m-->10<!--/auto--> million distance calculations, repeated for each care level.
 
 ### What is a KD-tree?
 
@@ -161,7 +161,7 @@ This makes the coordinate space approximately proportional to real-world distanc
 
 ### Vectorisation
 
-Instead of looping through 326,000 postcodes one at a time, the script:
+Instead of looping through <!--auto:postcodes_k-->333,000<!--/auto--> postcodes one at a time, the script:
 
 1. Groups all postcodes by side (North/South)
 2. For each side × level combination, builds **one** KD-tree
@@ -237,7 +237,7 @@ For postcode BR1 1AA (51.4015°N, 0.0154°E) and Princess Royal hospital (51.385
 
 Some postcodes — particularly large-user (business/government) and PO Box entries — are assigned default OS grid references that do not reflect their real physical location. For example, several hundred SW1P/SW1V/SW1W postcodes share the exact same coordinate near Lambeth, which is south of the Thames. Because the routing logic classifies these postcodes as North (correct for delivery purposes), they would appear as stray North-coloured dots south of the river on the map.
 
-Three complementary filters are applied **before sampling** (on the full 326,000-postcode dataset) to suppress these:
+Three complementary filters are applied **before sampling** (on the full <!--auto:postcodes_k-->333,000<!--/auto-->-postcode dataset) to suppress these:
 
 ### Filter A: Cluster filter
 
@@ -318,7 +318,7 @@ The outcode approach maps entire outward codes (e.g. `TW7`, `BR1`) to a set of c
 The clinical routing guide (`Outcode approach.html`) contains a JavaScript object `outwardToUnits` mapping each outward code to an array of abbreviated hospital names. The script:
 
 1. Regex-extracts the JS object literal from the HTML
-2. Resolves abbreviated names to canonical names via a `NAME_MAP` dict (e.g. `PRUH → Princess Royal (PRUH)`, `GSTT → Evelina (St Thomas')`)
+2. Resolves abbreviated names to canonical names using the `Aliases` column of `hospitals_refined.csv` (e.g. `PRUH → Princess Royal (PRUH)`, `GSTT → Evelina (St Thomas')`), and writes each hospital's `Level` from the CSV back into `Outcode approach.html`
 3. Drops entries mapped to `None` (i.e. `"outside London Neonatal Network"`)
 4. Writes `docs/outcode_map.json`:
 
@@ -332,7 +332,7 @@ The clinical routing guide (`Outcode approach.html`) contains a JavaScript objec
 }
 ```
 
-Coverage: 307 outward codes → 26 unique hospitals.
+Coverage: <!--auto:outcodes-->307<!--/auto--> outward codes → <!--auto:outcode_hospitals-->26<!--/auto--> unique hospitals.
 
 #### Step 2 — Weighted allocation (`calculate_outcode_catchment.py`)
 
@@ -366,8 +366,8 @@ hospital_population += outcode_population × weight[hospital]
 | Routing unit | Individual postcode | Outward code (e.g. BR1) |
 | Assignment | Nearest hospital (geographic) | Clinical routing guide |
 | Split for multi-hospital outcodes | N/A (one hospital per postcode) | Postcode-count weighted |
-| Population total | 9,415,498 | 9,415,498 (same source) |
-| Births total | 247,913 | 247,913 (same source) |
+| Population total | <!--auto:population_total-->8,799,778<!--/auto--> | <!--auto:outcode_population_total-->9,415,500<!--/auto--> |
+| Births total | <!--auto:births_total-->253,099<!--/auto--> | <!--auto:outcode_births_total-->247,913<!--/auto--> |
 | Primary use | Geographic nearest-unit planning | Network capacity planning using clinical pathways |
 
 ---

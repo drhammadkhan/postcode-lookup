@@ -18,8 +18,8 @@ Not every hospital has every level of unit, so knowing which is closest — and 
 
 The script takes two input files:
 
-- **`hospitals_refined.csv`** — A list of ~31 neonatal hospitals across London, including their location (latitude/longitude), care level (1–3), which side of the Thames they serve (North, South, or Both), and profile flags (`include_lookup`, `include_analysis`).
-- **`postcodes_master.csv`** — A list of ~333,000 London-area postcodes with their geographic coordinates, derived from the ONS Postcode Directory May 2026 (`ONSPD_MAY_2026_UK.csv`). London rows are selected using region code `E12000007`, and postcodes are normalised by removing spaces.
+- **`hospitals_refined.csv`** — A list of <!--auto:hospitals-->31<!--/auto--> neonatal hospitals across London, including their location (latitude/longitude), care level (1–3), which side of the Thames they serve (North, South, or Both), profile flags (`include_lookup`, `include_analysis`), `Phone`, and `Aliases` (the short names used in the outcode guide, separated by `;`).
+- **`postcodes_master.csv`** — A list of ~<!--auto:postcodes_k-->333,000<!--/auto--> London-area postcodes with their geographic coordinates, derived from the ONS Postcode Directory May 2026 (`ONSPD_MAY_2026_UK.csv`). London rows are selected using region code `E12000007`, and postcodes are normalised by removing spaces.
 
 It then runs through three steps:
 
@@ -39,7 +39,7 @@ The outcode is extracted by stripping the last 3 characters (the incode) from th
 
 These are identified by checking the incode (the last three characters of the full postcode) to avoid false matches against similar outcodes like KT14.
 
-Some hospitals near the river serve **both** sides (e.g. West Middlesex), so they are available to postcodes on either side.
+Some hospitals near the river serve **both** sides (e.g. Wexham Park, St Peters Hospital), so they are available to postcodes on either side.
 
 ### 2. Find the nearest hospitals
 
@@ -60,20 +60,49 @@ Results are saved to profile-specific folders under `output/`:
 
 Each profile writes one CSV per hospital (e.g. `output/lookup/West_Middlesex.csv`) plus a combined file (`output/lookup/All_Postcodes.csv` or `output/analysis/All_Postcodes.csv`) with one row per postcode:
 
+<!--auto:example_row-->
 | Column | Example |
 |--------|---------|
 | Postcode | TW7 6QT |
 | Latitude | 51.4729 |
 | Longitude | -0.3317 |
-| Side | South |
+| Side | North |
 | Closest_Any | West Middlesex |
 | Distance_Any_km | 0.48 |
-| Closest_L1 | West Middlesex |
-| Distance_L1_km | 0.48 |
-| Closest_L2 | Kingston Hospital |
-| Distance_L2_km | 7.32 |
-| Closest_L3 | St. Georges Hospital |
-| Distance_L3_km | 12.0 |
+| Closest_L1 | Royal Free Hospital |
+| Distance_L1_km | 14.57 |
+| Closest_L2 | West Middlesex |
+| Distance_L2_km | 0.48 |
+| Closest_L3 | Queen Charlottes' |
+| Distance_L3_km | 8.23 |
+<!--/auto-->
+
+### Rebuilding everything
+
+`hospitals_refined.csv` is the **single source of truth** for hospital facts: level, side, sector, tags, phone number and the short names (`Aliases`) used in the outcode guide. Never copy those facts into other files by hand. After changing the CSV, rebuild every generated file with one command:
+
+```bash
+pip install -r requirements.txt
+python3 build_all.py             # all steps, in dependency order (~90 s)
+python3 build_all.py --list      # show the steps with their inputs and outputs
+python3 build_all.py --changed   # skip steps whose outputs are newer than their inputs
+python3 build_all.py --only maps # run only matching steps; also --from NAME and --skip NAME
+```
+
+The build ends by updating the numbers in this README and `TECHNICAL.md` from the data (`sync_docs.py`; look for the `<!--auto:...-->` markers, which should not be edited by hand) and by printing a summary of what changed compared with the last commit (`change_summary.py`, also runnable on its own with `--against <git ref>`).
+
+Then review `git diff --stat` and commit the regenerated files with the CSV change. `extract_outcode_json.py` also writes each hospital's level from the CSV back into `Outcode approach.html`, and `build_static.py` copies phone numbers into `docs/hospitals.json`, which the site pages read.
+
+#### Checks
+
+```bash
+pip install pytest
+python3 -m pytest tests -q       # ~5 s
+```
+
+`tests/test_consistency.py` fails if any generated file disagrees with `hospitals_refined.csv` (for example a hospital's level in `hospitals.json`, the postcode assignments, the catchment totals, the outcode guide, the maps and pages) or if the README/TECHNICAL numbers are stale. The GitHub Actions workflow `.github/workflows/verify.yml` runs these tests on every pull request and push to `main`, then rebuilds everything and fails if that changes any committed file, so a CSV edit that was not followed by `python3 build_all.py` cannot be merged unnoticed.
+
+Generated files (`output/`, `docs/*.json`, `docs/maps/`, `docs/comparison.html`, `docs/equalised_catchment.html`, `neonatal_catchment_map.html`) should not be edited by hand; change the generator script instead. Map element ids are seeded (`folium_utils.py`), so re-running the build on unchanged data produces no diff.
 
 ### 4. Visualise on a map
 
@@ -126,7 +155,7 @@ The public site keeps the postcode lookup, supplementary maps, outcode catchment
 Outward codes (e.g. `TW7`, `BR1`) are mapped to a set of candidate hospitals drawn from a clinical routing guide. Where an outcode maps to multiple hospitals, the postcode count from `output/analysis/All_Postcodes.csv` is used to weight the population/births split proportionally.
 
 Scripts:
-- `extract_outcode_json.py` → `docs/outcode_map.json` (307 outcodes, 26 hospitals)
+- `extract_outcode_json.py` → `docs/outcode_map.json` (<!--auto:outcodes-->307<!--/auto--> outcodes, <!--auto:outcode_hospitals-->26<!--/auto--> hospitals)
 - `calculate_outcode_catchment.py` → `docs/outcode_populations.json`, `docs/outcode_births.json`
 - Results visualised at `/outcode_population.html`
 

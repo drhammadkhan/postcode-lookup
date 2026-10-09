@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 import folium
+from folium_utils import make_folium_ids_deterministic
+
+make_folium_ids_deterministic()
 from folium.plugins import FastMarkerCluster
 from shapely.geometry import Point, Polygon
 
