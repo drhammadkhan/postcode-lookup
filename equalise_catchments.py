@@ -125,7 +125,7 @@ for side in ("North", "South"):
     # KNN locality mask: each postcode may only go to its K nearest hospitals.
     # K=3 for small pools (≤10), K=4 for larger pools (16).
     KNN_K    = min(3 if n_hosp <= 10 else 4, n_hosp)
-    knn_rank = np.argsort(D, axis=1)
+    knn_rank = np.argsort(D, axis=1, kind="stable")   # stable: tie order must not depend on the CPU
     top_k    = np.zeros((n_pc, n_hosp), dtype=bool)
     top_k[np.arange(n_pc)[:, None], knn_rank[:, :KNN_K]] = True
     D_masked = D.copy()
@@ -184,7 +184,7 @@ for side in ("North", "South"):
     if len(mismatch):
         dist_saved = (D[mismatch, assignment[mismatch]]
                       - D[mismatch, nearest_h[mismatch]])
-        order    = np.argsort(-dist_saved)
+        order    = np.argsort(-dist_saved, kind="stable")   # many postcodes share coordinates, so ties are common
         mismatch = mismatch[order]
 
         n_swapped = 0
