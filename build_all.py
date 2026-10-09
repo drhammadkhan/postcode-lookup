@@ -11,7 +11,9 @@ build_all.py - rebuild every generated file in the right order.
 
 hospitals_refined.csv is the single source of truth for hospital facts (level,
 side, tags, phone, aliases). After editing it, run this script and commit the
-result. Steps are listed in dependency order.
+result. Steps are listed in dependency order; the last two update the docs from
+the data (sync_docs.py) and print what changed versus the last commit
+(change_summary.py).
 """
 
 import argparse
@@ -69,6 +71,12 @@ STEPS = [
     ("extra-maps", ["generate_extra_maps.py"],
      [LOOKUP_ALL, HOSPITALS, "generate_extra_maps.py", "folium_utils.py"] + PROFILE_CODE,
      sorted(glob.glob(os.path.join(BASE_DIR, "docs/maps/map*.html"))) or ["docs/maps/map4_bubbles.html"]),
+    ("docs", ["sync_docs.py"],
+     [HOSPITALS, POSTCODES, LOOKUP_ALL, "docs/outcode_map.json", "docs/populations.json", "docs/births.json",
+      "docs/outcode_populations.json", "docs/outcode_births.json", "sync_docs.py"],
+     ["README.md", "TECHNICAL.md"]),
+    # Report only: compares the fresh files with the last commit. Always runs, never fails the build.
+    ("summary", ["change_summary.py"], [], []),
 ]
 
 
@@ -82,6 +90,8 @@ def _mtime(path):
 
 def is_fresh(inputs, outputs):
     """True when every output exists and is newer than every input."""
+    if not outputs:
+        return False
     out_times = [_mtime(p) for p in outputs]
     if any(t is None for t in out_times):
         return False
@@ -138,7 +148,9 @@ def main():
         print(f"\n== {name}: python3 {' '.join(cmd)}", flush=True)
         t0 = time.time()
         rc = subprocess.call([sys.executable, "-u"] + cmd, cwd=BASE_DIR)
-        if rc != 0:
+        if rc != 0 and name == "summary":
+            print("   (change summary failed; the build itself is fine)")
+        elif rc != 0:
             sys.exit(f"\nStep '{name}' failed (exit {rc}). Fix it, then resume with: "
                      f"python3 build_all.py --from {name}")
         print(f"   {name} done in {time.time() - t0:.1f}s")
