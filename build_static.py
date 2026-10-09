@@ -153,6 +153,7 @@ for _, row in hospitals.iterrows():
         'lat': round(row['Latitude'], 4),
         'lon': round(row['Longitude'], 4),
         'tags': tags,
+        'phone': str(row['Phone']).strip() if pd.notna(row.get('Phone', '')) else '',
     })
 
 with open('docs/hospitals.json', 'w') as f:

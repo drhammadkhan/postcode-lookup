@@ -612,39 +612,8 @@
     const hospitalDisplayNames = {
         'University Lewisham': 'Lewisham Hospital',
     };
-    const hospitalPhones = {
-        'Barnet Hospital': '020 8216 4600',
-        'Chelsea & Westminster': '020 3315 8000',
-        'Croydon University': '020 8401 3000',
-        'Darent Valley': '01322 428 100',
-        'East Surrey': '01737 768 511',
-        'Epsom Hospital': '01372 735 735',
-        "Evelina (St Thomas')": '020 7188 7188',
-        'Hillingdon Hospital': '01895 238 282',
-        'Homerton University': '020 8510 5555',
-        'Kings College Hospital': '020 3299 9000',
-        'Kingston Hospital': '020 8546 7711',
-        'Newham General': '020 7476 4000',
-        'North Middlesex': '020 8887 2000',
-        'Northwick Park': '020 8864 3232',
-        'Princess Royal (PRUH)': '01689 863 000',
-        'Queen Elizabeth Woolwich': '020 8836 6000',
-        "Queen Charlottes'": '020 3313 1111',
-        'Queens Hospital': '0330 400 4333',
-        'Royal Free Hospital': '020 7794 0500',
-        'St Heliers Hospital': '020 8296 2000',
-        'St Marys Hospital': '020 3312 6666',
-        'St Peters Hospital': '01932 872000',
-        'St. Georges Hospital': '020 8672 1255',
-        'The Royal London': '020 7377 7000',
-        'UCH (University College)': '020 3456 7890',
-        'University Lewisham': '020 8333 3000',
-        'Watford General': '01923 244 366',
-        'West Middlesex': '020 8560 2121',
-        'Whipps Cross': '020 8539 5522',
-        'Whittington Hospital': '020 7272 3070',
-        'Wexham Park': '0300 614 5000',
-    };
+    // Filled from hospitals.json (Phone column of hospitals_refined.csv)
+    const hospitalPhones = {};
 
     function escapeHtml(value) {
         return String(value ?? '').replace(/[&<>"']/g, ch => ({
@@ -758,6 +727,7 @@
         window.hospCoords = {};
         hospitalData.forEach(h => {
             window.hospCoords[h.name] = { lat: h.lat, lon: h.lon, level: h.level, sector: h.sector, side: h.side, tags: h.tags || '' };
+            if (h.phone) hospitalPhones[h.name] = h.phone;
         });
         setTimeout(() => {
             document.getElementById('loading-state').style.display = 'none';

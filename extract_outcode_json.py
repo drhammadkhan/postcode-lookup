@@ -1,52 +1,47 @@
 """
 extract_outcode_json.py
 Parses outwardToUnits from 'Outcode approach.html' and writes docs/outcode_map.json.
-Also normalises abbreviated hospital names to match hospitals_refined.csv.
+
+Hospital names come from hospitals_refined.csv (the single source of truth):
+  * the "Aliases" column (semicolon-separated) lists the short names used in the
+    outcode guide;
+  * the "Level" column is written back into the guide's `units` list so the
+    guide can never disagree with the CSV about a hospital's level.
 """
 import re, json
 
+import pandas as pd
+
+HOSPITALS_CSV = "hospitals_refined.csv"
+GUIDE_HTML    = "Outcode approach.html"
+
 # ---------------------------------------------------------------------------
-# Name mapping: abbreviations in Outcode approach.html → hospitals_refined.csv
+# Name mapping: aliases (from the CSV) -> canonical hospital name
 # ---------------------------------------------------------------------------
-NAME_MAP = {
-    "PRUH":                  "Princess Royal (PRUH)",
-    "QEW":                   "Queen Elizabeth Woolwich",
-    "Croydon":               "Croydon University",
-    "St. Helier":            "St Heliers Hospital",
-    "Epsom":                 "Epsom Hospital",
-    "Royal London":          "The Royal London",
-    "Newham":                "Newham General",
-    "Whipps Cross":          "Whipps Cross",
-    "Homerton":              "Homerton University",
-    "Barnet":                "Barnet Hospital",
-    "North Middlesex":       "North Middlesex",
-    "Royal Free":            "Royal Free Hospital",
-    "UCLH":                  "UCH (University College)",
-    "UCH":                   "UCH (University College)",
-    "St. Mary's":            "St Marys Hospital",
-    "Queen Charlotte's":     "Queen Charlottes'",
-    "Northwick Park":        "Northwick Park",
-    "Hillingdon":            "Hillingdon Hospital",
-    "West Middlesex":        "West Middlesex",
-    "Kingston":              "Kingston Hospital",
-    "Queen's Romford":       "Queens Hospital",
-    "GSTT":                  "Evelina (St Thomas')",
-    "King's":                "Kings College Hospital",
-    "Lewisham":              "University Lewisham",
-    "Chelsea & Westminster": "Chelsea & Westminster",
-    "St. George's":          "St. Georges Hospital",
-    # typos / variants in the HTML
-    "Whittingdon":           "Whittington Hospital",
-    "Whittindon":            "Whittington Hospital",
-    "Whittington":           "Whittington Hospital",
+hospitals = pd.read_csv(HOSPITALS_CSV)
+hospitals.columns = hospitals.columns.str.strip()
+hospitals["Hospital Name"] = hospitals["Hospital Name"].str.strip()
+
+NAME_MAP = {}
+for _, row in hospitals.iterrows():
+    aliases = [] if pd.isna(row["Aliases"]) else [a.strip() for a in str(row["Aliases"]).split(";") if a.strip()]
+    for alias in aliases + [row["Hospital Name"]]:
+        if NAME_MAP.setdefault(alias, row["Hospital Name"]) != row["Hospital Name"]:
+            raise ValueError(f"Alias '{alias}' is used by more than one hospital in {HOSPITALS_CSV}")
+
+# Typos / variants that appear in the guide but are not worth a CSV alias
+NAME_MAP.update({
+    "Whittingdon": "Whittington Hospital",
+    "Whittindon":  "Whittington Hospital",
+    "Whittington": "Whittington Hospital",
     # skip
     "outside London Neonatal Network": None,
-}
+})
 
 # ---------------------------------------------------------------------------
 # Parse the JS object from the HTML
 # ---------------------------------------------------------------------------
-with open("Outcode approach.html", encoding="utf-8") as f:
+with open(GUIDE_HTML, encoding="utf-8") as f:
     html = f.read()
 
 # Extract the JS object literal between 'const outwardToUnits = {' and '};'
@@ -81,6 +76,27 @@ for outcode, abbrevs in raw.items():
 
 if unknown:
     print(f"WARNING: unmapped names: {unknown}")
+
+# ---------------------------------------------------------------------------
+# Keep the guide's `units` levels in step with the CSV
+# ---------------------------------------------------------------------------
+level_by_name = dict(zip(hospitals["Hospital Name"], hospitals["Level"].astype(int)))
+
+def _sync_level(match):
+    block = match.group(0)
+    alias_list = re.search(r'aliases:\s*\[(.*?)\]', block)
+    aliases = re.findall(r'"([^"]+)"', alias_list.group(1)) if alias_list else []
+    canon = {NAME_MAP[a] for a in aliases if NAME_MAP.get(a)}
+    if len(canon) != 1:
+        return block                      # not a hospital we can identify (e.g. GOSH)
+    level = level_by_name[canon.pop()]
+    return re.sub(r'level:\s*\d', f'level: {level}', block, count=1)
+
+synced = re.sub(r'\{\s*name:\s*"[^"]+",\s*aliases:.*?mapUrl:[^\n]*\n\s*\}', _sync_level, html, flags=re.DOTALL)
+if synced != html:
+    with open(GUIDE_HTML, "w", encoding="utf-8") as f:
+        f.write(synced)
+    print(f"Updated unit levels in {GUIDE_HTML} from {HOSPITALS_CSV}")
 
 # ---------------------------------------------------------------------------
 # Write JSON

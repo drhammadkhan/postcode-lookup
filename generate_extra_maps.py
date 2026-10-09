@@ -24,6 +24,9 @@ import colorsys, os
 import numpy as np
 import pandas as pd
 import folium
+from folium_utils import make_folium_ids_deterministic
+
+make_folium_ids_deterministic()
 
 from hospital_profiles import load_hospitals_for_profile
 
@@ -50,7 +53,6 @@ colour_map  = dict(zip(hospital_names, colour_list))
 
 CENTRE   = [51.5, -0.1]
 ZOOM     = 10
-BASETILE = 'OpenStreetMap'
 
 
 # ── Shared helpers ─────────────────────────────────────────────────────────────
@@ -189,6 +191,19 @@ def build_map4():
     path = 'docs/maps/map4_bubbles.html'
     m.save(path)
     print(f"Map 4 saved → {path}  ({n_hosp} hospitals)")
+
+
+_LEAFLET_CSS = '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>'
+_LEAFLET_JS  = '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>'
+
+
+def _with_maplibre(html):
+    """Add the MapLibre GL scripts that _BASE_TILE (the Positron basemap) needs."""
+    assert _LEAFLET_CSS in html and _LEAFLET_JS in html, "leaflet tags not found in template"
+    return (html
+            .replace(_LEAFLET_CSS, _LEAFLET_CSS + '\n<link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet"/>')
+            .replace(_LEAFLET_JS, _LEAFLET_JS + '\n<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>'
+                     '\n<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>'))
 
 
 # ── MAP 5 – Grid rasterisation catchment map ──────────────────────────────────
@@ -357,12 +372,12 @@ Promise.all([
 }).catch(function(e){document.getElementById('loadMsg').textContent='Error: '+e.message;});
 </script></body></html>"""
 
-    content = (html
+    content = _with_maplibre(html
                .replace('_LOADING_', _LOADING)
                .replace('_STATUS_', _STATUS)
                .replace('_BASE_TILE_', _BASE_TILE))
     with open(path, 'w', encoding='utf-8') as f:
-        f.write(content)
+        f.write(content + '\n')
     kb = os.path.getsize(path) // 1024
     print(f"Map 5 saved → {path}  ({kb} KB)")
 
@@ -420,14 +435,14 @@ _HOSP_JS = """var nc={};names.forEach(function(n,i){nc[n]='hsl('+Math.round((i/n
 
 
 def _write_leaflet(path, template):
-    content = (template
+    content = _with_maplibre(template
                .replace('_LOADING_', _LOADING)
                .replace('_STATUS_', _STATUS)
                .replace('_DOT_LAYER_', _DOT_LAYER)
                .replace('_BASE_TILE_', _BASE_TILE)
                .replace('_HOSP_JS_', _HOSP_JS))
     with open(path, 'w', encoding='utf-8') as f:
-        f.write(content)
+        f.write(content + '\n')
     kb = os.path.getsize(path) // 1024
     num = os.path.basename(path)[3]  # e.g. '1' from map1_levels.html
     print(f"Map {num} saved → {path}  ({kb} KB)")

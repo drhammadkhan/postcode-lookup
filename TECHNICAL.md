@@ -318,7 +318,7 @@ The outcode approach maps entire outward codes (e.g. `TW7`, `BR1`) to a set of c
 The clinical routing guide (`Outcode approach.html`) contains a JavaScript object `outwardToUnits` mapping each outward code to an array of abbreviated hospital names. The script:
 
 1. Regex-extracts the JS object literal from the HTML
-2. Resolves abbreviated names to canonical names via a `NAME_MAP` dict (e.g. `PRUH → Princess Royal (PRUH)`, `GSTT → Evelina (St Thomas')`)
+2. Resolves abbreviated names to canonical names using the `Aliases` column of `hospitals_refined.csv` (e.g. `PRUH → Princess Royal (PRUH)`, `GSTT → Evelina (St Thomas')`), and writes each hospital's `Level` from the CSV back into `Outcode approach.html`
 3. Drops entries mapped to `None` (i.e. `"outside London Neonatal Network"`)
 4. Writes `docs/outcode_map.json`:
 

@@ -18,7 +18,7 @@ Not every hospital has every level of unit, so knowing which is closest — and 
 
 The script takes two input files:
 
-- **`hospitals_refined.csv`** — A list of ~31 neonatal hospitals across London, including their location (latitude/longitude), care level (1–3), which side of the Thames they serve (North, South, or Both), and profile flags (`include_lookup`, `include_analysis`).
+- **`hospitals_refined.csv`** — A list of ~31 neonatal hospitals across London, including their location (latitude/longitude), care level (1–3), which side of the Thames they serve (North, South, or Both), profile flags (`include_lookup`, `include_analysis`), `Phone`, and `Aliases` (the short names used in the outcode guide, separated by `;`).
 - **`postcodes_master.csv`** — A list of ~333,000 London-area postcodes with their geographic coordinates, derived from the ONS Postcode Directory May 2026 (`ONSPD_MAY_2026_UK.csv`). London rows are selected using region code `E12000007`, and postcodes are normalised by removing spaces.
 
 It then runs through three steps:
@@ -74,6 +74,22 @@ Each profile writes one CSV per hospital (e.g. `output/lookup/West_Middlesex.csv
 | Distance_L2_km | 0.48 |
 | Closest_L3 | Queen Charlottes' |
 | Distance_L3_km | 8.23 |
+
+### Rebuilding everything
+
+`hospitals_refined.csv` is the **single source of truth** for hospital facts: level, side, sector, tags, phone number and the short names (`Aliases`) used in the outcode guide. Never copy those facts into other files by hand. After changing the CSV, rebuild every generated file with one command:
+
+```bash
+pip install -r requirements.txt
+python3 build_all.py             # all steps, in dependency order (~90 s)
+python3 build_all.py --list      # show the steps with their inputs and outputs
+python3 build_all.py --changed   # skip steps whose outputs are newer than their inputs
+python3 build_all.py --only maps # run only matching steps; also --from NAME and --skip NAME
+```
+
+Then review `git diff --stat` and commit the regenerated files with the CSV change. `extract_outcode_json.py` also writes each hospital's level from the CSV back into `Outcode approach.html`, and `build_static.py` copies phone numbers into `docs/hospitals.json`, which the site pages read.
+
+Generated files (`output/`, `docs/*.json`, `docs/maps/`, `docs/comparison.html`, `docs/equalised_catchment.html`, `neonatal_catchment_map.html`) should not be edited by hand; change the generator script instead. Map element ids are seeded (`folium_utils.py`), so re-running the build on unchanged data produces no diff.
 
 ### 4. Visualise on a map
 
