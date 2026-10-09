@@ -144,7 +144,15 @@ def build_map4():
     ]
 
     m = folium.Map(location=CENTRE, zoom_start=ZOOM, tiles=None)
-    folium.TileLayer(BASETILE, name='Base Map').add_to(m)
+    m.get_root().header.add_child(folium.Element(
+        '<link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet"/>'
+        '<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>'
+        '<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>'
+    ))
+    m.get_root().script.add_child(folium.Element(
+        f"L.maplibreGL({{style:'https://tiles.openfreemap.org/styles/positron',"
+        f"attribution:'&copy; OpenStreetMap contributors'}}).addTo({m.get_name()});"
+    ))
 
     MAX_RADIUS = 45
     for label, col, show in level_defs:

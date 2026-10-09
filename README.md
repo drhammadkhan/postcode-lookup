@@ -65,15 +65,15 @@ Each profile writes one CSV per hospital (e.g. `output/lookup/West_Middlesex.csv
 | Postcode | TW7 6QT |
 | Latitude | 51.4729 |
 | Longitude | -0.3317 |
-| Side | South |
+| Side | North |
 | Closest_Any | West Middlesex |
 | Distance_Any_km | 0.48 |
-| Closest_L1 | West Middlesex |
-| Distance_L1_km | 0.48 |
-| Closest_L2 | Kingston Hospital |
-| Distance_L2_km | 7.32 |
-| Closest_L3 | St. Georges Hospital |
-| Distance_L3_km | 12.0 |
+| Closest_L1 | Royal Free Hospital |
+| Distance_L1_km | 14.57 |
+| Closest_L2 | West Middlesex |
+| Distance_L2_km | 0.48 |
+| Closest_L3 | Queen Charlottes' |
+| Distance_L3_km | 8.23 |
 
 ### 4. Visualise on a map
 
