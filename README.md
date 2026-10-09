@@ -39,7 +39,7 @@ The outcode is extracted by stripping the last 3 characters (the incode) from th
 
 These are identified by checking the incode (the last three characters of the full postcode) to avoid false matches against similar outcodes like KT14.
 
-Some hospitals near the river serve **both** sides (e.g. West Middlesex), so they are available to postcodes on either side.
+Some hospitals near the river serve **both** sides (e.g. Wexham Park, St Peters Hospital), so they are available to postcodes on either side.
 
 ### 2. Find the nearest hospitals
 
